@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
 import "./App.css";
 
 const Home = () => {
   const [teachers, setTeachers] = useState([]);
 
   const fetchItems = async () => {
-    const data = await axios.get("http://localhost:3001/teachers");
+    const data = await axios.get("/api/teachers");
 
     console.log(data.data);
 
