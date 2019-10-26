@@ -3,7 +3,7 @@ import axios from "axios";
 
 const NewTeacher = () => {
   const newTeacher = () => {
-    axios.post("http://localhost:3001/api/teachers", {
+    axios.post("/api/teachers", {
       first_name: "New teacher test"
     });
   };

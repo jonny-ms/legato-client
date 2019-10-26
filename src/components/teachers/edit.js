@@ -3,7 +3,7 @@ import axios from "axios";
 
 const EditTeacher = () => {
   const editTeacher = () => {
-    axios.put("http://172.46.1.121:3001/api/teachers", {
+    axios.put("/api/teachers", {
       last_name: "last name"
     });
   };
