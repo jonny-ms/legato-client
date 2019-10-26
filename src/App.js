@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
 import "./App.css";
 import Nav from "./components/_nav";
-import About from "./About";
 import Search from "./Search";
 import Home from "./Home";
 import NewTeacher from "./components/teachers/new";

@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
 
 const NewTeacher = () => {
-  const [items, setItems] = useState([]);
-
   const newTeacher = () => {
-    axios.post("http://172.46.1.121:3001/teachers", {
+    axios.post("http://localhost:3001/teachers", {
       first_name: "New teacher test"
     });
   };
