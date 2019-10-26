@@ -10,11 +10,23 @@ class Nav extends Component {
           <h3>Logo</h3>
         </Link>
         <ul className="nav-links">
-          <Link to="/about">
-            <li>About</li>
+          <Link to="/teachers/new">
+            <li>New teacher</li>
           </Link>
-          <Link to="/search">
-            <li>Search</li>
+          <Link to="/teachers/edit">
+            <li>Edit teacher</li>
+          </Link>
+          <Link to="/about">
+            <li>Login</li>
+          </Link>
+          <Link to="/about">
+            <li>Login</li>
+          </Link>
+          <Link to="/about">
+            <li>Login</li>
+          </Link>
+          <Link to="/about">
+            <li>Login</li>
           </Link>
         </ul>
       </nav>

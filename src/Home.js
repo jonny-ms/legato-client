@@ -19,8 +19,10 @@ const Home = () => {
   return (
     <div className="App">
       <p>Home</p>
+      <div>This is the home page</div>
       <div>
-        Who is the best teacher? {items.first_name} {items.last_name}
+        This will lead to -login -register -create new teacher account -create
+        new student account
       </div>
     </div>
   );
