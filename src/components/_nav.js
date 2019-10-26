@@ -16,11 +16,11 @@ class Nav extends Component {
           <Link to="/teachers/edit">
             <li>Edit teacher</li>
           </Link>
-          <Link to="/about">
-            <li>Login</li>
+          <Link to="/teachers/schedule">
+            <li>Teacher Schedule</li>
           </Link>
-          <Link to="/about">
-            <li>Login</li>
+          <Link to="/teachers/schedule/day">
+            <li>Teacher Schedule Day</li>
           </Link>
           <Link to="/about">
             <li>Login</li>
