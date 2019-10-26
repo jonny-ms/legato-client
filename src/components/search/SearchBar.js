@@ -4,7 +4,6 @@ import Results from "./Results";
 
 
 export default function SearchBar(props) {
-  // const [value, setValue] = useState("");
   const [filter, setFilter] = useState("");
 
   console.log("teachers:", props.teachers)
@@ -15,11 +14,6 @@ export default function SearchBar(props) {
 
   console.log(filteredTeachers);
 
-
-  // let filteredTeachers = props.teachers.filter(teacher => {
-  //   return teacher.first_name.toUpperCase().includes(filter.toUpperCase())
-  // });  
-
   return (
     <section className="search">
       <form className="search__form" onSubmit={event => event.preventDefault()}>
@@ -29,7 +23,6 @@ export default function SearchBar(props) {
           placeholder="Search Teachers"
           name="search"
           type="text"
-          // value={value}
           onChange={event => setFilter(event.target.value)}
         />
       </form>
