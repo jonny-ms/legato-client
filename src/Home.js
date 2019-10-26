@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 import "./App.css";
 
 const Home = () => {
-  const [items, setItems] = useState([]);
+  const [teachers, setTeachers] = useState([]);
 
   const fetchItems = async () => {
-    const data = await fetch("http://172.46.1.121:3001");
+    const data = await axios.get("/api/teachers");
 
-    const items = await data.json();
-    console.log(items[0]);
-    setItems(items);
+    console.log(data.data);
+
+    setTeachers(data.data);
   };
 
   useEffect(() => {
@@ -19,9 +21,17 @@ const Home = () => {
   return (
     <div className="App">
       <p>Home</p>
+      <div>This is the home page</div>
       <div>
-        Who is the best teacher? {items.first_name} {items.last_name}
+        This will lead to -login -register -create new teacher account -create
+        new student account
       </div>
+      <div>Teacher List:</div>
+      {teachers.map(teacher => (
+        <div>
+          {teacher.first_name}, {teacher.last_name}
+        </div>
+      ))}
     </div>
   );
 };
