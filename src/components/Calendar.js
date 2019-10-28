@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-// listPlugin is to view a list of all appointments
 import listWeekPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 
@@ -13,8 +12,6 @@ class Calendar extends Component {
 
   // handleDateClick = arg => {
   //   // if (confirm("Would you like to add an event to " + arg.dateStr + " ?")) {
-  //   alert("Current view: " + arg.view.type);
-  //   arg.view.type = "timeGridDay";
   //   // changeView("timeGrid");
   //   this.setState({
   //     // add new event data
@@ -32,9 +29,7 @@ class Calendar extends Component {
   // };
 
   handleSelect = arg => {
-    // console.log(arg);
     const id = this.state.calendarEvents.length;
-    // console.log(id);
     this.setState({
       calendarEvents: this.state.calendarEvents.concat({
         // creates a new array
@@ -44,6 +39,7 @@ class Calendar extends Component {
         id: id
       })
     });
+    console.log(this.state.calendarEvents);
   };
 
   handleDrop = arg => {
@@ -51,7 +47,7 @@ class Calendar extends Component {
     const events = this.state.calendarEvents;
 
     events[id] = {
-      title: "available",
+      title: "Available drop",
       start: arg.event.start,
       end: arg.event.end,
       id: id
@@ -63,17 +59,38 @@ class Calendar extends Component {
   };
 
   handleResize = arg => {
-    console.log("dragging");
-    console.log(arg.event);
     const id = arg.prevEvent.id;
-    const events = this.state.calendarEvents;
+    let events = this.state.calendarEvents;
 
     events[id] = {
-      title: "available",
+      title: "Available",
       start: arg.event.start,
       end: arg.event.end,
       id: id
     };
+
+    this.setState({
+      calendarEvents: events
+    });
+  };
+
+  removeEvent = arg => {
+    console.log(arg);
+    const id = arg.event.id;
+    let events = this.state.calendarEvents;
+    console.log(events);
+    events.splice(id, 1);
+    console.log(events);
+    arg.event.remove();
+    // let newEvents = events.map(event => {
+    //   if (event.id !== id) {
+    //     return event;
+    //   }
+    // });
+    // arg.remove();
+    for (let i in events) {
+      events[i].id = i;
+    }
 
     this.setState({
       calendarEvents: events
@@ -101,10 +118,10 @@ class Calendar extends Component {
         editable={true}
         droppable={true}
         draggable={true}
-        eventOverlap={false}
         select={this.handleSelect}
         eventDrop={this.handleDrop}
         eventResize={this.handleResize}
+        eventClick={this.removeEvent}
       />
     );
   }
