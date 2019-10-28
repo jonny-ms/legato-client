@@ -3,9 +3,12 @@ import axios from "axios";
 
 const NewTeacher = () => {
   const newTeacher = () => {
-    axios.post("/api/teachers", {
+    axios("/api/teachers", {
+      method: "post",
+      withCredentials: true,
+      data: {
       first_name: "New teacher test"
-    });
+    }})
   };
 
   return (
