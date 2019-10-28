@@ -6,13 +6,17 @@ import Results from "./Results";
 export default function SearchBar(props) {
   const [filter, setFilter] = useState("");
 
-  console.log("teachers:", props.teachers)
-
+  
   let filteredTeachers = props.teachers.filter(function(teacher) {
+
+    let filtered
+
     return teacher.first_name.includes(filter)
   })
-
-  console.log(filteredTeachers);
+  
+  console.log(props.teachers[0])
+  
+  // console.log(filteredTeachers);
 
   return (
     <section className="search">
