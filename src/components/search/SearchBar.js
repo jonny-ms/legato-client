@@ -1,7 +1,5 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import Results from "./Results";
-
-
 
 export default function SearchBar(props) {
   const [filter, setFilter] = useState("");
@@ -30,13 +28,13 @@ export default function SearchBar(props) {
           onChange={event => setFilter(event.target.value)}
         />
       </form>
-    <div>
-      <ul>
-        {filteredTeachers.map((name, i) => (
-          <Results teacher={name} />
-        ))}
-      </ul>
-    </div>
+      <div>
+        <ul>
+          {filteredTeachers.map((name, i) => (
+            <Results key={i} teacher={name} />
+          ))}
+        </ul>
+      </div>
     </section>
   );
 }

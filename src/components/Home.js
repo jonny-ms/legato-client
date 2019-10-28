@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import "./App.css";
-import SearchBar from "./components/search/SearchBar";
-
+import SearchBar from "./search/SearchBar";
 
 const Home = () => {
   const [teachers, setTeachers] = useState([]);
@@ -14,10 +12,9 @@ const Home = () => {
     setTeachers(data.data);
 
   };
-  
-  useEffect(() => {
-    fetchItems()
 
+  useEffect(() => {
+    fetchItems();
   }, []);
 
   return (
@@ -29,17 +26,15 @@ const Home = () => {
         new student account
       </div>
       <div>
-      <SearchBar teachers={teachers} />
+        <SearchBar teachers={teachers} />
       </div>
       <div>
-        <ul>
-          {}
-        </ul>
+        <ul>{}</ul>
       </div>
       <div>Teacher List:</div>
 
       {teachers.map(teacher => (
-        <div>
+        <div key={teacher.id}>
           {teacher.first_name}, {teacher.last_name}
         </div>
       ))}
