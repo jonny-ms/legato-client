@@ -14,6 +14,34 @@ class Calendar extends Component {
     calendarEvents: []
   };
 
+  getCalendarEvents = () => {
+    axios(`/api/timeslots`, {
+      method: "get",
+      withCredentials: true
+    }).then(({ data }) => {
+      let loadedEvents = [];
+      for (let i in data) {
+        const startTime = data[i].datetime;
+        loadedEvents.push({
+          title: "Available",
+          start: moment(startTime).toDate(),
+          end: moment(startTime)
+            .add(30, "m")
+            .toDate(),
+          id: i
+        });
+      }
+      console.log(loadedEvents);
+      this.setState({
+        calendarEvents: loadedEvents
+      });
+    });
+  };
+
+  componentDidMount() {
+    this.getCalendarEvents();
+  }
+
   // handleDateClick = arg => {
   //   // if (confirm("Would you like to add an event to " + arg.dateStr + " ?")) {
   //   // changeView("timeGrid");
