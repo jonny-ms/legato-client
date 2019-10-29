@@ -8,8 +8,10 @@ import NewTeacher from "./components/teachers/new";
 import EditTeacher from "./components/teachers/edit";
 import TeacherMonth from "./components/teachers/scheduleMonth";
 import TeacherDay from "./components/teachers/scheduleDay";
+import Login from "./components/Login";
 
 class App extends Component {
+
   render() {
     return (
       <Router>
@@ -25,6 +27,7 @@ class App extends Component {
             <Route exact path="/teachers/edit" component={EditTeacher} />
             <Route exact path="/teachers/schedule" component={TeacherMonth} />
             <Route exact path="/teachers/schedule/day" component={TeacherDay} />
+            <Route exact path="/login" component={() => <Login />} />
           </Switch>
         </div>
       </Router>

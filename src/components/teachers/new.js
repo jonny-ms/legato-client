@@ -3,8 +3,7 @@ import RegisterForm from "../RegisterForm";
 
 const NewTeacher = () => {
 
-
-  return (    
+  return (
     <div className="NewTeacher">
       <p>New Teacher</p>
       <div>This is the new teacher form</div>

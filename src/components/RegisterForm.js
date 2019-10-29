@@ -16,11 +16,13 @@ export default function RegisterForm(props) {
       method: "post",
       withCredentials: true,
       data: {
-      first_name: firstName,
-      last_name: lastName,
-      email,
-      password,
-      password_confirmation: passwordConfirmation
+        teacher: {
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          password,
+          password_confirmation: passwordConfirmation
+        }
     }})
   };
 
