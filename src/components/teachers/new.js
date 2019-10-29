@@ -7,7 +7,7 @@ const NewTeacher = () => {
     <div className="NewTeacher">
       <p>New Teacher</p>
       <div>This is the new teacher form</div>
-      <RegisterForm userType={"teachers"}/>
+      <RegisterForm userType={"teacher"}/>
     </div>
   );
 };

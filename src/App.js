@@ -4,6 +4,7 @@ import "./App.css";
 
 import Nav from "./components/_nav";
 import Home from "./components/Home";
+import NewStudent from "./components/students/New";
 import NewTeacher from "./components/teachers/new";
 import EditTeacher from "./components/teachers/edit";
 import TeacherMonth from "./components/teachers/scheduleMonth";
@@ -17,6 +18,7 @@ const App = () => {
         <Nav />
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/students/new" component={() => <NewStudent />} />
           <Route exact path="/teachers/new" component={() => <NewTeacher />} />
           <Route exact path="/teachers/edit" component={EditTeacher} />
           <Route exact path="/teachers/schedule" component={TeacherMonth} />
