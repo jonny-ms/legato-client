@@ -115,7 +115,7 @@ class Calendar extends Component {
       method: "post",
       withCredentials: true,
       data: {
-        timeslots: timeslots
+        timeslot: timeslots
       }
     });
   };
