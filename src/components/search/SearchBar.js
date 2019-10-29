@@ -1,20 +1,41 @@
 import React, { useState } from "react";
 import Results from "./Results";
+import "./SearchBar.css"
 
 export default function SearchBar(props) {
-  const [filter, setFilter] = useState("");
+  const [name, setName] = useState("");
+  const [instrument, setInstrument] = useState("Select");
 
   
-  let filteredTeachers = props.teachers.filter(function(teacher) {
-
-    let filtered
-
-    return teacher.first_name.includes(filter)
+  let filteredNames = props.teachers.filter(function(teacher) {
+    // console.log(teacher)
+    let check = false;
+    if (!teacher.first_name.includes(name)) {
+      return false
+    }
+    if (instrument == "Select") {
+      check = true
+    } else if (teacher.courses.some(course => course.instrument === instrument)) {
+      check = true
+    } else {
+      check = false
+    }
+    return  check
+      
   })
   
-  console.log(props.teachers[0])
-  
-  // console.log(filteredTeachers);
+  // let filteredCourse = props.teachers.filter(teacher => {
+  //   for (const course of teacher.courses) {
+  //     if (instrument === course.instrument) {
+  //       return true
+  //     }
+  //   }
+  //   return false
+  // })
+
+
+
+
 
   return (
     <section className="search">
@@ -25,12 +46,20 @@ export default function SearchBar(props) {
           placeholder="Search Teachers"
           name="search"
           type="text"
-          onChange={event => setFilter(event.target.value)}
+          onChange={event => setName(event.target.value)}
         />
       </form>
+
+        <select onChange={e => setInstrument(e.target.value)}>
+          <option>Select</option>
+          <option>Piano</option>
+          <option>Flute</option>
+          <option>Drums</option>
+        </select>
+
       <div>
         <ul>
-          {filteredTeachers.map((name, i) => (
+          {filteredNames.map((name, i) => (
             <Results key={i} teacher={name} />
           ))}
         </ul>
