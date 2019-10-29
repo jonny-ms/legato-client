@@ -1,9 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listWeekPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
+
+import axios from "axios";
+
+const moment = require("moment");
 
 class Calendar extends Component {
   state = {
@@ -89,32 +93,62 @@ class Calendar extends Component {
     // console.log(this.state.calendarEvents);
   };
 
+  submitTimeSlots = e => {
+    e.preventDefault();
+    const events = this.state.calendarEvents;
+    const timeslotInMilliseconds = 1000 * 60 * 30;
+
+    let timeslots = [];
+    for (let event of events) {
+      const numberOfTimeslots =
+        (event.end - event.start) / timeslotInMilliseconds;
+      for (let i = 0; i < numberOfTimeslots; i++) {
+        const newTimeslot = moment(event.start)
+          .add(30 * i, "m")
+          .toDate();
+        timeslots.push(newTimeslot);
+      }
+    }
+    console.log(timeslots);
+
+    axios(`/api/timeslots`, {
+      method: "post",
+      withCredentials: true,
+      data: {
+        timeslots: timeslots
+      }
+    });
+  };
+
   render() {
     return (
-      <FullCalendar
-        // dateClick={this.handleDateClick}
-        events={this.state.calendarEvents}
-        defaultView="timeGridWeek"
-        header={{
-          left: "prev,next today",
-          center: "title",
-          right: "timeGridWeek,listWeek"
-        }}
-        plugins={[
-          dayGridPlugin,
-          timeGridPlugin,
-          listWeekPlugin,
-          interactionPlugin
-        ]}
-        selectable={true}
-        editable={true}
-        droppable={true}
-        draggable={true}
-        select={this.handleSelect}
-        eventDrop={this.handleDrop}
-        eventResize={this.handleResize}
-        eventClick={this.removeEvent}
-      />
+      <Fragment>
+        <button onClick={this.submitTimeSlots}>Submit</button>
+        <FullCalendar
+          // dateClick={this.handleDateClick}
+          events={this.state.calendarEvents}
+          defaultView="timeGridWeek"
+          header={{
+            left: "prev,next today",
+            center: "title",
+            right: "timeGridWeek,listWeek"
+          }}
+          plugins={[
+            dayGridPlugin,
+            timeGridPlugin,
+            listWeekPlugin,
+            interactionPlugin
+          ]}
+          selectable={true}
+          editable={true}
+          droppable={true}
+          draggable={true}
+          select={this.handleSelect}
+          eventDrop={this.handleDrop}
+          eventResize={this.handleResize}
+          eventClick={this.removeEvent}
+        />
+      </Fragment>
     );
   }
 }
