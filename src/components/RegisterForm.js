@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-
 export default function RegisterForm(props) {
 
   const [firstName, setFirstName] = useState("");
@@ -12,18 +11,24 @@ export default function RegisterForm(props) {
 
   const register = (e) => {
     e.preventDefault()
-    axios(`/api/${props.userType}`, {
+    axios(`/api/${props.userType}s`, {
       method: "post",
       withCredentials: true,
       data: {
-        teacher: {
+        [props.userType]: {
           first_name: firstName,
           last_name: lastName,
           email,
           password,
           password_confirmation: passwordConfirmation
         }
-    }})
+    }}).then(() => {
+      if (props.userType === "teacher") {
+
+      } else {
+
+      }
+    })
   };
 
 

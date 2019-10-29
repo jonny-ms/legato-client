@@ -4,6 +4,7 @@ import "./App.css";
 
 import Nav from "./components/_nav";
 import Home from "./components/Home";
+import NewStudent from "./components/students/New";
 import NewTeacher from "./components/teachers/new";
 import EditTeacher from "./components/teachers/edit";
 import TeacherMonth from "./components/teachers/scheduleMonth";
@@ -19,6 +20,11 @@ class App extends Component {
           <Nav />
           <Switch>
             <Route exact path="/" component={Home} />
+            <Route
+              exact
+              path="/students/new"
+              component={() => <NewStudent />}
+            />
             <Route
               exact
               path="/teachers/new"

@@ -21,6 +21,9 @@ export default function Nav() {
         <h3>Logo</h3>
       </Link>
       <ul className="nav-links">
+        <Link to="/students/new">
+          <li>New Student</li>
+        </Link>
         <Link to="/teachers/new">
           <li>New teacher</li>
         </Link>
