@@ -22,13 +22,22 @@ class Calendar extends Component {
       let loadedEvents = [];
       for (let i in data) {
         const startTime = data[i].datetime;
+        let title = ""
+        if (data[i].lesson_id && data[i].is_booked){
+          title = "Booked";
+        } else if (data[i].lesson_id) {
+          title = "Booking Request"
+        } else {
+          title = "Available"
+        }
         loadedEvents.push({
-          title: "Available",
+          id: data[i].id,
+          title,
           start: moment(startTime).toDate(),
           end: moment(startTime)
             .add(30, "m")
             .toDate(),
-          id: i
+          
         });
       }
       console.log(loadedEvents);

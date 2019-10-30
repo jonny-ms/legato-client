@@ -18,7 +18,7 @@ class CalendarForBooking extends Component {
 
   getCalendarEvents = () => {
     let id = 6;
-    axios(`/api/teachers/6`, {
+    axios(`/api/teachers/3`, {
       method: "get",
       withCredentials: true
     }).then(({ data }) => {
@@ -31,7 +31,7 @@ class CalendarForBooking extends Component {
           end: moment(startTime)
             .add(30, "m")
             .toDate(),
-          id: i
+          id: data[i].id
         });
       }
       console.log(loadedEvents);
@@ -50,23 +50,6 @@ class CalendarForBooking extends Component {
     // this.forceUpdate();
   }
 
-  removeEvent = arg => {
-    const id = Number(arg.event.id);
-    let events = this.state.calendarEvents;
-    events = events.filter(event => {
-      return event.id !== id;
-    });
-
-    for (let i in events) {
-      events[i].id = Number(i);
-    }
-
-    this.setState({
-      calendarEvents: events
-    });
-
-    // console.log(this.state.calendarEvents);
-  };
 
   submitTimeSlots = e => {
     e.preventDefault();
@@ -78,19 +61,19 @@ class CalendarForBooking extends Component {
       const numberOfTimeslots =
         (event.end - event.start) / timeslotInMilliseconds;
       for (let i = 0; i < numberOfTimeslots; i++) {
-        const newTimeslot = moment(event.start)
-          .add(30 * i, "m")
-          .toDate();
-        timeslots.push(newTimeslot);
+        const newTimeslot = event.id;
+        if (event.title === "Booking Request") {
+          timeslots.push(newTimeslot);
+        }
       }
     }
     console.log(timeslots);
 
-    axios(`/api/timeslots`, {
+    axios(`/api/lessons`, {
       method: "post",
       withCredentials: true,
       data: {
-        timeslot: timeslots
+        lesson: timeslots
       }
     });
   };
@@ -99,19 +82,28 @@ class CalendarForBooking extends Component {
     // console.log("create booking");
     // console.log(this.state.calendarEvents);
     // console.log(arg.event.title);
-    let eventId = arg.event.id;
+    let eventId = Number(arg.event.id);
+    
     let events = [...this.state.calendarEvents];
 
-    events[eventId] = {
-      ...events[eventId],
-      title: "Booking Request",
-      backgroundColor: "green",
-      borderColor: "green"
-    };
+    let newEvents = [];
+    for (let event of events) {
+      let newEvent = {...event}
+      if (event.id === eventId) {
+        newEvent = {
+          ...event,
+          title: "Booking Request",
+          backgroundColor: "green",
+          borderColor: "green"
+        };
+      }
+      newEvents.push(newEvent)
+    }
+
     // console.log(events);
 
     this.setState({
-      calendarEvents: events
+      calendarEvents: newEvents
     });
 
     // console.log(this.state.calendarEvents);
@@ -137,7 +129,7 @@ class CalendarForBooking extends Component {
             listWeekPlugin,
             interactionPlugin
           ]}
-          eventRender={e => console.log(e.event)}
+          // eventRender={e => console.log(e.event)}
           // selectable={true}
           // editable={true}
           // droppable={true}
