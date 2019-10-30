@@ -91,7 +91,7 @@ export default function SearchBar(props) {
     }
     return check;
   });
-  console.log("filteredNames: ", filteredNames);
+  console.log("filteredNames: ", filteredTeachers);
 
   return (
     <section className="search">
@@ -128,7 +128,7 @@ export default function SearchBar(props) {
 
       <div>
         <ul>
-          {filteredNames.map((name, i) => (
+          {filteredTeachers.map((name, i) => (
             <Results key={i} teacher={name} />
           ))}
         </ul>
