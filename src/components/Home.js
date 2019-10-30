@@ -7,10 +7,9 @@ const Home = () => {
   const [teachers, setTeachers] = useState([]);
 
   const fetchItems = async () => {
-    const data = await axios.get("/api/teachers");
-    
-    setTeachers(data.data);
+    const data = await axios("/api/teachers", { withCredentials: true });
 
+    setTeachers(data.data);
   };
 
   useEffect(() => {
