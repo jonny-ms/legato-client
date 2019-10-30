@@ -18,6 +18,7 @@ class CalendarForBooking extends Component {
 
   getCalendarEvents = () => {
     let id = 6;
+    // TODO: Dynamically set which teacher's calendar is requested
     axios(`/api/teachers/3`, {
       method: "get",
       withCredentials: true
@@ -45,13 +46,8 @@ class CalendarForBooking extends Component {
     this.getCalendarEvents();
   }
 
-  componentDidUpdate() {
-    // console.log("updated bookings");
-    // this.forceUpdate();
-  }
-
-
-  submitTimeSlots = e => {
+  submitBookings = e => {
+    // Send requested bookings to server
     e.preventDefault();
     const events = this.state.calendarEvents;
     const timeslotInMilliseconds = 1000 * 60 * 30;
@@ -62,7 +58,9 @@ class CalendarForBooking extends Component {
         (event.end - event.start) / timeslotInMilliseconds;
       for (let i = 0; i < numberOfTimeslots; i++) {
         const newTimeslot = event.id;
+        // Only send timeslots which have a booking request
         if (event.title === "Booking Request") {
+          // TODO: Check if timeslots are next to each other and send as one lesson
           timeslots.push(newTimeslot);
         }
       }
@@ -78,17 +76,14 @@ class CalendarForBooking extends Component {
     });
   };
 
-  bookEvent = arg => {
-    // console.log("create booking");
-    // console.log(this.state.calendarEvents);
-    // console.log(arg.event.title);
+  requestBooking = arg => {
     let eventId = Number(arg.event.id);
-    
     let events = [...this.state.calendarEvents];
-
     let newEvents = [];
+
+    // Must create a new instance for state to update
     for (let event of events) {
-      let newEvent = {...event}
+      let newEvent = { ...event };
       if (event.id === eventId) {
         newEvent = {
           ...event,
@@ -97,10 +92,8 @@ class CalendarForBooking extends Component {
           borderColor: "green"
         };
       }
-      newEvents.push(newEvent)
+      newEvents.push(newEvent);
     }
-
-    // console.log(events);
 
     this.setState({
       calendarEvents: newEvents
@@ -112,7 +105,7 @@ class CalendarForBooking extends Component {
   render() {
     return (
       <Fragment>
-        <button onClick={this.submitTimeSlots}>Submit</button>
+        <button onClick={this.submitBookings}>Submit</button>
         <FullCalendar
           // dateClick={this.handleDateClick}
           ref={this.calendarRef}
@@ -137,7 +130,7 @@ class CalendarForBooking extends Component {
           // select={this.handleSelect}
           // eventDrop={this.handleDrop}
           // eventResize={this.handleResize}
-          eventClick={this.bookEvent}
+          eventClick={this.requestBooking}
         />
       </Fragment>
     );
