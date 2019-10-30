@@ -8,7 +8,6 @@ const Home = () => {
 
   const fetchItems = async () => {
     const data = await axios("/api/teachers", { withCredentials: true });
-
     setTeachers(data.data);
   };
 

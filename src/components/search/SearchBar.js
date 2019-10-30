@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Results from "./Results";
+
+import TeacherListItem from "./TeacherListItem";
 
 export default function SearchBar(props) {
   const [name, setName] = useState("");
@@ -127,8 +128,8 @@ export default function SearchBar(props) {
 
       <div>
         <ul>
-          {filteredTeachers.map((name, i) => (
-            <Results key={i} teacher={name} />
+          {filteredTeachers.map((teacher, i) => (
+            <TeacherListItem key={i} teacher={teacher} />
           ))}
         </ul>
       </div>
