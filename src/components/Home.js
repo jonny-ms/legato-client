@@ -5,12 +5,17 @@ import SearchBar from "./search/SearchBar";
 
 const Home = () => {
   const [teachers, setTeachers] = useState([]);
+  const [user, setUser] = useState({});
 
   const fetchItems = async () => {
     const data = await axios("/api/teachers", { withCredentials: true });
 
-    setTeachers(data.data);
+    setTeachers(data.data.teachers);
+    const user = data.data.user
+    user.type = data.data.type
+    setUser(user)
   };
+  console.log(user)
 
   useEffect(() => {
     fetchItems();
@@ -19,6 +24,7 @@ const Home = () => {
   return (
     <div className="App">
       <p>Home</p>
+      { user && <p>{user.type} {user.first_name}</p>} 
       <div>This is the home page</div>
       <div>
         This will lead to -login -register -create new teacher account -create
