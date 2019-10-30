@@ -71,7 +71,10 @@ class CalendarForBooking extends Component {
       method: "post",
       withCredentials: true,
       data: {
-        lesson: timeslots
+        lesson: {
+          timeslots,
+          course_id: 1
+        }
       }
     });
   };
