@@ -11,7 +11,9 @@ const moment = require("moment");
 
 class Calendar extends Component {
   state = {
-    calendarEvents: []
+    calendarEvents: [],
+    maxIDFromServer: 0,
+    maxID: 0
   };
 
   getCalendarEvents = () => {
@@ -20,15 +22,19 @@ class Calendar extends Component {
       withCredentials: true
     }).then(({ data }) => {
       let loadedEvents = [];
+      let maxID = 0;
       for (let i in data) {
+        if (maxID < data[i].id) {
+          maxID = data[i].id;
+        }
         const startTime = data[i].datetime;
-        let title = ""
-        if (data[i].lesson_id && data[i].is_booked){
+        let title = "";
+        if (data[i].lesson_id && data[i].is_booked) {
           title = "Booked";
         } else if (data[i].lesson_id) {
-          title = "Booking Request"
+          title = "Booking Request";
         } else {
-          title = "Available"
+          title = "Available";
         }
         loadedEvents.push({
           id: data[i].id,
@@ -36,13 +42,14 @@ class Calendar extends Component {
           start: moment(startTime).toDate(),
           end: moment(startTime)
             .add(30, "m")
-            .toDate(),
-          
+            .toDate()
         });
       }
       console.log(loadedEvents);
       this.setState({
-        calendarEvents: loadedEvents
+        calendarEvents: loadedEvents,
+        maxIDFromServer: maxID,
+        maxID: ++maxID
       });
     });
   };
@@ -71,23 +78,34 @@ class Calendar extends Component {
 
   handleSelect = arg => {
     const id = this.state.calendarEvents.length;
+    const maxID = this.state.maxID;
+    console.log(maxID);
     this.setState({
       calendarEvents: this.state.calendarEvents.concat({
+        id: maxID,
         title: "Available",
         start: arg.start,
-        end: arg.end,
-        id: Number(id)
-      })
+        end: arg.end
+      }),
+      maxID: this.state.maxID++
     });
-    // console.log(this.state.calendarEvents);
+    console.log(this.state.calendarEvents);
   };
 
   handleDrop = arg => {
     const id = arg.oldEvent.id;
-    let events = this.state.calendarEvents;
 
-    events[id].start = arg.event.start;
-    events[id].end = arg.event.end;
+    let events = this.state.calendarEvents.map(event => {
+      if (event.id == id) {
+        event.start = arg.event.start;
+        event.end = arg.event.end;
+      }
+      return event;
+    });
+    // let events = this.state.calendarEvents;
+
+    // events[id].start = arg.event.start;
+    // events[id].end = arg.event.end;
 
     this.setState({
       calendarEvents: events
@@ -99,12 +117,15 @@ class Calendar extends Component {
     const id = arg.prevEvent.id;
     let events = this.state.calendarEvents;
 
-    events[id] = {
-      title: "Available",
-      start: arg.event.start,
-      end: arg.event.end,
-      id: Number(id)
-    };
+    events = events.map(event => {
+      if (event.id == id) {
+        event.start = arg.event.start;
+        event.end = arg.event.end;
+      }
+      return event;
+    });
+
+    // console.log(events);
 
     this.setState({
       calendarEvents: events
@@ -121,7 +142,7 @@ class Calendar extends Component {
     });
 
     // for (let i in events) {
-      // events[i].id = Number(i);
+    // events[i].id = Number(i);
     // }
 
     this.setState({
@@ -130,15 +151,16 @@ class Calendar extends Component {
 
     console.log("new state -->", this.state.calendarEvents);
     console.log("arg.event.id -->", id);
-
-    axios(`/api/timeslots/${id}`, {
-      method: "delete",
-      withCredentials: true,
-      data: {
-        timeslot: id
-      }
-    });
-    
+    if (id < this.state.maxIDFromServer) {
+      console.log("delete event on server");
+      axios(`/api/timeslots/${id}`, {
+        method: "delete",
+        withCredentials: true,
+        data: {
+          timeslot: id
+        }
+      });
+    }
   };
 
   submitTimeSlots = e => {
@@ -158,7 +180,6 @@ class Calendar extends Component {
       }
     }
     console.log(timeslots);
-
     axios(`/api/timeslots`, {
       method: "post",
       withCredentials: true,
