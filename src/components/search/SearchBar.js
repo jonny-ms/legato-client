@@ -79,7 +79,7 @@ export default function SearchBar(props) {
     return false;
   }
 
-  let filteredNames = props.teachers.filter(function(teacher) {
+  let filteredTeachers = props.teachers.filter(function(teacher) {
     let check = false;
     if (
       isTeacherNameIncluded(name, teacher) &&
@@ -91,7 +91,6 @@ export default function SearchBar(props) {
     }
     return check;
   });
-  console.log("filteredNames: ", filteredTeachers);
 
   return (
     <section className="search">
