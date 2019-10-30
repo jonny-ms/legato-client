@@ -11,9 +11,19 @@ const moment = require("moment");
 
 class CalendarForBooking extends Component {
   state = {
-    calendarEvents: []
+    calendarEvents: [],
+    courses: {},
+    course_id: null 
   };
 
+
+
+  // const courses = [
+
+  // ]
+  
+  
+  
   calendarRef = React.createRef();
 
   getCalendarEvents = () => {
@@ -22,22 +32,33 @@ class CalendarForBooking extends Component {
     axios(`/api/teachers/3`, {
       method: "get",
       withCredentials: true
-    }).then(({ data }) => {
+    }).then(({data}) => {
       let loadedEvents = [];
-      for (let i in data) {
-        const startTime = data[i].datetime;
+      // create calendar events for timeslots
+      for (let i in data.timeslots) {
+        const startTime = data.timeslots[i].datetime;
         loadedEvents.push({
           title: "Available",
           start: moment(startTime).toDate(),
           end: moment(startTime)
             .add(30, "m")
             .toDate(),
-          id: data[i].id
+          id: data.timeslots[i].id
         });
       }
       console.log(loadedEvents);
+      // Create courses
+      console.log(data.courses)
+      let courses = {}
+      for (let course of data.courses) {
+        console.log(course)
+        const courseName = course.instrument + " - " + course.level
+        courses[courseName]= course.id
+      }
+      console.log(courses)
       this.setState({
-        calendarEvents: loadedEvents
+        calendarEvents: loadedEvents,
+        courses: courses
       });
     });
   };
@@ -66,14 +87,14 @@ class CalendarForBooking extends Component {
       }
     }
     console.log(timeslots);
-
+    console.log(this.state.course_id);
     axios(`/api/lessons`, {
       method: "post",
       withCredentials: true,
       data: {
         lesson: {
           timeslots,
-          course_id: 1
+          course_id: this.state.course_id
         }
       }
     });
@@ -102,12 +123,25 @@ class CalendarForBooking extends Component {
       calendarEvents: newEvents
     });
 
-    // console.log(this.state.calendarEvents);
+    console.log(this.state);
   };
 
   render() {
     return (
       <Fragment>
+        {/* <select onChange={e => this.setState({course_id: e.target.value})}>
+          {courses.map((course) => {
+            return <option>{course}</option>
+          })}
+        </select> */}
+        <select
+          onChange={e => this.setState({ course_id: this.state.courses[e.target.value] })}
+        >
+          <option>Select a course</option>
+          {Object.keys(this.state.courses).map(course => {
+            return <option>{course}</option>;
+          })}
+        </select>
         <button onClick={this.submitBookings}>Submit</button>
         <FullCalendar
           // dateClick={this.handleDateClick}
