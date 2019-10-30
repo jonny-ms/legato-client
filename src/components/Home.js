@@ -27,16 +27,6 @@ const Home = () => {
       <div>
         <SearchBar teachers={teachers} />
       </div>
-      <div>
-        <ul>{}</ul>
-      </div>
-      <div>Teacher List:</div>
-
-      {teachers.map(teacher => (
-        <div key={teacher.id}>
-          {teacher.first_name}, {teacher.last_name}
-        </div>
-      ))}
     </div>
   );
 };
