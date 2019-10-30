@@ -27,7 +27,6 @@ class CalendarForBooking extends Component {
   calendarRef = React.createRef();
 
   getCalendarEvents = () => {
-    let id = 6;
     // TODO: Dynamically set which teacher's calendar is requested
     axios(`/api/teachers/3`, {
       method: "get",
