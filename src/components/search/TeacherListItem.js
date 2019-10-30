@@ -31,42 +31,44 @@ export default function TeacherListItem(props) {
   console.log("coursesArray: ", coursesArray);
 
   return (
-    <Card className={classes.card}>
-      <CardActionArea>
-        <CardMedia
-          className={classes.media}
-          image={props.teacher.profile_pic}
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {`${props.teacher.first_name}  ${props.teacher.last_name}`}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {props.teacher.bio}
-          </Typography>
-          <Typography variant="body2" color="textPrimary" component="p">
-            {coursesArray.map((courseData, i) => (
-              <div>{courseData}</div>
-            ))}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <Box component="fieldset" mb={3} borderColor="transparent">
-        <Typography component="legend"></Typography>
+    <div>
+      <Card className={classes.card}>
+        <CardActionArea>
+          <CardMedia
+            className={classes.media}
+            image={props.teacher.profile_pic}
+            title="Contemplative Reptile"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {`${props.teacher.first_name}  ${props.teacher.last_name}`}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {props.teacher.bio}
+            </Typography>
+            <Typography variant="body2" color="textPrimary" component="p">
+              {coursesArray.map((courseData, i) => (
+                <div>{courseData}</div>
+              ))}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
         <Box component="fieldset" mb={3} borderColor="transparent">
           <Typography component="legend"></Typography>
-          <Rating name="disabled" value={3.6} disabled />
+          <Box component="fieldset" mb={3} borderColor="transparent">
+            <Typography component="legend"></Typography>
+            <Rating name="disabled" value={3.6} disabled />
+          </Box>
         </Box>
-      </Box>
-      <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
-      </CardActions>
-    </Card>
+        <CardActions>
+          <Button size="small" color="primary">
+            Share
+          </Button>
+          <Button size="small" color="primary">
+            Learn More
+          </Button>
+        </CardActions>
+      </Card>
+    </div>
   );
 }
