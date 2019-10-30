@@ -9,6 +9,10 @@ import axios from "axios";
 
 const moment = require("moment");
 
+// List of Todos
+// stop teacher from dragging booking requests or booked
+// stop teacher from deleting booking request or booked
+
 class Calendar extends Component {
   state = {
     calendarEvents: [],
@@ -29,10 +33,16 @@ class Calendar extends Component {
         }
         const startTime = data[i].datetime;
         let title = "";
+        let backgroundColor = "";
+        let borderColor = "";
         if (data[i].lesson_id && data[i].is_booked) {
           title = "Booked";
+          backgroundColor = "Green";
+          borderColor = "Green";
         } else if (data[i].lesson_id) {
           title = "Booking Request";
+          backgroundColor = "Orange";
+          borderColor = "Orange";
         } else {
           title = "Available";
         }
@@ -42,7 +52,9 @@ class Calendar extends Component {
           start: moment(startTime).toDate(),
           end: moment(startTime)
             .add(30, "m")
-            .toDate()
+            .toDate(),
+          backgroundColor: backgroundColor,
+          borderColor: borderColor
         });
       }
       console.log(loadedEvents);
@@ -136,30 +148,66 @@ class Calendar extends Component {
   removeEvent = arg => {
     const id = Number(arg.event.id);
     let events = this.state.calendarEvents;
+    if (arg.event.title === "Booking Request") {
+      if (confirm("Do you want to accept the booking?")) {
+        console.log("Accepted");
 
-    events = events.filter(event => {
-      return event.id !== id;
-    });
+        events = events.map(event => {
+          if (event.id == id) {
+            let newEvent = {
+              ...event,
+              title: "Accepted",
+              backgroundColor: "Green",
+              borderColor: "Green"
+            };
+            return newEvent;
+          }
+          return event;
+        });
+        this.setState({
+          calendarEvents: events
+        });
+        console.log(events);
+        console.log(this.state);
 
-    // for (let i in events) {
-    // events[i].id = Number(i);
-    // }
-
-    this.setState({
-      calendarEvents: events
-    });
-
-    console.log("new state -->", this.state.calendarEvents);
-    console.log("arg.event.id -->", id);
-    if (id < this.state.maxIDFromServer) {
-      console.log("delete event on server");
-      axios(`/api/timeslots/${id}`, {
-        method: "delete",
-        withCredentials: true,
-        data: {
-          timeslot: id
-        }
+        axios(`/api/timeslots/${id}`, {
+          method: "put",
+          withCredentials: true,
+          data: {
+            timeslot: id
+          }
+        });
+      } else {
+        console.log("rejected");
+        // modify state so booking is rejected - returned to available
+      }
+    } else if (arg.event.title === "Booked" || arg.event.title === "Accepted") {
+      console.log("NOPE");
+    } else {
+      events = events.filter(event => {
+        return event.id !== id;
       });
+
+      // for (let i in events) {
+      // events[i].id = Number(i);
+      // }
+
+      this.setState({
+        calendarEvents: events
+      });
+
+      console.log("new state -->", this.state.calendarEvents);
+      console.log("arg.event.id -->", id);
+      if (id < this.state.maxIDFromServer) {
+        console.log("delete event on server");
+        axios(`/api/timeslots/${id}`, {
+          method: "delete",
+          withCredentials: true,
+          data: {
+            timeslot: id
+          }
+        });
+      }
     }
   };
 
@@ -179,7 +227,7 @@ class Calendar extends Component {
         timeslots.push(newTimeslot);
       }
     }
-    console.log(timeslots);
+    console.log("hey look here!!!", timeslots);
     axios(`/api/timeslots`, {
       method: "post",
       withCredentials: true,
