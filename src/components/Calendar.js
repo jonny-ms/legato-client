@@ -115,19 +115,30 @@ class Calendar extends Component {
   removeEvent = arg => {
     const id = Number(arg.event.id);
     let events = this.state.calendarEvents;
+
     events = events.filter(event => {
       return event.id !== id;
     });
 
-    for (let i in events) {
-      events[i].id = Number(i);
-    }
+    // for (let i in events) {
+      // events[i].id = Number(i);
+    // }
 
     this.setState({
       calendarEvents: events
     });
 
-    // console.log(this.state.calendarEvents);
+    console.log("new state -->", this.state.calendarEvents);
+    console.log("arg.event.id -->", id);
+
+    axios(`/api/timeslots/${id}`, {
+      method: "delete",
+      withCredentials: true,
+      data: {
+        timeslot: id
+      }
+    });
+    
   };
 
   submitTimeSlots = e => {
