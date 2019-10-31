@@ -2,6 +2,13 @@ import React, { useState } from "react";
 
 import TeacherListItem from "./TeacherListItem";
 
+import {
+  isTeacherNameIncluded,
+  isLevelIncluded,
+  isInstrumentIncluded,
+  isRateIncluded
+} from "./helpers/isIncluded";
+
 export default function SearchBar(props) {
   const [name, setName] = useState("");
   const [instrument, setInstrument] = useState("Select");
@@ -38,47 +45,6 @@ export default function SearchBar(props) {
   ];
 
   const levels = ["Select", "Beginner", "Intermediate", "Advance"];
-
-  function isTeacherNameIncluded(teacherName, teacher) {
-    let fullName = `${teacher.first_name} ${teacher.last_name}`;
-    if (!teacherName) {
-      return true;
-    }
-    if (fullName.toUpperCase().includes(teacherName.toUpperCase())) {
-      return true;
-    }
-    return false;
-  }
-
-  function isLevelIncluded(level, teacher) {
-    if (level === "Select") {
-      return true;
-    }
-    if (teacher.courses.some(course => course.level === level)) {
-      return true;
-    }
-    return false;
-  }
-
-  function isInstrumentIncluded(instrument, teacher) {
-    if (instrument === "Select") {
-      return true;
-    }
-    if (teacher.courses.some(course => course.instrument === instrument)) {
-      return true;
-    }
-    return false;
-  }
-
-  function isRateIncluded(rate, teacher) {
-    if (!rate) {
-      return true;
-    }
-    if (teacher.courses.some(course => course.rate <= rate)) {
-      return true;
-    }
-    return false;
-  }
 
   let filteredTeachers = props.teachers.filter(function(teacher) {
     let check = false;
@@ -117,14 +83,14 @@ export default function SearchBar(props) {
       </form>
 
       <select onChange={e => setInstrument(e.target.value)}>
-        {instruments.map(instrument => {
-          return <option>{instrument}</option>;
+        {instruments.map((instrument, i) => {
+          return <option key={i}>{instrument}</option>;
         })}
       </select>
 
       <select onChange={e => setLevel(e.target.value)}>
-        {levels.map(level => {
-          return <option>{level}</option>;
+        {levels.map((level, i) => {
+          return <option key={i}>{level}</option>;
         })}
       </select>
 

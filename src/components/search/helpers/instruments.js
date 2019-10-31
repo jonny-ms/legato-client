@@ -1,0 +1,30 @@
+const instruments = [
+  "Select",
+  "Accordion",
+  "Bassoon",
+  "Cello",
+  "Clarinet",
+  "Double bass",
+  "Drums",
+  "Euphonium",
+  "Flute",
+  "French horn",
+  "Guitar",
+  "Harp",
+  "Harpsichord",
+  "Oboe",
+  "Organ",
+  "Percussion",
+  "Piano",
+  "Recorder",
+  "Saxophone",
+  "Speech arts and drama",
+  "Trombone",
+  "Trumpet",
+  "Tuba",
+  "Viola",
+  "Violin",
+  "Voice"
+];
+
+module.exports.instruments = instruments;

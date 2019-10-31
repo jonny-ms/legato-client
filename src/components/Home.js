@@ -9,7 +9,7 @@ const Home = () => {
 
   const fetchItems = async () => {
     const data = await axios("/api/teachers", { withCredentials: true });
-    console.log("data", JSON.parse(data.data.teachers));
+    // console.log("data", JSON.parse(data.data.teachers));
 
     setTeachers(JSON.parse(data.data.teachers));
     const user = data.data.user;

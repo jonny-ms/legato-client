@@ -47,9 +47,9 @@ export default function TeacherListItem(props) {
             <Typography variant="body2" color="textSecondary" component="p">
               {props.teacher.bio}
             </Typography>
-            <Typography variant="body2" color="textPrimary" component="p">
+            <Typography variant="body2" color="textPrimary" component="div">
               {coursesArray.map((courseData, i) => (
-                <div>{courseData}</div>
+                <div key={i}>{courseData}</div>
               ))}
             </Typography>
           </CardContent>
