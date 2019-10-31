@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext } from "react";
+import React, { Component, Fragment } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -135,8 +135,8 @@ class CalendarForBooking extends Component {
           }
         >
           <option>Select a course</option>
-          {Object.keys(this.state.courses).map(course => {
-            return <option>{course}</option>;
+          {Object.keys(this.state.courses).map((course, i) => {
+            return <option key={i}>{course}</option>;
           })}
         </select>
         <button onClick={this.submitBookings}>Submit</button>

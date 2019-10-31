@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import SearchBar from "./search/SearchBar";
-import TeacherDay from "./teachers/scheduleDay";
 
 const Home = () => {
   const [teachers, setTeachers] = useState([]);
@@ -18,12 +17,6 @@ const Home = () => {
     setUser(user);
     // setTeachers(data.data);
   };
-  // console.log(user);
-
-  const TeacherContext = React.createContext(teachers);
-
-  const teacherData = useContext(TeacherContext);
-  // console.log(teacherData);
 
   useEffect(() => {
     fetchItems();
