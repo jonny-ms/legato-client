@@ -22,7 +22,6 @@ const useStyles = makeStyles({
 
 export default function TeacherListItem(props) {
   // console.log(props.teacher.id);
-  console.log(props);
   const classes = useStyles();
 
   let courses = {};
@@ -36,11 +35,14 @@ export default function TeacherListItem(props) {
     <div>
       <Card className={classes.card}>
         <CardActionArea>
-          <CardMedia
-            className={classes.media}
-            image={props.teacher.profile_pic}
-            title="Contemplative Reptile"
-          />
+          <Box height="100%">
+            <CardMedia
+              component="img"
+              className={classes.media}
+              image={props.teacher.profile_pic}
+              title="Contemplative Reptile"
+            />
+          </Box>
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               {`${props.teacher.first_name}  ${props.teacher.last_name}`}
