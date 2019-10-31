@@ -26,11 +26,7 @@ const App = () => {
           <Route exact path="/students" component={() => <StudentSchedule />} />
           <Route exact path="/teachers/schedule" component={TeacherMonth} />
           <Route exact path="/teachers/schedule/day" component={TeacherDay} />
-<<<<<<< HEAD
           <Route path="/teachers/" component={ShowTeacherTimeslots} />
-=======
-          <Route path="/teachers" component={ShowTeacherTimeslots} />
->>>>>>> a8666a784204a26cc13446b7bfbb6ae48b1efd2a
           <Route exact path="/login" component={() => <Login />} />
         </Switch>
       </div>
