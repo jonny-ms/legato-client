@@ -89,23 +89,23 @@ class Calendar extends Component {
   // };
 
   handleSelect = arg => {
-    // const id = this.state.calendarEvents.length;
-    const maxID = this.state.maxID;
-    // console.log(maxID);
+    let newMaxID = this.state.maxID;
+
     this.setState({
       calendarEvents: this.state.calendarEvents.concat({
-        id: maxID,
+        id: newMaxID,
         title: "Available",
         start: arg.start,
         end: arg.end
       }),
-      maxID: this.state.maxID++
+      maxID: ++newMaxID
     });
-    // console.log(this.state.calendarEvents);
+    // this.setState({ maxID: newMaxID++ });
+    console.log(this.state);
   };
 
   handleDrop = arg => {
-    const id = arg.oldEvent.id;
+    const id = Number(arg.oldEvent.id);
 
     let events = this.state.calendarEvents.map(event => {
       if (event.id === id) {
@@ -122,11 +122,11 @@ class Calendar extends Component {
     this.setState({
       calendarEvents: events
     });
-    // console.log(this.state.calendarEvents);
+    console.log(this.state.calendarEvents);
   };
 
   handleResize = arg => {
-    const id = arg.prevEvent.id;
+    const id = Number(arg.prevEvent.id);
     let events = this.state.calendarEvents;
 
     events = events.map(event => {
@@ -184,6 +184,7 @@ class Calendar extends Component {
     } else if (arg.event.title === "Booked" || arg.event.title === "Accepted") {
       // console.log("NOPE");
     } else {
+      console.log(this.state);
       events = events.filter(event => {
         return event.id !== id;
       });
@@ -196,10 +197,10 @@ class Calendar extends Component {
         calendarEvents: events
       });
 
-      console.log("new state -->", this.state.calendarEvents);
-      console.log("arg.event.id -->", id);
-      if (id < this.state.maxIDFromServer) {
-        console.log("delete event on server");
+      // console.log("new state -->", this.state);
+      // console.log("arg.event.id -->", id);
+      if (id <= this.state.maxIDFromServer) {
+        // console.log("delete event on server");
         axios(`/api/timeslots/${id}`, {
           method: "delete",
           withCredentials: true,
@@ -227,7 +228,7 @@ class Calendar extends Component {
         timeslots.push(newTimeslot);
       }
     }
-    console.log("hey look here!!!", timeslots);
+    // console.log("hey look here!!!", timeslots);
     axios(`/api/timeslots`, {
       method: "post",
       withCredentials: true,
