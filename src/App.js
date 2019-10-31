@@ -23,7 +23,7 @@ const App = () => {
           <Route exact path="/students/new" component={() => <NewStudent />} />
           <Route exact path="/teachers/new" component={() => <NewTeacher />} />
           <Route exact path="/teachers/edit" component={EditTeacher} />
-          <Route path="/students" component={() => <StudentSchedule />} />
+          <Route exact path="/students" component={() => <StudentSchedule />} />
           <Route exact path="/teachers/schedule" component={TeacherMonth} />
           <Route exact path="/teachers/schedule/day" component={TeacherDay} />
           <Route path="/teachers" component={ShowTeacherTimeslots} />

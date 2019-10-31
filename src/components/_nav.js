@@ -28,7 +28,7 @@ export default function Nav() {
         <Link to="/teachers/edit">
           <li>Edit teacher</li>
         </Link>
-        <Link to="/students/1">
+        <Link to="/students">
           <li>Student 1</li>
         </Link>
         <Link to="/teachers/schedule">

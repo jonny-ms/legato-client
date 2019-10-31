@@ -20,7 +20,7 @@ class CalendarForBooking extends Component {
 
   getCalendarEvents = () => {
     // TODO: Dynamically set which teacher's calendar is requested
-    axios(`/api/students/1`, {
+    axios(`/api/students`, {
       method: "get",
       withCredentials: true
     }).then(({ data }) => {
