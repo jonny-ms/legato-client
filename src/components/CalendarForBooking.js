@@ -16,10 +16,6 @@ class CalendarForBooking extends Component {
     course_id: null
   };
 
-  // const courses = [
-
-  // ]
-
   calendarRef = React.createRef();
 
   getCalendarEvents = () => {
@@ -98,33 +94,42 @@ class CalendarForBooking extends Component {
     // Send requested bookings to server
     e.preventDefault();
     const events = this.state.calendarEvents;
-    const timeslotInMilliseconds = 1000 * 60 * 30;
 
-    let timeslots = [];
+    let requests = [];
     for (let event of events) {
-      const numberOfTimeslots =
-        (event.end - event.start) / timeslotInMilliseconds;
-      for (let i = 0; i < numberOfTimeslots; i++) {
-        const newTimeslot = event.id;
-        // Only send timeslots which have a booking request
-        if (event.title === "Booking Request") {
-          // TODO: Check if timeslots are next to each other and send as one lesson
-          timeslots.push(newTimeslot);
-        }
+      if (event.title === "Booking Request") {
+        requests.push(event);
       }
     }
-    // console.log(timeslots);
-    // console.log(this.state.course_id);
-    axios(`/api/lessons`, {
-      method: "post",
-      withCredentials: true,
-      data: {
-        lesson: {
-          timeslots,
-          course_id: this.state.course_id
-        }
-      }
+    
+    const sortedRequests = requests.sort((a, b) => {
+      return moment(a.start).diff(moment(b.start));
     });
+    
+    // Only send timeslots which have a booking request
+    let checkValidTimeslots = true
+    for (let i = 0; i < sortedRequests.length - 1; i++) {
+      if ( moment(sortedRequests[Number(i) + 1].start).diff(moment(sortedRequests[i].start).add(30, "m").toDate())) {
+        alert("Please request one lesson at a time.")
+        return checkValidTimeslots = false
+      }
+    }
+
+    if (checkValidTimeslots) {
+
+      axios(`/api/lessons`, {
+        method: "post",
+        withCredentials: true,
+        data: {
+          lesson: {
+            timeslots: sortedRequests.map((request) => {
+              return request.id
+            }),
+            course_id: this.state.course_id
+          }
+        }
+      });
+    }
   };
 
   requestBooking = arg => {
@@ -135,7 +140,7 @@ class CalendarForBooking extends Component {
     // Must create a new instance for state to update
     for (let event of events) {
       let newEvent = { ...event };
-      if (event.id === eventId) {
+      if (event.id === eventId && event.title === "Available") {
         newEvent = {
           ...event,
           title: "Booking Request",
