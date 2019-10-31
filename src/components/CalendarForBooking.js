@@ -13,17 +13,13 @@ class CalendarForBooking extends Component {
   state = {
     calendarEvents: [],
     courses: {},
-    course_id: null 
+    course_id: null
   };
-
-
 
   // const courses = [
 
   // ]
-  
-  
-  
+
   calendarRef = React.createRef();
 
   getCalendarEvents = () => {
@@ -31,7 +27,7 @@ class CalendarForBooking extends Component {
     axios(`/api/teachers/3`, {
       method: "get",
       withCredentials: true
-    }).then(({data}) => {
+    }).then(({ data }) => {
       let loadedEvents = [];
       // create calendar events for timeslots
       for (let i in data.timeslots) {
@@ -45,16 +41,16 @@ class CalendarForBooking extends Component {
           id: data.timeslots[i].id
         });
       }
-      console.log(loadedEvents);
+      // console.log(loadedEvents);
       // Create courses
-      console.log(data.courses)
-      let courses = {}
+      // console.log(data.courses)
+      let courses = {};
       for (let course of data.courses) {
-        console.log(course)
-        const courseName = course.instrument + " - " + course.level
-        courses[courseName]= course.id
+        // console.log(course)
+        const courseName = course.instrument + " - " + course.level;
+        courses[courseName] = course.id;
       }
-      console.log(courses)
+      // console.log(courses)
       this.setState({
         calendarEvents: loadedEvents,
         courses: courses
@@ -85,8 +81,8 @@ class CalendarForBooking extends Component {
         }
       }
     }
-    console.log(timeslots);
-    console.log(this.state.course_id);
+    // console.log(timeslots);
+    // console.log(this.state.course_id);
     axios(`/api/lessons`, {
       method: "post",
       withCredentials: true,
@@ -122,7 +118,7 @@ class CalendarForBooking extends Component {
       calendarEvents: newEvents
     });
 
-    console.log(this.state);
+    // console.log(this.state);
   };
 
   render() {
@@ -134,7 +130,9 @@ class CalendarForBooking extends Component {
           })}
         </select> */}
         <select
-          onChange={e => this.setState({ course_id: this.state.courses[e.target.value] })}
+          onChange={e =>
+            this.setState({ course_id: this.state.courses[e.target.value] })
+          }
         >
           <option>Select a course</option>
           {Object.keys(this.state.courses).map(course => {

@@ -9,13 +9,15 @@ const Home = () => {
 
   const fetchItems = async () => {
     const data = await axios("/api/teachers", { withCredentials: true });
+    console.log("data", JSON.parse(data.data.teachers));
 
-    setTeachers(data.data.teachers);
-    const user = data.data.user
-    user.type = data.data.type
-    setUser(user)
+    setTeachers(JSON.parse(data.data.teachers));
+    const user = data.data.user;
+    user.type = data.data.type;
+    setUser(user);
+    // setTeachers(data.data);
   };
-  console.log(user)
+  // console.log(user);
 
   useEffect(() => {
     fetchItems();
@@ -24,7 +26,11 @@ const Home = () => {
   return (
     <div className="App">
       <p>Home</p>
-      { user && <p>{user.type} {user.first_name}</p>} 
+      {user && (
+        <p>
+          {user.type} {user.first_name}
+        </p>
+      )}
       <div>This is the home page</div>
       <div>
         This will lead to -login -register -create new teacher account -create
@@ -33,16 +39,6 @@ const Home = () => {
       <div>
         <SearchBar teachers={teachers} />
       </div>
-      <div>
-        <ul>{}</ul>
-      </div>
-      <div>Teacher List:</div>
-
-      {teachers.map(teacher => (
-        <div key={teacher.id}>
-          {teacher.first_name}, {teacher.last_name}
-        </div>
-      ))}
     </div>
   );
 };

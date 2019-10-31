@@ -57,7 +57,7 @@ class Calendar extends Component {
           borderColor: borderColor
         });
       }
-      console.log(loadedEvents);
+      // console.log(loadedEvents);
       this.setState({
         calendarEvents: loadedEvents,
         maxIDFromServer: maxID,
@@ -89,9 +89,9 @@ class Calendar extends Component {
   // };
 
   handleSelect = arg => {
-    const id = this.state.calendarEvents.length;
+    // const id = this.state.calendarEvents.length;
     const maxID = this.state.maxID;
-    console.log(maxID);
+    // console.log(maxID);
     this.setState({
       calendarEvents: this.state.calendarEvents.concat({
         id: maxID,
@@ -101,14 +101,14 @@ class Calendar extends Component {
       }),
       maxID: this.state.maxID++
     });
-    console.log(this.state.calendarEvents);
+    // console.log(this.state.calendarEvents);
   };
 
   handleDrop = arg => {
     const id = arg.oldEvent.id;
 
     let events = this.state.calendarEvents.map(event => {
-      if (event.id == id) {
+      if (event.id === id) {
         event.start = arg.event.start;
         event.end = arg.event.end;
       }
@@ -130,7 +130,7 @@ class Calendar extends Component {
     let events = this.state.calendarEvents;
 
     events = events.map(event => {
-      if (event.id == id) {
+      if (event.id === id) {
         event.start = arg.event.start;
         event.end = arg.event.end;
       }
@@ -150,10 +150,10 @@ class Calendar extends Component {
     let events = this.state.calendarEvents;
     if (arg.event.title === "Booking Request") {
       if (confirm("Do you want to accept the booking?")) {
-        console.log("Accepted");
+        // console.log("Accepted");
 
         events = events.map(event => {
-          if (event.id == id) {
+          if (event.id === id) {
             let newEvent = {
               ...event,
               title: "Accepted",
@@ -167,8 +167,8 @@ class Calendar extends Component {
         this.setState({
           calendarEvents: events
         });
-        console.log(events);
-        console.log(this.state);
+        // console.log(events);
+        // console.log(this.state);
 
         axios(`/api/timeslots/${id}`, {
           method: "put",
@@ -182,7 +182,7 @@ class Calendar extends Component {
         // modify state so booking is rejected - returned to available
       }
     } else if (arg.event.title === "Booked" || arg.event.title === "Accepted") {
-      console.log("NOPE");
+      // console.log("NOPE");
     } else {
       events = events.filter(event => {
         return event.id !== id;
