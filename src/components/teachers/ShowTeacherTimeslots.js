@@ -1,11 +1,11 @@
 import React from "react";
 import CalendarForBooking from "../CalendarForBooking";
 
-const ShowTeacherTimeslots = () => {
+const ShowTeacherTimeslots = props => {
   return (
     <div className="EditTeacher">
       <p>Book Appointments</p>
-      <CalendarForBooking />
+      <CalendarForBooking teacherID={props.history.location.state} />
     </div>
   );
 };

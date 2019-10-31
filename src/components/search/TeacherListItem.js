@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -20,16 +21,16 @@ const useStyles = makeStyles({
 });
 
 export default function TeacherListItem(props) {
+  // console.log(props.teacher.id);
+  console.log(props);
   const classes = useStyles();
 
   let courses = {};
-  // console.log("courses", props);
   for (let course of props.teacher.courses) {
     const courseName = `${course.instrument} - ${course.level} - ${course.rate}/hr`;
     courses[courseName] = course.id;
   }
   let coursesArray = Object.keys(courses);
-  // console.log("coursesArray: ", coursesArray);
 
   return (
     <div>
@@ -66,7 +67,14 @@ export default function TeacherListItem(props) {
             Share
           </Button>
           <Button size="small" color="primary">
-            Learn More
+            <Link
+              to={{
+                pathname: `/teachers/${props.teacher.id}`,
+                state: { teacher: props.teacher.id }
+              }}
+            >
+              Book Now
+            </Link>
           </Button>
         </CardActions>
       </Card>

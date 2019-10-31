@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment, useContext } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -24,7 +24,7 @@ class CalendarForBooking extends Component {
 
   getCalendarEvents = () => {
     // TODO: Dynamically set which teacher's calendar is requested
-    axios(`/api/teachers/3`, {
+    axios(`/api/teachers/${this.props.teacherID.teacher}`, {
       method: "get",
       withCredentials: true
     }).then(({ data }) => {
