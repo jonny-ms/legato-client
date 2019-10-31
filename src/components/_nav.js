@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../App.css";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 
 export default function Nav() {
@@ -10,13 +10,9 @@ export default function Nav() {
     e.preventDefault();
     axios(`/api/logout`, {
       withCredentials: true
-    })
-      .then(resp => {
-        console.log(resp);
-      })
-      .then(() => {
-        setState(true);
-      });
+    }).then(() => {
+      setState(true);
+    });
   };
 
   return (
@@ -46,9 +42,9 @@ export default function Nav() {
         <Link to="/login">
           <li>Login</li>
         </Link>
-        <Link to="/" onClick={e => logout(e)}>
+        <Link onClick={e => logout(e)}>
           <li>
-            {/* {state && <Redirect to="/" />} */}
+            {state && <Redirect to="/" />}
             Logout
           </li>
         </Link>
