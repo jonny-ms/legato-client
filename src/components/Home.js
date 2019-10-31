@@ -21,6 +21,7 @@ const Home = () => {
   useEffect(() => {
     fetchItems();
   }, []);
+  console.log("user Home.js: ", user);
 
   return (
     <div className="App">

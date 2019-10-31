@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import "../App.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Nav() {
+  const [state, setState] = useState(false);
+
   const logout = e => {
     e.preventDefault();
     axios(`/api/logout`, {
       withCredentials: true
-    }).then(resp => {
-      console.log(resp);
-    });
+    })
+      .then(resp => {
+        console.log(resp);
+      })
+      .then(() => {
+        setState(true);
+      });
   };
 
   return (
@@ -41,7 +47,10 @@ export default function Nav() {
           <li>Login</li>
         </Link>
         <Link to="/" onClick={e => logout(e)}>
-          <li>Logout</li>
+          <li>
+            {/* {state && <Redirect to="/" />} */}
+            Logout
+          </li>
         </Link>
       </ul>
     </nav>
