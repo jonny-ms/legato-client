@@ -30,7 +30,9 @@ class CalendarForBooking extends Component {
     }).then(({ data }) => {
       let loadedEvents = [];
       // create calendar events for timeslots
+      console.log("LOOK HERE", data)
       for (let i in data.timeslots) {
+        
         const startTime = data.timeslots[i].datetime;
         loadedEvents.push({
           title: "Available",
@@ -39,7 +41,37 @@ class CalendarForBooking extends Component {
             .add(30, "m")
             .toDate(),
           id: data.timeslots[i].id
-        });
+        }); 
+      }
+
+      for (let i in data.lessons) {
+        
+        const startTime = data.lessons[i].datetime;
+        
+        if (!data.lessons[i].is_booked) {
+          loadedEvents.push({
+            title: "Pending lessons",
+            start: moment(startTime).toDate(),
+            end: moment(startTime)
+              .add(30, "m")
+              .toDate(),
+            id: data.lessons[i].id,
+            backgroundColor: "orange",
+            borderColor: "orange"
+          }); 
+        } else {
+          loadedEvents.push({
+            title: "My lessons",
+            start: moment(startTime).toDate(),
+            end: moment(startTime)
+              .add(30, "m")
+              .toDate(),
+            id: data.lessons[i].id,
+            backgroundColor: "green",
+            borderColor: "green"
+          }); 
+
+        }
       }
       // console.log(loadedEvents);
       // Create courses
