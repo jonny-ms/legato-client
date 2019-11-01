@@ -10,8 +10,8 @@ import axios from "axios";
 const moment = require("moment");
 
 // List of Todos
-// stop teacher from dragging booking requests or booked
-// stop teacher from deleting booking request or booked
+// TODO stop teacher from dragging booking requests or booked
+// TODO stop teacher from deleting booking request or booked
 
 class Calendar extends Component {
   state = {
@@ -23,129 +23,87 @@ class Calendar extends Component {
 
   getCalendarEvents = () => {
     Promise.all([
-      axios(`/api/timeslots`, {
+      axios(`/api/courses`, {
         method: "get",
         withCredentials: true
       }),
-      axios("/api/courses", {
+      axios(`/api/timeslots`, {
         method: "get",
         withCredentials: true
       })
     ]).then(all => {
-      const timeslots = all[0].data;
-      const rawCourses = all[1].data;
-      let courses = {};
-      for (let course of rawCourses) {
-        const courseName = course.instrument + " - " + course.level;
-        courses[courseName] = course.id;
-      }
+      const data = all[0].data
+      const timeslots = all[1].data
+
       let loadedEvents = [];
+      
+      for (let course of data) {
+        const lessons = course.lessons
+        for (let i in lessons) {
+          const timeslots = lessons[i].timeslots
+          const startTime = timeslots[0].datetime;
+  
+          const lastTimeslot = timeslots[timeslots.length -1];
+          const endTime = moment(lastTimeslot.datetime).add(30, "m").toDate();
+  
+          if (!timeslots[0].is_booked) {
+            loadedEvents.push({
+              title: "Pending lessons",
+              start: moment(startTime).toDate(),
+              end: endTime,
+              id: lessons[i].id,
+              backgroundColor: "orange",
+              borderColor: "orange"
+            }); 
+          } else {
+            loadedEvents.push({
+              title: "Lessons",
+              start: moment(startTime).toDate(),
+              end: endTime,
+              id: lessons[i].id,
+              backgroundColor: "green",
+              borderColor: "green"
+            }); 
+          }
+        }
+      }
+      
+      // let courses = {};
+      // for (let course of rawCourses) {
+        // const courseName = course.instrument + " - " + course.level;
+        // courses[courseName] = course.id;
+      // }
       let maxID = 0;
       for (let i in timeslots) {
         if (maxID < timeslots[i].id) {
           maxID = timeslots[i].id;
         }
         const startTime = timeslots[i].datetime;
-        let title = "";
-        let backgroundColor = "";
-        let borderColor = "";
-        if (timeslots[i].lesson_id && timeslots[i].is_booked) {
-          title = "Booked";
-          backgroundColor = "Green";
-          borderColor = "Green";
-        } else if (timeslots[i].lesson_id) {
-          title = "Booking Request";
-          backgroundColor = "Orange";
-          borderColor = "Orange";
-        } else {
-          title = "Available";
+        if (!timeslots[i].lesson_id) {
+          loadedEvents.push({
+            id: timeslots[i].id,
+            title: "Available",
+            start: moment(startTime).toDate(),
+            end: moment(startTime)
+              .add(30, "m")
+              .toDate(),
+          });
         }
-        loadedEvents.push({
-          id: timeslots[i].id,
-          title,
-          start: moment(startTime).toDate(),
-          end: moment(startTime)
-            .add(30, "m")
-            .toDate(),
-          backgroundColor: backgroundColor,
-          borderColor: borderColor
-        });
       }
       // console.log(loadedEvents);
       this.setState({
         calendarEvents: loadedEvents,
-        courses: courses,
+        // courses: courses,
         maxIDFromServer: maxID,
         maxID: ++maxID
       });
     });
-
-    // axios(`/api/timeslots`, {
-    //   method: "get",
-    //   withCredentials: true
-    // }).then(({ data }) => {
-    //   let loadedEvents = [];
-    //   let maxID = 0;
-    //   for (let i in data) {
-    //     if (maxID < data[i].id) {
-    //       maxID = data[i].id;
-    //     }
-    //     const startTime = data[i].datetime;
-    //     let title = "";
-    //     let backgroundColor = "";
-    //     let borderColor = "";
-    //     if (data[i].lesson_id && data[i].is_booked) {
-    //       title = "Booked";
-    //       backgroundColor = "Green";
-    //       borderColor = "Green";
-    //     } else if (data[i].lesson_id) {
-    //       title = "Booking Request";
-    //       backgroundColor = "Orange";
-    //       borderColor = "Orange";
-    //     } else {
-    //       title = "Available";
-    //     }
-    //     loadedEvents.push({
-    //       id: data[i].id,
-    //       title,
-    //       start: moment(startTime).toDate(),
-    //       end: moment(startTime)
-    //         .add(30, "m")
-    //         .toDate(),
-    //       backgroundColor: backgroundColor,
-    //       borderColor: borderColor
-    //     });
-    //   }
-    //   // console.log(loadedEvents);
-    //   this.setState({
-    //     calendarEvents: loadedEvents,
-    //     maxIDFromServer: maxID,
-    //     maxID: ++maxID
-    //   });
-    // });
   };
 
   componentDidMount() {
     this.getCalendarEvents();
   }
 
-  // handleDateClick = arg => {
-  //   // if (confirm("Would you like to add an event to " + arg.dateStr + " ?")) {
-  //   // changeView("timeGrid");
-  //   this.setState({
-  //     // add new event data
-  //     calendarEvents: this.state.calendarEvents.concat({
-  //       // creates a new array
-  //       title: "New Event",
-  //       start: arg.date,
-  //       end: arg.date + 1800
-  //       // allDay: arg.allDay
-  //     })
-  //   });
-  //   console.log(arg.date);
-  //   console.log(arg.date + 1800);
-  //   // }
-  // };
 
   handleSelect = arg => {
     let newMaxID = this.state.maxID;
