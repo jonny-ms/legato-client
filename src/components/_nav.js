@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "../App.css";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
+import { Button } from "@material-ui/core";
 
 export default function Nav(props) {
   const [state, setState] = useState(false);
-  const [user, setUser] = useState({});
-
-  // setUser(props);
 
   const logout = e => {
     e.preventDefault();
@@ -18,52 +16,77 @@ export default function Nav(props) {
     });
   };
 
-  console.log("props from _nav.js: ", props);
+  const UserContext = React.createContext(props);
+
+  const user = useContext(UserContext);
+
+  console.log("user from _nav.js: ", user);
 
   return (
     <nav>
-      {user && (
+      {user.user && (
         <p>
-          {user.type} {user.first_name}
+          {user.user.type} {user.user.first_name}
         </p>
       )}
       <Link to="/">
-        <h3>Logo</h3>
+        <h3>Home</h3>
       </Link>
+
       <ul className="nav-links">
         {/* Displayed when NO USER */}
-        <Link to="/students/new">
-          <li>New Student</li>
-        </Link>
+        {!user.user.type && (
+          <Link to="/students/new">
+            <li>New Student</li>
+          </Link>
+        )}
         {/* Displayed when NO USER */}
-        <Link to="/teachers/new">
-          <li>New teacher</li>
-        </Link>
+        {!user.user.type && (
+          <Link to="/teachers/new">
+            <li>New teacher</li>
+          </Link>
+        )}
         {/* Displayed for SIGNED IN TEACHER */}
-        <Link to="/teachers/edit">
-          <li>Edit teacher</li>
-        </Link>
+        {user.user.type === "Teacher" && (
+          <Link to="/teachers/edit">
+            <li>Edit teacher</li>
+          </Link>
+        )}
         {/*  DISPLAYED FOR SIGNED IN STUDENT */}
-        <Link to="/students">
-          <li>Student Dashboard</li>
-        </Link>
+        {user.user.type === "Student" && (
+          <Link to="/students">
+            <li>Student Dashboard</li>
+          </Link>
+        )}
         {/* Displayed for SIGNED IN teachers */}
-        <Link to="/teachers/schedule">
-          <li>Teacher Dashboard</li>
-        </Link>
+        {user.user.type === "Teacher" && (
+          <Link to="/teachers/schedule">
+            <li>Teacher Dashboard</li>
+          </Link>
+        )}
         {/* Displayed for SIGNED IN teachers */}
-        <Link to="/teachers/schedule/day">
-          <li>Teacher Schedule Day</li>
-        </Link>
-        <Link to="/login">
-          <li>Login</li>
-        </Link>
-        <Link onClick={e => logout(e)}>
-          <li>
-            {state && <Redirect to="/" />}
-            Logout
-          </li>
-        </Link>
+        {user.user.type === "Teacher" && (
+          <Link to="/teachers/schedule/day">
+            <li>Teacher Schedule Day</li>
+          </Link>
+        )}
+        {!user.user.type && (
+          <Link to="/login">
+            <li>Login</li>
+          </Link>
+        )}
+        {user.user.type && (
+          <Button
+            onClick={e => {
+              logout(e);
+            }}
+          >
+            <li>
+              {state && <Redirect to="/" />}
+              Logout
+            </li>
+          </Button>
+        )}
       </ul>
     </nav>
   );

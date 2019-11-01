@@ -21,8 +21,7 @@ const App = () => {
   const fetchItems = async () => {
     const data = await axios("/api/teachers", { withCredentials: true });
     // console.log("data", JSON.parse(data.data.teachers));
-
-    setTeacher(JSON.parse(data.data.teachers));
+    // setTeacher(JSON.parse(data.data.teachers));
     const user = data.data.user;
     user.type = data.data.type;
     setUser(user);
@@ -36,7 +35,7 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <Nav teacher={teacher} user={user} />
+        <Nav user={user} />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/students/new" component={() => <NewStudent />} />
