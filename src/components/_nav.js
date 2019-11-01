@@ -3,8 +3,11 @@ import "../App.css";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 
-export default function Nav() {
+export default function Nav(props) {
   const [state, setState] = useState(false);
+  const [user, setUser] = useState({});
+
+  // setUser(props);
 
   const logout = e => {
     e.preventDefault();
@@ -15,29 +18,39 @@ export default function Nav() {
     });
   };
 
+  console.log("props from _nav.js: ", props);
+
   return (
     <nav>
+      {user && (
+        <p>
+          {user.type} {user.first_name}
+        </p>
+      )}
       <Link to="/">
         <h3>Logo</h3>
       </Link>
       <ul className="nav-links">
+        {/* Displayed when NO USER */}
         <Link to="/students/new">
           <li>New Student</li>
         </Link>
+        {/* Displayed when NO USER */}
         <Link to="/teachers/new">
           <li>New teacher</li>
         </Link>
+        {/* Displayed for SIGNED IN TEACHER */}
         <Link to="/teachers/edit">
           <li>Edit teacher</li>
         </Link>
+
+        {/* This displayed only for teachers */}
         <Link to="/teachers/schedule">
-          <li>Teacher Schedule</li>
+          <li>Teacher Dashboard</li>
         </Link>
+        {/* Displayed only for teachers */}
         <Link to="/teachers/schedule/day">
           <li>Teacher Schedule Day</li>
-        </Link>
-        <Link to="/teachers/6">
-          <li>Teacher 6</li>
         </Link>
         <Link to="/login">
           <li>Login</li>

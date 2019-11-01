@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 
@@ -13,10 +14,28 @@ import ShowTeacherTimeslots from "./components/teachers/ShowTeacherTimeslots";
 import Login from "./components/Login";
 
 const App = () => {
+  const [teacher, setTeacher] = useState([]);
+  const [user, setUser] = useState({});
+
+  const fetchItems = async () => {
+    const data = await axios("/api/teachers", { withCredentials: true });
+    // console.log("data", JSON.parse(data.data.teachers));
+
+    setTeacher(JSON.parse(data.data.teachers));
+    const user = data.data.user;
+    user.type = data.data.type;
+    setUser(user);
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+  // console.log("user from App.js: ", user);
+
   return (
     <Router>
       <div className="App">
-        <Nav />
+        <Nav teacher={teacher} user={user} />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/students/new" component={() => <NewStudent />} />
