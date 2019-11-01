@@ -23,7 +23,7 @@ const App = () => {
     // setTeacher(JSON.parse(data.data.teachers));
     const user = data.data.user;
     user.type = data.data.type;
-    console.log("user from App.js :", user);
+    // console.log("user from App.js :", user);
     setUser(user);
   };
 
