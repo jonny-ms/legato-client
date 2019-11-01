@@ -34,7 +34,7 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <Nav user={user} />
+        <Nav user={user} setUser={setUser} />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/students/new" component={() => <NewStudent />} />

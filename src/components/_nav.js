@@ -12,6 +12,7 @@ export default function Nav(props) {
     axios(`/api/logout`, {
       withCredentials: true
     }).then(() => {
+      props.setUser({});
       setState(true);
     });
   };
