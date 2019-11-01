@@ -4,10 +4,15 @@ import Calendar from "../Calendar";
 const TeacherSchedule = () => {
   return (
     <div className="EditTeacher">
-      <p>Edit Teacher's schedule</p>
-      <div>This is the teacher edit schedule form</div>
-      <div>This will have a calendar to set the teachers schedule</div>
-      <Calendar />
+      <p>Your Dashboard</p>
+      <div className="dashboard-links">
+        <p>Schedule</p>
+        <p>Messages</p>
+        <p>Appointments</p>
+      </div>
+      <div className="calendar">
+        <Calendar />
+      </div>
     </div>
   );
 };
