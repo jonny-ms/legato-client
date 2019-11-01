@@ -41,6 +41,7 @@ export default function TeacherListItem(props) {
               className={classes.media}
               image={props.teacher.profile_pic}
               title="Contemplative Reptile"
+              style={{ height: "400px" }}
             />
           </Box>
           <CardContent>
