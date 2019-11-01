@@ -9,7 +9,7 @@ import axios from "axios";
 
 const moment = require("moment");
 
-class CalendarForBooking extends Component {
+class StudentCalendar extends Component {
   state = {
     calendarEvents: [],
     courses: {},
@@ -20,23 +20,27 @@ class CalendarForBooking extends Component {
 
   getCalendarEvents = () => {
     // TODO: Dynamically set which teacher's calendar is requested
-    axios(`/api/students`, {
+    axios(`/api/lessons`, {
       method: "get",
       withCredentials: true
-    }).then(({ data }) => {
+    }).then(({data}) => {
+      const parsedLessons = JSON.parse(data.lessons)
       let loadedEvents = [];
-      console.log("in students", data)
-      for (let i in data) {
-        const startTime = data[i].datetime;
-        
-        if (!data[i].is_booked) {
+      console.log("in students", parsedLessons)
+      console.log(data.courses)
+      for (let i in parsedLessons) {
+        const timeslot = parsedLessons[i].timeslots
+        const startTime = timeslot[0].datetime;
+
+        const lastTimeslot = timeslot[timeslot.length -1];
+        const endTime = moment(lastTimeslot.datetime).add(30, "m").toDate();
+
+        if (!timeslot[0].is_booked) {
           loadedEvents.push({
             title: "Pending lessons",
             start: moment(startTime).toDate(),
-            end: moment(startTime)
-              .add(30, "m")
-              .toDate(),
-            id: data[i].id,
+            end: endTime,
+            id: parsedLessons[i].id,
             backgroundColor: "orange",
             borderColor: "orange"
           }); 
@@ -44,10 +48,8 @@ class CalendarForBooking extends Component {
           loadedEvents.push({
             title: "Lessons",
             start: moment(startTime).toDate(),
-            end: moment(startTime)
-              .add(30, "m")
-              .toDate(),
-            id: data[i].id,
+            end: endTime,
+            id: parsedLessons[i].id,
             backgroundColor: "green",
             borderColor: "green"
           }); 
@@ -99,4 +101,4 @@ class CalendarForBooking extends Component {
   }
 }
 
-export default CalendarForBooking;
+export default StudentCalendar;
