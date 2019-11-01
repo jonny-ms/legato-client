@@ -43,12 +43,15 @@ export default function Nav(props) {
         <Link to="/teachers/edit">
           <li>Edit teacher</li>
         </Link>
-
-        {/* This displayed only for teachers */}
+        {/*  DISPLAYED FOR SIGNED IN STUDENT */}
+        <Link to="/students">
+          <li>Student Dashboard</li>
+        </Link>
+        {/* Displayed for SIGNED IN teachers */}
         <Link to="/teachers/schedule">
           <li>Teacher Dashboard</li>
         </Link>
-        {/* Displayed only for teachers */}
+        {/* Displayed for SIGNED IN teachers */}
         <Link to="/teachers/schedule/day">
           <li>Teacher Schedule Day</li>
         </Link>
