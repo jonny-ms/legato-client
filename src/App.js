@@ -15,7 +15,6 @@ import ShowTeacherTimeslots from "./components/teachers/ShowTeacherTimeslots";
 import Login from "./components/Login";
 
 const App = () => {
-  const [teacher, setTeacher] = useState([]);
   const [user, setUser] = useState({});
 
   const fetchItems = async () => {
@@ -45,7 +44,11 @@ const App = () => {
           <Route exact path="/teachers/schedule" component={TeacherMonth} />
           <Route exact path="/teachers/schedule/day" component={TeacherDay} />
           <Route path="/teachers/" component={ShowTeacherTimeslots} />
-          <Route exact path="/login" component={() => <Login />} />
+          <Route
+            exact
+            path="/login"
+            component={() => <Login setUser={setUser} />}
+          />
         </Switch>
       </div>
     </Router>

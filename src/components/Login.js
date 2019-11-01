@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 
 import axios from "axios";
 
-export default function LoginForm() {
+export default function LoginForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [teacher, setTeacher] = useState(false);
@@ -23,8 +23,15 @@ export default function LoginForm() {
         alert("Nice try!");
       } else {
         console.log("resp from Login.js: ", resp);
-        setTeacher(resp.data.teacher);
-        setStudent(resp.data.student);
+        axios("/api/teachers", { withCredentials: true }).then(data => {
+          // console.log("data", JSON.parse(data.data.teachers));
+          // setTeacher(JSON.parse(data.data.teachers));
+          const user = data.data.user;
+          user.type = data.data.type;
+          props.setUser(user);
+          setTeacher(resp.data.teacher);
+          setStudent(resp.data.student);
+        });
       }
     });
   };
