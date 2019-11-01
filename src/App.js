@@ -18,11 +18,12 @@ const App = () => {
   const [user, setUser] = useState({});
 
   const fetchItems = async () => {
-    const data = await axios("/api/teachers", { withCredentials: true });
+    const data = await axios("/api/sessions", { withCredentials: true });
     // console.log("data", JSON.parse(data.data.teachers));
     // setTeacher(JSON.parse(data.data.teachers));
     const user = data.data.user;
     user.type = data.data.type;
+    console.log("user from App.js :", user);
     setUser(user);
   };
 

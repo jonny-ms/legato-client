@@ -22,15 +22,19 @@ export default function LoginForm(props) {
       if (resp.data.status === 401) {
         alert("Nice try!");
       } else {
-        console.log("resp from Login.js: ", resp);
-        axios("/api/teachers", { withCredentials: true }).then(data => {
+        console.log("resp.data.teacher from Login.js: ", resp.data.teacher);
+        let tempStudent = resp.data.student;
+        let tempTeacher = resp.data.teacher;
+        axios("/api/sessions", { withCredentials: true }).then(data => {
           // console.log("data", JSON.parse(data.data.teachers));
           // setTeacher(JSON.parse(data.data.teachers));
           const user = data.data.user;
           user.type = data.data.type;
-          props.setUser(user);
-          setTeacher(resp.data.teacher);
-          setStudent(resp.data.student);
+          props.setUser(prev => {
+            if (tempTeacher) setTeacher(tempTeacher);
+            else setStudent(tempStudent);
+            return user;
+          });
         });
       }
     });
@@ -58,8 +62,8 @@ export default function LoginForm(props) {
           required
         />
       </label>
-      {student && <Redirect to="/" />}
       {teacher && <Redirect to="/teachers/schedule" />}
+      {student && <Redirect to="/" />}
       <button type="submit" onClick={e => login(e)}>
         Login
       </button>

@@ -5,7 +5,7 @@ import axios from "axios";
 import { Button } from "@material-ui/core";
 
 export default function Nav(props) {
-  const [state, setState] = useState(false);
+  const [redirect, setRedirect] = useState(false);
 
   const logout = e => {
     e.preventDefault();
@@ -13,7 +13,7 @@ export default function Nav(props) {
       withCredentials: true
     }).then(() => {
       props.setUser({});
-      setState(true);
+      setRedirect(true);
     });
   };
 
@@ -21,8 +21,13 @@ export default function Nav(props) {
 
   const user = useContext(UserContext);
 
-  console.log("user from _nav.js: ", user);
+  const red = () => {
+    setRedirect(false);
+    return <Redirect to="/" />;
+  };
 
+  console.log("user from _nav.js: ", user);
+  console.log("REDIRECT", redirect);
   return (
     <nav>
       {user.user && (
@@ -77,13 +82,9 @@ export default function Nav(props) {
           </Link>
         )}
         {user.user.type && (
-          <Button
-            onClick={e => {
-              logout(e);
-            }}
-          >
+          <Button onClick={e => logout(e)}>
             <li>
-              {state && <Redirect to="/" />}
+              {redirect && red()}
               Logout
             </li>
           </Button>
