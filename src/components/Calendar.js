@@ -16,30 +16,44 @@ const moment = require("moment");
 class Calendar extends Component {
   state = {
     calendarEvents: [],
+    coruses: {},
     maxIDFromServer: 0,
     maxID: 0
   };
 
   getCalendarEvents = () => {
-    axios(`/api/timeslots`, {
-      method: "get",
-      withCredentials: true
-    }).then(({ data }) => {
+    Promise.all([
+      axios(`/api/timeslots`, {
+        method: "get",
+        withCredentials: true
+      }),
+      axios("/api/courses", {
+        method: "get",
+        withCredentials: true
+      })
+    ]).then(all => {
+      const timeslots = all[0].data;
+      const rawCourses = all[1].data;
+      let courses = {};
+      for (let course of rawCourses) {
+        const courseName = course.instrument + " - " + course.level;
+        courses[courseName] = course.id;
+      }
       let loadedEvents = [];
       let maxID = 0;
-      for (let i in data) {
-        if (maxID < data[i].id) {
-          maxID = data[i].id;
+      for (let i in timeslots) {
+        if (maxID < timeslots[i].id) {
+          maxID = timeslots[i].id;
         }
-        const startTime = data[i].datetime;
+        const startTime = timeslots[i].datetime;
         let title = "";
         let backgroundColor = "";
         let borderColor = "";
-        if (data[i].lesson_id && data[i].is_booked) {
+        if (timeslots[i].lesson_id && timeslots[i].is_booked) {
           title = "Booked";
           backgroundColor = "Green";
           borderColor = "Green";
-        } else if (data[i].lesson_id) {
+        } else if (timeslots[i].lesson_id) {
           title = "Booking Request";
           backgroundColor = "Orange";
           borderColor = "Orange";
@@ -47,7 +61,7 @@ class Calendar extends Component {
           title = "Available";
         }
         loadedEvents.push({
-          id: data[i].id,
+          id: timeslots[i].id,
           title,
           start: moment(startTime).toDate(),
           end: moment(startTime)
@@ -60,10 +74,55 @@ class Calendar extends Component {
       // console.log(loadedEvents);
       this.setState({
         calendarEvents: loadedEvents,
+        courses: courses,
         maxIDFromServer: maxID,
         maxID: ++maxID
       });
     });
+
+    // axios(`/api/timeslots`, {
+    //   method: "get",
+    //   withCredentials: true
+    // }).then(({ data }) => {
+    //   let loadedEvents = [];
+    //   let maxID = 0;
+    //   for (let i in data) {
+    //     if (maxID < data[i].id) {
+    //       maxID = data[i].id;
+    //     }
+    //     const startTime = data[i].datetime;
+    //     let title = "";
+    //     let backgroundColor = "";
+    //     let borderColor = "";
+    //     if (data[i].lesson_id && data[i].is_booked) {
+    //       title = "Booked";
+    //       backgroundColor = "Green";
+    //       borderColor = "Green";
+    //     } else if (data[i].lesson_id) {
+    //       title = "Booking Request";
+    //       backgroundColor = "Orange";
+    //       borderColor = "Orange";
+    //     } else {
+    //       title = "Available";
+    //     }
+    //     loadedEvents.push({
+    //       id: data[i].id,
+    //       title,
+    //       start: moment(startTime).toDate(),
+    //       end: moment(startTime)
+    //         .add(30, "m")
+    //         .toDate(),
+    //       backgroundColor: backgroundColor,
+    //       borderColor: borderColor
+    //     });
+    //   }
+    //   // console.log(loadedEvents);
+    //   this.setState({
+    //     calendarEvents: loadedEvents,
+    //     maxIDFromServer: maxID,
+    //     maxID: ++maxID
+    //   });
+    // });
   };
 
   componentDidMount() {
