@@ -26,8 +26,6 @@ export default function LoginForm(props) {
         let tempStudent = resp.data.student;
         let tempTeacher = resp.data.teacher;
         axios("/api/sessions", { withCredentials: true }).then(data => {
-          // console.log("data", JSON.parse(data.data.teachers));
-          // setTeacher(JSON.parse(data.data.teachers));
           const user = data.data.user;
           user.type = data.data.type;
           props.setUser(prev => {

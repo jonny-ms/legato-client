@@ -30,11 +30,8 @@ export default function Nav(props) {
   console.log("REDIRECT", redirect);
   return (
     <nav>
-      {user.user && (
-        <p>
-          {user.user.type} {user.user.first_name}
-        </p>
-      )}
+      {user.user && <h5>{user.user.type}:</h5>}
+      {user.user && <p>Welcome back {user.user.first_name}!</p>}
       <Link to="/">
         <h3>Home</h3>
       </Link>
