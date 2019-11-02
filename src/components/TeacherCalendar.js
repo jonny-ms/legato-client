@@ -256,21 +256,28 @@ class TeacherCalendar extends Component {
     e.preventDefault();
     const events = this.state.calendarEvents;
     const repeatWeeks = this.state.repeatWeeks;
+    const maxIDFromServer = this.state.maxIDFromServer;
     const timeslotInMilliseconds = 1000 * 60 * 30;
 
     // Group all timeslots into one lesson
     let timeslots = [];
     for (let i = 0; i < repeatWeeks; i++) {
       console.log("repeat for week", i);
+
       for (let event of events) {
-        const numberOfTimeslots =
-          (event.end - event.start) / timeslotInMilliseconds;
-        for (let j = 0; j < numberOfTimeslots; j++) {
-          const newTimeslot = moment(event.start)
-            .add(1 * i, "weeks")
-            .add(30 * j, "minutes")
-            .toDate();
-          timeslots.push(newTimeslot);
+        if (event.id > maxIDFromServer) {
+          console.log("this is a new event");
+          console.log("event id: ", event.id);
+          console.log("max id of existing events: ", maxIDFromServer);
+          const numberOfTimeslots =
+            (event.end - event.start) / timeslotInMilliseconds;
+          for (let j = 0; j < numberOfTimeslots; j++) {
+            const newTimeslot = moment(event.start)
+              .add(1 * i, "weeks")
+              .add(30 * j, "minutes")
+              .toDate();
+            timeslots.push(newTimeslot);
+          }
         }
       }
     }
@@ -386,7 +393,7 @@ class TeacherCalendar extends Component {
         )}
         <div>
           <span>Repeat for</span>
-          <input type="number" onChange={this.changeRepeatWeeks} />
+          <input type="number" min="0" onChange={this.changeRepeatWeeks} />
           <span>weeks | </span>
           <button onClick={this.submitTimeSlots}>Submit Availabilities</button>
         </div>
