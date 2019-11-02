@@ -2,23 +2,21 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function EditProfile(props) {
-
-  const [id, setId] = useState(0)
+  const [id, setId] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [tagline, setTagline] = useState("");
   const [bio, setBio] = useState("");
-  const [courses, setCourses] = useState([])
+  const [courses, setCourses] = useState([]);
   const [instrument, setInstrument] = useState("");
   const [level, setLevel] = useState("");
   const [rate, setRate] = useState(0);
   const [url, setUrl] = useState("");
   const [videoInstrument, setVideoInstrument] = useState("");
   const [videoLevel, setVideoLevel] = useState("");
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
 
-  
   const instruments = [
     "Select",
     "Accordion",
@@ -51,25 +49,22 @@ export default function EditProfile(props) {
   const levels = ["Select", "Beginner", "Intermediate", "Advanced"];
 
   const fetchTeacherInfo = () => {
-    axios('/api/teachers/new', { withCredentials: true,})
-      .then(({data}) => {
+    axios("/api/teachers/new", { withCredentials: true }).then(({ data }) => {
+      const currentCourses = data.courses.filter(course => course.is_available);
 
-        const currentCourses = data.courses.filter(course => course.is_available)
-        
-        setId(data.id)
-        setFirstName(data.first_name)
-        setLastName(data.last_name)
-        setEmail(data.email)
-        setTagline(data.tagline)
-        setBio(data.bio)
-        setCourses(currentCourses)
-      })
-  }
+      setId(data.id);
+      setFirstName(data.first_name);
+      setLastName(data.last_name);
+      setEmail(data.email);
+      setTagline(data.tagline);
+      setBio(data.bio);
+      setCourses(currentCourses);
+    });
+  };
 
-
-  const addCourse = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
+  const addCourse = e => {
+    e.preventDefault();
+    e.stopPropagation();
     if (instrument && level && rate) {
       axios(`/api/courses`, {
         method: "post",
@@ -82,37 +77,36 @@ export default function EditProfile(props) {
             rate
           }
         }
-      }).then(({data}) => {
-        setCourses(data)
-        setInstrument("")
-        setLevel("")
-        setRate(0)
-      })
+      }).then(({ data }) => {
+        fetchTeacherInfo();
+        setInstrument("");
+        setLevel("");
+        setRate(0);
+      });
     } else {
-      setError("Missing field")
+      setError("Missing field");
     }
-  }
+  };
 
   const destroyCourse = (e, id) => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
     axios(`/api/courses/${id}`, {
       method: "put",
       withCredentials: true
-    }).then(({data}) => {
-      console.log(data.status)
+    }).then(({ data }) => {
+      console.log(data.status);
       if (data.status === 401) {
-        setError("Cannot remove a course with future lessons.")
+        setError("Cannot remove a course with future lessons.");
       } else {
-        fetchTeacherInfo()
+        fetchTeacherInfo();
       }
-    })
-
-  }
+    });
+  };
 
   const editProfile = (e, id) => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
     axios(`/api/teachers/${id}`, {
       method: "put",
       withCredentials: true,
@@ -123,16 +117,16 @@ export default function EditProfile(props) {
         }
       }
     }).then(() => {
-      fetchTeacherInfo()
-    })
-  }
+      fetchTeacherInfo();
+    });
+  };
 
   const addVideo = (e, id) => {
-    e.preventDefault()
-    e.stopPropagation()
-    let videoId = url.split('v=')[1]
-    const ampersandPosition = videoId.indexOf('&');
-    if(ampersandPosition !== -1) {
+    e.preventDefault();
+    e.stopPropagation();
+    let videoId = url.split("v=")[1];
+    const ampersandPosition = videoId.indexOf("&");
+    if (ampersandPosition !== -1) {
       videoId = videoId.substring(0, ampersandPosition);
     }
     if (videoInstrument && videoLevel) {
@@ -149,21 +143,20 @@ export default function EditProfile(props) {
         }
       }).then(() => {
         fetchTeacherInfo();
-        setVideoInstrument("")
-        setVideoLevel("")
-        setUrl("")
-      })
+        setVideoInstrument("");
+        setVideoLevel("");
+        setUrl("");
+      });
     } else {
-      setError("Missing field")
+      setError("Missing field");
     }
-  }
-  
+  };
+
   useEffect(() => {
     fetchTeacherInfo();
   }, []);
 
-
-  return(
+  return (
     <form>
       <label>
         First Name:
@@ -179,25 +172,35 @@ export default function EditProfile(props) {
       </label>
       <label>
         Tagline:
-      <input type="text" name="tagline" value={tagline} onChange={e => setTagline(e.target.value)} />
+        <input
+          type="text"
+          name="tagline"
+          value={tagline}
+          onChange={e => setTagline(e.target.value)}
+        />
       </label>
       <label>
         Bio:
-        <input type="text" name="bio" value={bio} onChange={e => setBio(e.target.value)} />
+        <input
+          type="text"
+          name="bio"
+          value={bio}
+          onChange={e => setBio(e.target.value)}
+        />
       </label>
       {/* <label> */}
-        {/* Certifications: */}
-        {/* <input type="text" name="certifications" value={certification} onChange={e => setCertification(e.target.value)} /> */}
+      {/* Certifications: */}
+      {/* <input type="text" name="certifications" value={certification} onChange={e => setCertification(e.target.value)} /> */}
       {/* </label> */}
 
       {/* //!COURSES */}
       <label>
         Courses:
-          {courses.map((course, i) => {
-            return(
-              <li key={i}>
-                {course.level} {course.instrument} for {course.rate}$/hour
-                {/* <label>
+        {courses.map((course, i) => {
+          return (
+            <li key={i}>
+              {course.level} {course.instrument} for {course.rate}$/hour
+              {/* <label>
                   Instrument:
                 <input type="text" name="instrument" value={course.instrument} readOnly />
                 </label>
@@ -209,14 +212,18 @@ export default function EditProfile(props) {
                   Rate:
                 <input type="number" name="rate" value={course.rate} readOnly />
                 </label> */}
-                <button type="submit" onClick={(e) => destroyCourse(e, course.id)} >Remove Course</button>
-              </li>
-            )
-          })
-          }
+              <button type="submit" onClick={e => destroyCourse(e, course.id)}>
+                Remove Course
+              </button>
+            </li>
+          );
+        })}
         <label>
           Instrument:
-          <select value={instrument} onChange={e => setInstrument(e.target.value)}>
+          <select
+            value={instrument}
+            onChange={e => setInstrument(e.target.value)}
+          >
             {instruments.map((instrument, i) => {
               return <option key={i}>{instrument}</option>;
             })}
@@ -232,10 +239,16 @@ export default function EditProfile(props) {
         </label>
         <label>
           Rate:
-          <input type="number" name="rate" value={rate} onChange={e => setRate(e.target.value)}/>
+          <input
+            type="number"
+            name="rate"
+            value={rate}
+            onChange={e => setRate(e.target.value)}
+          />
         </label>
-
-        <button type="submit" onClick={(e) => addCourse(e)} >Add Course</button>
+        <button type="submit" onClick={e => addCourse(e)}>
+          Add Course
+        </button>
       </label>
 
       {/* //!VIDEOS */}
@@ -244,40 +257,46 @@ export default function EditProfile(props) {
         Youtube Videos:
         <label>
           Url:
-          <input type="url" name="video" value={url} onChange={e => setUrl(e.target.value)} />
-
+          <input
+            type="url"
+            name="video"
+            value={url}
+            onChange={e => setUrl(e.target.value)}
+          />
         </label>
         <label>
           Instrument:
-            <select value={videoInstrument} onChange={e => setVideoInstrument(e.target.value)}>
-              {instruments.map((instrument, i) => {
-                return <option key={i}>{instrument}</option>;
-              })}
-            </select>
+          <select
+            value={videoInstrument}
+            onChange={e => setVideoInstrument(e.target.value)}
+          >
+            {instruments.map((instrument, i) => {
+              return <option key={i}>{instrument}</option>;
+            })}
+          </select>
         </label>
         <label>
           Level:
-            <select value={videoLevel} onChange={e => setVideoLevel(e.target.value)}>
-              {levels.map((level, i) => {
-                return <option key={i}>{level}</option>;
-              })}
-            </select>
+          <select
+            value={videoLevel}
+            onChange={e => setVideoLevel(e.target.value)}
+          >
+            {levels.map((level, i) => {
+              return <option key={i}>{level}</option>;
+            })}
+          </select>
         </label>
-          <button type="submit" onClick={(e) => addVideo(e, id)} >Add Video</button>
+        <button type="submit" onClick={e => addVideo(e, id)}>
+          Add Video
+        </button>
       </label>
 
       {/* will travel */}
       {/* will host */}
 
-
-      <button onClick={(e) => editProfile(e, id)}>Edit Teacher</button>
+      <button onClick={e => editProfile(e, id)}>Edit Teacher</button>
 
       {error}
-
     </form>
-
-
-    
-    
-  )
+  );
 }
