@@ -132,7 +132,7 @@ export default function EditProfile(props) {
     e.stopPropagation()
     let videoId = url.split('v=')[1]
     const ampersandPosition = videoId.indexOf('&');
-    if(ampersandPosition != -1) {
+    if(ampersandPosition !== -1) {
       videoId = videoId.substring(0, ampersandPosition);
     }
     if (videoInstrument && videoLevel) {
@@ -241,7 +241,7 @@ export default function EditProfile(props) {
       {/* //!VIDEOS */}
 
       <label>
-        Videos:
+        Youtube Videos:
         <label>
           Url:
           <input type="url" name="video" value={url} onChange={e => setUrl(e.target.value)} />

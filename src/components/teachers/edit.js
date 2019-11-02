@@ -1,13 +1,7 @@
 import React from "react";
-import axios from "axios";
 import EditProfile from "./EditProfile"
 
 const EditTeacher = () => {
-  const editTeacher = () => {
-    axios.put("/api/teachers", {
-      last_name: "last name"
-    });
-  };
 
   return (
     <div className="EditTeacher">
