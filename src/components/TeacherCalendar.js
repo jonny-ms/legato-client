@@ -8,8 +8,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
 
-import Lesson from "./Lesson";
-import PendingLesson from "./PendingLesson";
+import LessonTeacher from "./LessonTeacher";
+import PendingLessonTeacher from "./PendingLessonTeacher";
 
 const moment = require("moment");
 
@@ -349,7 +349,7 @@ class TeacherCalendar extends Component {
     return (
       <Fragment>
         {this.state.showPendingLesson && (
-          <PendingLesson
+          <PendingLessonTeacher
             student={this.state.showStudent}
             course={this.state.showCourse}
             time={this.state.showTime}
@@ -360,7 +360,7 @@ class TeacherCalendar extends Component {
           />
         )}
         {this.state.showLesson && (
-          <Lesson
+          <LessonTeacher
             student={this.state.showStudent}
             course={this.state.showCourse}
             time={this.state.showTime}

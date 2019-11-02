@@ -1,12 +1,12 @@
 import React from "react";
 
-const Lesson = props => {
+const LessonStudent = props => {
   console.log(props);
 
   return (
     <div>
       <span>
-        You have a {props.course} lesson with {props.student} on {props.time}!
+        You have a {props.course} lesson with {props.teacher} on {props.time}!
       </span>
       <button onClick={() => props.cancelLesson(props.currentLessonID)}>
         Cancel Lesson
@@ -15,4 +15,4 @@ const Lesson = props => {
   );
 };
 
-export default Lesson;
+export default LessonStudent;

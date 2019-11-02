@@ -3,6 +3,9 @@ import axios from "axios";
 
 import SearchBar from "./search/SearchBar";
 
+// ============== BUGS ============
+// If a user doesn't upload a photo, it doesn't display properly
+
 const Home = () => {
   const [teachers, setTeachers] = useState([]);
   // const [user, setUser] = useState({});

@@ -1,6 +1,6 @@
 import React from "react";
 
-const PendingLesson = props => {
+const PendingLessonTeacher = props => {
   console.log(props);
 
   return (
@@ -19,4 +19,4 @@ const PendingLesson = props => {
   );
 };
 
-export default PendingLesson;
+export default PendingLessonTeacher;
