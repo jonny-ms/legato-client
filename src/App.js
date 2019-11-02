@@ -41,10 +41,8 @@ const App = () => {
           <Route exact path="/students/new" component={() => <NewStudent />} />
           <Route exact path="/teachers/new" component={() => <NewTeacher />} />
           <Route exact path="/teachers/edit" component={EditTeacher} />
-<<<<<<< HEAD
-          <Route exact path="/students" component={() => <StudentSchedule />} />
-          <Route exact path="/teachers/schedule" component={TeacherMonth} />
-          <Route exact path="/teachers/schedule/day" component={TeacherDay} />
+          <Route exact path="/teachers/schedule" component={TeacherDashboard} />
+          {/* <Route exact path="/teachers/schedule/day" component={TeacherDay} /> */}
           <Route
             path="/teachers/"
             render={props => (
@@ -54,18 +52,12 @@ const App = () => {
                 trigger={trigger}
               />
             )}
-            // trigger={trigger}
-            // setTrigger={setTrigger}
           />
-=======
           <Route
             exact
             path="/students"
             component={() => <StudentDashboard />}
           />
-          <Route exact path="/teachers/schedule" component={TeacherDashboard} />
-          <Route path="/teachers/" component={ShowTeacherTimeslots} />
->>>>>>> b2212fcd020558ee27ace6d853fd9d482a9a006a
           <Route
             exact
             path="/login"

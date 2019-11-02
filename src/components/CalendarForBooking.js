@@ -27,11 +27,7 @@ class CalendarForBooking extends Component {
 
       let loadedEvents = [];
       // create calendar events for timeslots
-<<<<<<< HEAD
       // console.log("LOOK HERE", data)
-=======
-      console.log("LOOK HERE", data);
->>>>>>> b2212fcd020558ee27ace6d853fd9d482a9a006a
       for (let i in data.timeslots) {
         const startTime = data.timeslots[i].datetime;
         loadedEvents.push({
@@ -44,12 +40,6 @@ class CalendarForBooking extends Component {
         });
       }
 
-<<<<<<< HEAD
-      for (let i in data.lessons) {
-        const startTime = data.lessons[i].datetime;
-
-        if (!data.lessons[i].is_booked) {
-=======
       for (let i in lessons) {
         const timeslots = lessons[i].timeslots;
         const startTime = timeslots[0].datetime;
@@ -60,7 +50,6 @@ class CalendarForBooking extends Component {
           .toDate();
 
         if (!timeslots[0].is_booked) {
->>>>>>> b2212fcd020558ee27ace6d853fd9d482a9a006a
           loadedEvents.push({
             title: "Pending lessons",
             start: moment(startTime).toDate(),
