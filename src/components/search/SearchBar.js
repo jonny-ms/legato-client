@@ -44,7 +44,7 @@ export default function SearchBar(props) {
     "Voice"
   ];
 
-  const levels = ["Select", "Beginner", "Intermediate", "Advance"];
+  const levels = ["Select", "Beginner", "Intermediate", "Advanced"];
 
   let filteredTeachers = props.teachers.filter(function(teacher) {
     let check = false;
