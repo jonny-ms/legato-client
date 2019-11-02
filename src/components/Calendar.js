@@ -191,61 +191,63 @@ class Calendar extends Component {
     const lessonID = Number(arg.event.id);
     let events = this.state.calendarEvents;
 
-    const students = this.state.students;
-    const courses = this.state.courses;
-    for (let course of courses) {
-      var tempLesson = course.lessons.find(lesson => {
-        return lesson.id === lessonID;
+    if (arg.event.title !== "Available") {
+      const students = this.state.students;
+      const courses = this.state.courses;
+      for (let course of courses) {
+        var tempLesson = course.lessons.find(lesson => {
+          return lesson.id === lessonID;
+        });
+        if (tempLesson) {
+          break;
+        }
+      }
+      const student = students.find(student => {
+        return student.id === tempLesson.student_id;
       });
-      if (tempLesson) {
-        break;
-      }
-    }
-    const student = students.find(student => {
-      return student.id === tempLesson.student_id;
-    });
-    const course = courses.find(course => {
-      return course.id === tempLesson.course_id;
-    });
-    const studentName = student.first_name + " " + student.last_name;
-    const courseName = course.level + " " + course.instrument;
-    const startTime = moment(arg.event.start).format(
-      "dddd, MMMM Do YYYY, h:mm a"
-    );
+      const course = courses.find(course => {
+        return course.id === tempLesson.course_id;
+      });
+      const studentName = student.first_name + " " + student.last_name;
+      const courseName = course.level + " " + course.instrument;
+      const startTime = moment(arg.event.start).format(
+        "dddd, MMMM Do YYYY, h:mm a"
+      );
 
-    if (arg.event.title === "Pending Lesson") {
-      if (this.state.showPendingLesson) {
-        this.setState({
-          showPendingLesson: false
-        });
-      } else {
-        this.setState({
-          showPendingLesson: true,
-          showStudent: studentName,
-          showCourse: courseName,
-          showTime: startTime,
-          currentLessonID: lessonID
-        });
-      }
-    } else if (arg.event.title === "Lesson") {
-      console.log("clicked on a lesson");
-      if (this.state.showLesson) {
-        console.log("I can see the lesson");
-        this.setState({
-          showLesson: false
-        });
-      } else {
-        this.setState({
-          showLesson: true,
-          // showPendingLesson: true,
-          showStudent: studentName,
-          showCourse: courseName,
-          showTime: startTime,
-          currentLessonID: lessonID
-        });
+      if (arg.event.title === "Pending Lesson") {
+        if (this.state.showPendingLesson) {
+          this.setState({
+            showPendingLesson: false
+          });
+        } else {
+          this.setState({
+            showPendingLesson: true,
+            showStudent: studentName,
+            showCourse: courseName,
+            showTime: startTime,
+            currentLessonID: lessonID
+          });
+        }
+      } else if (arg.event.title === "Lesson") {
+        console.log("clicked on a lesson");
+        if (this.state.showLesson) {
+          console.log("I can see the lesson");
+          this.setState({
+            showLesson: false
+          });
+        } else {
+          this.setState({
+            showLesson: true,
+            // showPendingLesson: true,
+            showStudent: studentName,
+            showCourse: courseName,
+            showTime: startTime,
+            currentLessonID: lessonID
+          });
+        }
       }
     } else if (arg.event.title === "Available") {
-      // console.log(this.state);
+      console.log("remove event:", lessonID);
       events = events.filter(event => {
         return event.id !== lessonID;
       });
@@ -260,16 +262,16 @@ class Calendar extends Component {
 
       // console.log("new state -->", this.state);
       // console.log("arg.event.id -->", id);
-      if (lessonID <= this.state.maxIDFromServer) {
-        // console.log("delete event on server");
-        axios(`/api/timeslots/${lessonID}`, {
-          method: "delete",
-          withCredentials: true,
-          data: {
-            timeslot: lessonID
-          }
-        });
-      }
+      // if (lessonID <= this.state.maxIDFromServer) {
+      //   // console.log("delete event on server");
+      //   axios(`/api/timeslots/${lessonID}`, {
+      //     method: "delete",
+      //     withCredentials: true,
+      //     data: {
+      //       timeslot: lessonID
+      //     }
+      //   });
+      // }
     }
   };
 
