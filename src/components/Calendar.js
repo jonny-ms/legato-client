@@ -20,6 +20,65 @@ const moment = require("moment");
 // When rejecting a pending booking, it also removes the availability with the same id from state
 // When deleting an availability, it also removes the lesson with the same id from state
 // Need to refresh when booking a second appointment even after hitting submit
+// If a user clicks on a pending lesson and then a confirmed lesson, both dialog boxes will appear
+
+const parseLoadedEvents = (courses, timeslots) => {
+  // Parse the courses into calendar events
+  let loadedEvents = [];
+  for (let course of courses) {
+    const lessons = course.lessons;
+    for (let i in lessons) {
+      const timeslots = lessons[i].timeslots;
+      const startTime = timeslots[0].datetime;
+
+      const lastTimeslot = timeslots[timeslots.length - 1];
+      const endTime = moment(lastTimeslot.datetime)
+        .add(30, "m")
+        .toDate();
+
+      if (timeslots[0].is_booked) {
+        loadedEvents.push({
+          title: "Lesson",
+          start: moment(startTime).toDate(),
+          end: endTime,
+          id: lessons[i].id,
+          backgroundColor: "green",
+          borderColor: "green"
+        });
+      } else {
+        loadedEvents.push({
+          title: "Pending Lesson",
+          start: moment(startTime).toDate(),
+          end: endTime,
+          id: lessons[i].id,
+          backgroundColor: "orange",
+          borderColor: "orange"
+        });
+      }
+    }
+  }
+
+  // Parse the teacher's available timeslots
+  let maxID = 0;
+  for (let i in timeslots) {
+    if (maxID < timeslots[i].id) {
+      maxID = timeslots[i].id;
+    }
+    const startTime = timeslots[i].datetime;
+    // Timeslots without a lesson ID are available
+    if (!timeslots[i].lesson_id) {
+      loadedEvents.push({
+        id: timeslots[i].id,
+        title: "Available",
+        start: moment(startTime).toDate(),
+        end: moment(startTime)
+          .add(30, "m")
+          .toDate()
+      });
+    }
+  }
+  return { loadedEvents, maxID };
+};
 
 class Calendar extends Component {
   state = {
@@ -37,85 +96,23 @@ class Calendar extends Component {
 
   getCalendarEvents = () => {
     Promise.all([
+      // Courses includes lessons and associated timeslots
       axios(`/api/courses`, {
         method: "get",
         withCredentials: true
       }),
+      // Timeslots includes all of the teachers available timeslots
       axios(`/api/timeslots`, {
         method: "get",
         withCredentials: true
       })
     ]).then(all => {
       const students = all[0].data.students;
-      // console.log(students);
       const courses = JSON.parse(all[0].data.courses);
       const timeslots = all[1].data;
-      // console.log(timeslots);
 
-      let loadedEvents = [];
+      let { loadedEvents, maxID } = parseLoadedEvents(courses, timeslots);
 
-      for (let course of courses) {
-        const lessons = course.lessons;
-        for (let i in lessons) {
-          const timeslots = lessons[i].timeslots;
-          const startTime = timeslots[0].datetime;
-
-          const lastTimeslot = timeslots[timeslots.length - 1];
-          const endTime = moment(lastTimeslot.datetime)
-            .add(30, "m")
-            .toDate();
-
-          if (timeslots[0].is_booked) {
-            loadedEvents.push({
-              title: "Lesson",
-              start: moment(startTime).toDate(),
-              end: endTime,
-              id: lessons[i].id,
-              backgroundColor: "green",
-              borderColor: "green"
-              // student: students.find(student => {
-              //   return student.id === lessons[i].student_id;
-              // }).first_name
-            });
-          } else {
-            loadedEvents.push({
-              title: "Pending Lesson",
-              start: moment(startTime).toDate(),
-              end: endTime,
-              id: lessons[i].id,
-              backgroundColor: "orange",
-              borderColor: "orange"
-              // student: students.find(student => {
-              //   return student.id === lessons[i].student_id;
-              // }).first_name
-            });
-          }
-        }
-      }
-
-      // let courses = {};
-      // for (let course of rawCourses) {
-      // const courseName = course.instrument + " - " + course.level;
-      // courses[courseName] = course.id;
-      // }
-      let maxID = 0;
-      for (let i in timeslots) {
-        if (maxID < timeslots[i].id) {
-          maxID = timeslots[i].id;
-        }
-        const startTime = timeslots[i].datetime;
-        if (!timeslots[i].lesson_id) {
-          loadedEvents.push({
-            id: timeslots[i].id,
-            title: "Available",
-            start: moment(startTime).toDate(),
-            end: moment(startTime)
-              .add(30, "m")
-              .toDate()
-          });
-        }
-      }
-      // console.log(loadedEvents);
       this.setState({
         calendarEvents: loadedEvents,
         courses,
@@ -130,6 +127,7 @@ class Calendar extends Component {
     this.getCalendarEvents();
   }
 
+  // When a teacher selects availability
   handleSelect = arg => {
     let newMaxID = this.state.maxID;
 
@@ -142,13 +140,10 @@ class Calendar extends Component {
       }),
       maxID: ++newMaxID
     });
-    // this.setState({ maxID: newMaxID++ });
-    // console.log(this.state);
   };
 
-  handleDrop = arg => {
-    const id = Number(arg.oldEvent.id);
-
+  // Helper function for handleDrop and handleResize
+  handleModify = (id, arg) => {
     let events = this.state.calendarEvents.map(event => {
       if (event.id === id) {
         event.start = arg.event.start;
@@ -156,38 +151,27 @@ class Calendar extends Component {
       }
       return event;
     });
-    // let events = this.state.calendarEvents;
-
-    // events[id].start = arg.event.start;
-    // events[id].end = arg.event.end;
 
     this.setState({
       calendarEvents: events
     });
-    console.log(this.state.calendarEvents);
   };
 
+  // When a teacher drags and drops an available timeslot
+  handleDrop = arg => {
+    const id = Number(arg.oldEvent.id);
+
+    this.handleModify(id, arg);
+  };
+
+  // When a teacher drags an event to change their availability
   handleResize = arg => {
     const id = Number(arg.prevEvent.id);
-    let events = this.state.calendarEvents;
 
-    events = events.map(event => {
-      if (event.id === id) {
-        event.start = arg.event.start;
-        event.end = arg.event.end;
-      }
-      return event;
-    });
-
-    // console.log(events);
-
-    this.setState({
-      calendarEvents: events
-    });
-    // console.log(this.state.calendarEvents);
+    this.handleModify(id, arg);
   };
 
-  removeEvent = arg => {
+  handleEventClick = arg => {
     const lessonID = Number(arg.event.id);
     let events = this.state.calendarEvents;
 
@@ -229,16 +213,13 @@ class Calendar extends Component {
           });
         }
       } else if (arg.event.title === "Lesson") {
-        console.log("clicked on a lesson");
         if (this.state.showLesson) {
-          console.log("I can see the lesson");
           this.setState({
             showLesson: false
           });
         } else {
           this.setState({
             showLesson: true,
-            // showPendingLesson: true,
             showStudent: studentName,
             showCourse: courseName,
             showTime: startTime,
@@ -247,31 +228,24 @@ class Calendar extends Component {
         }
       }
     } else if (arg.event.title === "Available") {
-      console.log("remove event:", lessonID);
       events = events.filter(event => {
         return event.id !== lessonID;
       });
-
-      // for (let i in events) {
-      // events[i].id = Number(i);
-      // }
 
       this.setState({
         calendarEvents: events
       });
 
-      // console.log("new state -->", this.state);
-      // console.log("arg.event.id -->", id);
-      // if (lessonID <= this.state.maxIDFromServer) {
-      //   // console.log("delete event on server");
-      //   axios(`/api/timeslots/${lessonID}`, {
-      //     method: "delete",
-      //     withCredentials: true,
-      //     data: {
-      //       timeslot: lessonID
-      //     }
-      //   });
-      // }
+      // This won't work as intended if timeslotID and lessonID overlap
+      if (lessonID <= this.state.maxIDFromServer) {
+        axios(`/api/timeslots/${lessonID}`, {
+          method: "delete",
+          withCredentials: true,
+          data: {
+            timeslot: lessonID
+          }
+        });
+      }
     }
   };
 
@@ -280,6 +254,7 @@ class Calendar extends Component {
     const events = this.state.calendarEvents;
     const timeslotInMilliseconds = 1000 * 60 * 30;
 
+    // Group all timeslots into one lesson
     let timeslots = [];
     for (let event of events) {
       const numberOfTimeslots =
@@ -291,7 +266,7 @@ class Calendar extends Component {
         timeslots.push(newTimeslot);
       }
     }
-    // console.log("hey look here!!!", timeslots);
+
     axios(`/api/timeslots`, {
       method: "post",
       withCredentials: true,
@@ -302,23 +277,7 @@ class Calendar extends Component {
   };
 
   acceptBooking = id => {
-    console.log("accept booking in Calendar.js");
-    console.log("id:", id);
-
     let events = this.state.calendarEvents;
-
-    events = events.map(event => {
-      if (event.id === id) {
-        let newEvent = {
-          ...event,
-          title: "Accepted",
-          backgroundColor: "Green",
-          borderColor: "Green"
-        };
-        return newEvent;
-      }
-      return event;
-    });
 
     axios(`/api/lessons/${id}`, {
       method: "put",
@@ -326,27 +285,35 @@ class Calendar extends Component {
       data: {
         timeslot: id
       }
-    });
+    }).then(resp => {
+      events = events.map(event => {
+        if (event.id === id) {
+          let newEvent = {
+            ...event,
+            title: "Accepted",
+            backgroundColor: "Green",
+            borderColor: "Green"
+          };
+          return newEvent;
+        }
+        return event;
+      });
 
-    this.setState({
-      calendarEvents: events
+      this.setState({
+        calendarEvents: events
+      });
     });
   };
 
   rejectBooking = id => {
-    console.log("reject booking in Calendar.js");
-    console.log("id:", id);
-
-    let events = this.state.calendarEvents;
-
-    events = events.filter(event => {
-      return event.id !== id;
-    });
-
     axios(`/api/lessons/${id}`, {
       method: "delete",
       withCredentials: true
     }).then(resp => {
+      const events = this.state.calendarEvents.filter(event => {
+        return event.id !== id;
+      });
+
       this.setState({
         calendarEvents: events,
         showPendingLesson: false
@@ -410,7 +377,6 @@ class Calendar extends Component {
         )}
         <button onClick={this.submitTimeSlots}>Submit Availabilities</button>
         <FullCalendar
-          // dateClick={this.handleDateClick}
           events={this.state.calendarEvents}
           defaultView="timeGridWeek"
           header={{
@@ -431,7 +397,7 @@ class Calendar extends Component {
           select={this.handleSelect}
           eventDrop={this.handleDrop}
           eventResize={this.handleResize}
-          eventClick={this.removeEvent}
+          eventClick={this.handleEventClick}
         />
       </Fragment>
     );
