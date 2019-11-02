@@ -4,7 +4,7 @@ export default function TeacherProfile(props) {
   // console.log("props from TeacherProfile.js :", props);
 
   const teacher = props.teacher[0];
-  console.log("teacher from TeacherProfile.js: ", teacher);
+  // console.log("teacher from TeacherProfile.js: ", teacher);
   return (
     <div>
       <img src={teacher.profile_pic} alt={"hee"}></img>
