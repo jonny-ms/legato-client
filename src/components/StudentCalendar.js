@@ -18,10 +18,13 @@ const moment = require("moment");
 class StudentCalendar extends Component {
   state = {
     calendarEvents: [],
-    courses: {},
+    courses: [],
+    teachers: [],
+    lessons: [],
     course_id: null,
     showLesson: false,
-    showPendingLesson: false
+    showPendingLesson: false,
+    showTeacher: ""
   };
 
   calendarRef = React.createRef();
@@ -34,6 +37,7 @@ class StudentCalendar extends Component {
       const teachers = data.teachers;
       const courses = data.courses;
       const lessons = JSON.parse(data.lessons);
+
       let loadedEvents = [];
       for (let i in lessons) {
         const timeslot = lessons[i].timeslots;
@@ -46,7 +50,7 @@ class StudentCalendar extends Component {
 
         if (!timeslot[0].is_booked) {
           loadedEvents.push({
-            title: "Pending lessons",
+            title: "Pending Lesson",
             start: moment(startTime).toDate(),
             end: endTime,
             id: lessons[i].id,
@@ -55,7 +59,7 @@ class StudentCalendar extends Component {
           });
         } else {
           loadedEvents.push({
-            title: "Lessons",
+            title: "Lesson",
             start: moment(startTime).toDate(),
             end: endTime,
             id: lessons[i].id,
@@ -66,87 +70,87 @@ class StudentCalendar extends Component {
       }
 
       this.setState({
-        calendarEvents: loadedEvents
+        calendarEvents: loadedEvents,
+        courses,
+        teachers,
+        lessons
       });
     });
   };
 
   handleEventClick = arg => {
     const lessonID = Number(arg.event.id);
-    let events = this.state.calendarEvents;
+    const teachers = this.state.teachers;
+    const courses = this.state.courses;
+    const lessons = this.state.lessons;
 
-    if (arg.event.title !== "Available") {
-      const students = this.state.students;
-      const courses = this.state.courses;
-      for (let course of courses) {
-        var tempLesson = course.lessons.find(lesson => {
-          return lesson.id === lessonID;
+    var tempLesson = lessons.find(lesson => {
+      return lesson.id === lessonID;
+    });
+
+    const course = courses.find(course => {
+      return course.id === tempLesson.course_id;
+    });
+
+    const teacher = teachers.find(teacher => {
+      return teacher.id === course.teacher_id;
+    });
+
+    const teacherName = teacher.first_name + " " + teacher.last_name;
+    const courseName = course.level + " " + course.instrument;
+    const startTime = moment(arg.event.start).format(
+      "dddd, MMMM Do YYYY, h:mm a"
+    );
+
+    if (arg.event.title === "Pending Lesson") {
+      if (this.state.showPendingLesson) {
+        this.setState({
+          showPendingLesson: false
         });
-        if (tempLesson) {
-          break;
-        }
+      } else {
+        this.setState({
+          showPendingLesson: true,
+          showLesson: false,
+          showTeacher: teacherName,
+          showCourse: courseName,
+          showTime: startTime,
+          currentLessonID: lessonID
+        });
       }
-      const student = students.find(student => {
-        return student.id === tempLesson.student_id;
-      });
-      const course = courses.find(course => {
-        return course.id === tempLesson.course_id;
-      });
-      const studentName = student.first_name + " " + student.last_name;
-      const courseName = course.level + " " + course.instrument;
-      const startTime = moment(arg.event.start).format(
-        "dddd, MMMM Do YYYY, h:mm a"
-      );
-
-      if (arg.event.title === "Pending Lesson") {
-        if (this.state.showPendingLesson) {
-          this.setState({
-            showPendingLesson: false
-          });
-        } else {
-          this.setState({
-            showPendingLesson: true,
-            showStudent: studentName,
-            showCourse: courseName,
-            showTime: startTime,
-            currentLessonID: lessonID
-          });
-        }
-      } else if (arg.event.title === "Lesson") {
-        if (this.state.showLesson) {
-          this.setState({
-            showLesson: false
-          });
-        } else {
-          this.setState({
-            showLesson: true,
-            showStudent: studentName,
-            showCourse: courseName,
-            showTime: startTime,
-            currentLessonID: lessonID
-          });
-        }
-      }
-    } else if (arg.event.title === "Available") {
-      events = events.filter(event => {
-        return event.id !== lessonID;
-      });
-
-      this.setState({
-        calendarEvents: events
-      });
-
-      // This won't work as intended if timeslotID and lessonID overlap
-      if (lessonID <= this.state.maxIDFromServer) {
-        axios(`/api/timeslots/${lessonID}`, {
-          method: "delete",
-          withCredentials: true,
-          data: {
-            timeslot: lessonID
-          }
+    } else if (arg.event.title === "Lesson") {
+      if (this.state.showLesson) {
+        this.setState({
+          showLesson: false
+        });
+      } else {
+        this.setState({
+          showLesson: true,
+          showPendingLesson: false,
+          showTeacher: teacherName,
+          showCourse: courseName,
+          showTime: startTime,
+          currentLessonID: lessonID
         });
       }
     }
+  };
+
+  cancelLesson = id => {
+    let events = this.state.calendarEvents;
+
+    events = events.filter(event => {
+      return event.id !== id;
+    });
+
+    axios(`/api/lessons/${id}`, {
+      method: "delete",
+      withCredentials: true
+    }).then(resp => {
+      this.setState({
+        calendarEvents: events,
+        showLesson: false
+      });
+    });
   };
 
   componentDidMount() {
@@ -159,18 +163,16 @@ class StudentCalendar extends Component {
         <div>
           {this.state.showPendingLesson && (
             <PendingLessonStudent
-              student={this.state.showStudent}
+              teacher={this.state.showTeacher}
               course={this.state.showCourse}
               time={this.state.showTime}
               currentLessonID={this.state.currentLessonID}
-              acceptBooking={this.acceptBooking}
-              rejectBooking={this.rejectBooking}
-              notNow={this.notNow}
+              cancelLesson={this.cancelLesson}
             />
           )}
           {this.state.showLesson && (
             <LessonStudent
-              student={this.state.showStudent}
+              teacher={this.state.showTeacher}
               course={this.state.showCourse}
               time={this.state.showTime}
               currentLessonID={this.state.currentLessonID}
@@ -182,9 +184,9 @@ class StudentCalendar extends Component {
           events={this.state.calendarEvents}
           defaultView="timeGridWeek"
           header={{
-            left: "prev,next today",
+            left: "prev today",
             center: "title",
-            right: "timeGridWeek,listWeek"
+            right: "next"
           }}
           plugins={[
             dayGridPlugin,
@@ -192,8 +194,8 @@ class StudentCalendar extends Component {
             listWeekPlugin,
             interactionPlugin
           ]}
-          minTime={"06:00:00"}
-          aspectRatio={1.83}
+          minTime={"08:00:00"}
+          aspectRatio={1.8}
           allDaySlot={false}
           eventClick={this.handleEventClick}
         />

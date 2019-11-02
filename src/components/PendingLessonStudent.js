@@ -1,22 +1,18 @@
 import React from "react";
 
-const PendingLessonStudent = props => {
+const PendingLessonTeacher = props => {
   console.log(props);
 
   return (
     <div>
       <span>
-        Confirm {props.course} lesson with {props.student} on {props.time}?
+        You have a {props.course} lesson with {props.teacher} on {props.time}?
       </span>
-      <button onClick={() => props.acceptBooking(props.currentLessonID)}>
-        Confirm
+      <button onClick={() => props.cancelLesson(props.currentLessonID)}>
+        Cancel
       </button>
-      <button onClick={() => props.rejectBooking(props.currentLessonID)}>
-        Reject
-      </button>
-      <button onClick={() => props.notNow()}>Not Now</button>
     </div>
   );
 };
 
-export default PendingLessonStudent;
+export default PendingLessonTeacher;

@@ -206,6 +206,7 @@ class TeacherCalendar extends Component {
         } else {
           this.setState({
             showPendingLesson: true,
+            showLesson: false,
             showStudent: studentName,
             showCourse: courseName,
             showTime: startTime,
@@ -220,6 +221,7 @@ class TeacherCalendar extends Component {
         } else {
           this.setState({
             showLesson: true,
+            showPendingLesson: false,
             showStudent: studentName,
             showCourse: courseName,
             showTime: startTime,
@@ -373,9 +375,9 @@ class TeacherCalendar extends Component {
           events={this.state.calendarEvents}
           defaultView="timeGridWeek"
           header={{
-            left: "prev,next today",
+            left: "prev today",
             center: "title",
-            right: "timeGridWeek,listWeek"
+            right: "next"
           }}
           plugins={[
             dayGridPlugin,
@@ -383,8 +385,8 @@ class TeacherCalendar extends Component {
             listWeekPlugin,
             interactionPlugin
           ]}
-          minTime={"06:00:00"}
-          aspectRatio={1.83}
+          minTime={"08:00:00"}
+          aspectRatio={1.8}
           allDaySlot={false}
           selectable={true}
           editable={true}

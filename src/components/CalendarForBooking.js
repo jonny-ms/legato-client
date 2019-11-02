@@ -137,9 +137,17 @@ class CalendarForBooking extends Component {
     let events = [...this.state.calendarEvents];
     let newEvents = [];
 
-    // Must create a new instance for state to update
+    // Must create a copy of the event for state to update
     for (let event of events) {
       let newEvent = { ...event };
+      if (event.id === eventId && event.title === "Available") {
+        newEvent = {
+          ...event,
+          title: "Booking Request",
+          backgroundColor: "green",
+          borderColor: "green"
+        };
+      }
       if (event.id === eventId && event.title === "Available") {
         newEvent = {
           ...event,
@@ -178,9 +186,9 @@ class CalendarForBooking extends Component {
           events={this.state.calendarEvents}
           defaultView="timeGridWeek"
           header={{
-            left: "prev,next today",
+            left: "prev today",
             center: "title",
-            right: "timeGridWeek,listWeek"
+            right: "next"
           }}
           plugins={[
             dayGridPlugin,
@@ -188,17 +196,9 @@ class CalendarForBooking extends Component {
             listWeekPlugin,
             interactionPlugin
           ]}
-          minTime={"06:00:00"}
-          aspectRatio={1.83}
+          minTime={"08:00:00"}
+          aspectRatio={1.8}
           allDaySlot={false}
-          // eventRender={e => console.log(e.event)}
-          // selectable={true}
-          // editable={true}
-          // droppable={true}
-          // draggable={true}
-          // select={this.handleSelect}
-          // eventDrop={this.handleDrop}
-          // eventResize={this.handleResize}
           eventClick={this.requestBooking}
         />
       </Fragment>
