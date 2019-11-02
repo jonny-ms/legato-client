@@ -2,6 +2,9 @@ import React, { useState } from "react";
 
 import TeacherListItem from "./TeacherListItem";
 
+import GridList from "@material-ui/core/GridList";
+import { makeStyles } from "@material-ui/core/styles";
+
 import {
   isTeacherNameIncluded,
   isLevelIncluded,
@@ -9,11 +12,29 @@ import {
   isRateIncluded
 } from "./helpers/isIncluded";
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    overflow: "hidden",
+    backgroundColor: theme.palette.background.paper
+  },
+  gridList: {
+    width: 500,
+    height: 450
+  },
+  icon: {
+    color: "rgba(255, 255, 255, 0.54)"
+  }
+}));
+
 export default function SearchBar(props) {
   const [name, setName] = useState("");
   const [instrument, setInstrument] = useState("Select");
   const [level, setLevel] = useState("Select");
   const [rate, setRate] = useState("");
+  // console.log("props from SearchBar.js: ", props);
 
   const instruments = [
     "Select",
@@ -59,10 +80,14 @@ export default function SearchBar(props) {
     return check;
   });
 
+  // console.log("props from SearchBar.js: ", props);
+
   // console.log("props", props);
 
+  const classes = useStyles();
+
   return (
-    <section className="search">
+    <div className="search">
       <form className="search__form" onSubmit={event => event.preventDefault()}>
         <input
           className="radius"
@@ -95,12 +120,18 @@ export default function SearchBar(props) {
       </select>
 
       <div>
-        <ul>
+        <div className={classes.root}>
           {filteredTeachers.map((teacher, i) => (
-            <TeacherListItem key={i} teacher={teacher} />
+            <GridList key={i} cellHeight={180}>
+              <TeacherListItem
+                key={i}
+                teacher={teacher}
+                setTrigger={props.setTrigger}
+              />
+            </GridList>
           ))}
-        </ul>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

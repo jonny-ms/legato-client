@@ -27,7 +27,7 @@ class CalendarForBooking extends Component {
 
       let loadedEvents = [];
       // create calendar events for timeslots
-      console.log("LOOK HERE", data);
+      // console.log("LOOK HERE", data)
       for (let i in data.timeslots) {
         const startTime = data.timeslots[i].datetime;
         loadedEvents.push({
