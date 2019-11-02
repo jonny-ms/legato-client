@@ -21,6 +21,7 @@ const useStyles = makeStyles({
 });
 
 export default function TeacherListItem(props) {
+  console.log("props from TeacherListItem.js: ", props);
   // console.log(props.teacher.id);
   const classes = useStyles();
 
@@ -35,7 +36,7 @@ export default function TeacherListItem(props) {
     props.setTrigger(false);
   };
   const clickTrue = e => {
-    props.setTrigger(true);
+    props.setTrigger(false);
   };
 
   return (
