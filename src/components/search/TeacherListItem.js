@@ -79,7 +79,7 @@ export default function TeacherListItem(props) {
             <Link
               to={{
                 pathname: `/teachers/${props.teacher.id}`,
-                // sending teacher id as state to /teachers/ url
+                // sending teacher id as state to /teachers/
                 state: { teacher: props.teacher.id }
               }}
               // onClick={e => {

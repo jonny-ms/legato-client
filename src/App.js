@@ -16,7 +16,7 @@ import Login from "./components/Login";
 
 const App = () => {
   const [user, setUser] = useState({});
-  // const [trigger, setTrigger] = useState(false);
+  const [trigger, setTrigger] = useState();
 
   const fetchItems = async () => {
     const data = await axios("/api/sessions", { withCredentials: true });
@@ -41,11 +41,7 @@ const App = () => {
           <Route
             exact
             path="/"
-            render={props => (
-              <Home
-              // setTrigger={setTrigger}
-              />
-            )}
+            render={props => <Home setTrigger={setTrigger} />}
           />
           <Route exact path="/students/new" component={() => <NewStudent />} />
           <Route exact path="/teachers/new" component={() => <NewTeacher />} />
@@ -55,7 +51,13 @@ const App = () => {
           <Route exact path="/teachers/schedule/day" component={TeacherDay} />
           <Route
             path="/teachers/"
-            component={ShowTeacherTimeslots}
+            render={props => (
+              <ShowTeacherTimeslots
+                {...props}
+                withCredentials={true}
+                trigger={trigger}
+              />
+            )}
             // trigger={trigger}
             // setTrigger={setTrigger}
           />

@@ -29,21 +29,23 @@ const ShowTeacherTimeslots = props => {
     fetch();
   }, []);
 
-  const triggerCalendar = e => {
-    setTrigger(true);
-  };
+  // const triggerCalendar = e => {
+  //   setTrigger(true);
+  // };
 
-  const triggerProfile = e => {
-    setTrigger(false);
-  };
+  // const triggerProfile = e => {
+  //   setTrigger(false);
+  // };
 
   return (
     <div className="EditTeacher">
       <p>Book Appointments</p>
 
       <div>
-        {trigger ? (
-          <div>{/* <CalendarForBooking teacherID={teacherID} /> */}</div>
+        {!trigger ? (
+          <div>
+            <CalendarForBooking teacherID={teacherID} />
+          </div>
         ) : (
           <div>{teacher ? <TeacherProfile teacher={teacher} /> : null}</div>
         )}
