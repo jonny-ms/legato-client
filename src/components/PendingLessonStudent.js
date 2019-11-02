@@ -1,8 +1,6 @@
 import React from "react";
 
 const PendingLessonTeacher = props => {
-  console.log(props);
-
   return (
     <div>
       <span>
