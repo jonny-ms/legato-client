@@ -13,8 +13,12 @@ export default function EditProfile(props) {
   const [instrument, setInstrument] = useState("");
   const [level, setLevel] = useState("");
   const [rate, setRate] = useState(0);
+  const [url, setUrl] = useState("");
+  const [videoInstrument, setVideoInstrument] = useState("");
+  const [videoLevel, setVideoLevel] = useState("");
   const [error, setError] = useState("")
 
+  
   const instruments = [
     "Select",
     "Accordion",
@@ -84,6 +88,8 @@ export default function EditProfile(props) {
         setLevel("")
         setRate(0)
       })
+    } else {
+      setError("Missing field")
     }
   }
 
@@ -100,8 +106,6 @@ export default function EditProfile(props) {
       } else {
         fetchTeacherInfo()
       }
-      // const newCourses = courses.filter(course => course.id !== id);
-      // setCourses(newCourses)
     })
 
   }
@@ -121,6 +125,37 @@ export default function EditProfile(props) {
     }).then(() => {
       fetchTeacherInfo()
     })
+  }
+
+  const addVideo = (e, id) => {
+    e.preventDefault()
+    e.stopPropagation()
+    let videoId = url.split('v=')[1]
+    const ampersandPosition = videoId.indexOf('&');
+    if(ampersandPosition != -1) {
+      videoId = videoId.substring(0, ampersandPosition);
+    }
+    if (videoInstrument && videoLevel) {
+      axios(`/api/videos`, {
+        method: "post",
+        withCredentials: true,
+        data: {
+          video: {
+            teacher_id: id,
+            file: videoId,
+            instrument: videoInstrument,
+            level: videoLevel
+          }
+        }
+      }).then(() => {
+        fetchTeacherInfo();
+        setVideoInstrument("")
+        setVideoLevel("")
+        setUrl("")
+      })
+    } else {
+      setError("Missing field")
+    }
   }
   
   useEffect(() => {
@@ -154,9 +189,10 @@ export default function EditProfile(props) {
         {/* Certifications: */}
         {/* <input type="text" name="certifications" value={certification} onChange={e => setCertification(e.target.value)} /> */}
       {/* </label> */}
+
+      {/* //!COURSES */}
       <label>
         Courses:
-          {error}
           {courses.map((course, i) => {
             return(
               <li key={i}>
@@ -185,12 +221,16 @@ export default function EditProfile(props) {
               return <option key={i}>{instrument}</option>;
             })}
           </select>
+        </label>
+        <label>
           Level:
           <select value={level} onChange={e => setLevel(e.target.value)}>
             {levels.map((level, i) => {
               return <option key={i}>{level}</option>;
             })}
           </select>
+        </label>
+        <label>
           Rate:
           <input type="number" name="rate" value={rate} onChange={e => setRate(e.target.value)}/>
         </label>
@@ -198,15 +238,41 @@ export default function EditProfile(props) {
         <button type="submit" onClick={(e) => addCourse(e)} >Add Course</button>
       </label>
 
-      {/* videos 
-            ---> url
-            --> instrument
-            --> level*/}
+      {/* //!VIDEOS */}
+
+      <label>
+        Videos:
+        <label>
+          Url:
+          <input type="url" name="video" value={url} onChange={e => setUrl(e.target.value)} />
+
+        </label>
+        <label>
+          Instrument:
+            <select value={videoInstrument} onChange={e => setVideoInstrument(e.target.value)}>
+              {instruments.map((instrument, i) => {
+                return <option key={i}>{instrument}</option>;
+              })}
+            </select>
+        </label>
+        <label>
+          Level:
+            <select value={videoLevel} onChange={e => setVideoLevel(e.target.value)}>
+              {levels.map((level, i) => {
+                return <option key={i}>{level}</option>;
+              })}
+            </select>
+        </label>
+          <button type="submit" onClick={(e) => addVideo(e, id)} >Add Video</button>
+      </label>
+
       {/* will travel */}
       {/* will host */}
 
 
       <button onClick={(e) => editProfile(e, id)}>Edit Teacher</button>
+
+      {error}
 
     </form>
 
