@@ -8,9 +8,8 @@ import Home from "./components/Home";
 import NewStudent from "./components/students/New";
 import NewTeacher from "./components/teachers/new";
 import EditTeacher from "./components/teachers/edit";
-import StudentSchedule from "./components/students/StudentSchedule";
 import TeacherDashboard from "./components/teachers/TeacherDashboard";
-import TeacherDay from "./components/teachers/scheduleDay";
+import StudentDashboard from "./components/students/StudentDashboard";
 import ShowTeacherTimeslots from "./components/teachers/ShowTeacherTimeslots";
 import Login from "./components/Login";
 
@@ -19,18 +18,14 @@ const App = () => {
 
   const fetchItems = async () => {
     const data = await axios("/api/sessions", { withCredentials: true });
-    // console.log("data", JSON.parse(data.data.teachers));
-    // setTeacher(JSON.parse(data.data.teachers));
     const user = data.data.user;
     user.type = data.data.type;
-    // console.log("user from App.js :", user);
     setUser(user);
   };
 
   useEffect(() => {
     fetchItems();
   }, []);
-  // console.log("user from App.js: ", user);
 
   return (
     <Router>
@@ -41,9 +36,12 @@ const App = () => {
           <Route exact path="/students/new" component={() => <NewStudent />} />
           <Route exact path="/teachers/new" component={() => <NewTeacher />} />
           <Route exact path="/teachers/edit" component={EditTeacher} />
-          <Route exact path="/students" component={() => <StudentSchedule />} />
+          <Route
+            exact
+            path="/students"
+            component={() => <StudentDashboard />}
+          />
           <Route exact path="/teachers/schedule" component={TeacherDashboard} />
-          <Route exact path="/teachers/schedule/day" component={TeacherDay} />
           <Route path="/teachers/" component={ShowTeacherTimeslots} />
           <Route
             exact

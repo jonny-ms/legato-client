@@ -9,6 +9,9 @@ import axios from "axios";
 
 const moment = require("moment");
 
+// ========= BUGS ============
+// Student does not get notified if a teacher cancels a lesson
+
 class StudentCalendar extends Component {
   state = {
     calendarEvents: [],
@@ -23,12 +26,10 @@ class StudentCalendar extends Component {
       method: "get",
       withCredentials: true
     }).then(({ data }) => {
-      const parsedLessons = JSON.parse(data.lessons);
+      const lessons = JSON.parse(data.lessons);
       let loadedEvents = [];
-      console.log("in students", parsedLessons);
-      console.log(data.courses);
-      for (let i in parsedLessons) {
-        const timeslot = parsedLessons[i].timeslots;
+      for (let i in lessons) {
+        const timeslot = lessons[i].timeslots;
         const startTime = timeslot[0].datetime;
 
         const lastTimeslot = timeslot[timeslot.length - 1];
@@ -41,7 +42,7 @@ class StudentCalendar extends Component {
             title: "Pending lessons",
             start: moment(startTime).toDate(),
             end: endTime,
-            id: parsedLessons[i].id,
+            id: lessons[i].id,
             backgroundColor: "orange",
             borderColor: "orange"
           });
@@ -50,7 +51,7 @@ class StudentCalendar extends Component {
             title: "Lessons",
             start: moment(startTime).toDate(),
             end: endTime,
-            id: parsedLessons[i].id,
+            id: lessons[i].id,
             backgroundColor: "green",
             borderColor: "green"
           });
@@ -71,8 +72,6 @@ class StudentCalendar extends Component {
     return (
       <Fragment>
         <FullCalendar
-          // dateClick={this.handleDateClick}
-          ref={this.calendarRef}
           events={this.state.calendarEvents}
           defaultView="timeGridWeek"
           header={{
@@ -86,14 +85,9 @@ class StudentCalendar extends Component {
             listWeekPlugin,
             interactionPlugin
           ]}
-          // eventRender={e => console.log(e.event)}
-          // selectable={true}
-          // editable={true}
-          // droppable={true}
-          // draggable={true}
-          // select={this.handleSelect}
-          // eventDrop={this.handleDrop}
-          // eventResize={this.handleResize}
+          minTime={"06:00:00"}
+          aspectRatio={1.83}
+          allDaySlot={false}
           eventClick={this.requestBooking}
         />
       </Fragment>

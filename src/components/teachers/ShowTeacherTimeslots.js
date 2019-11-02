@@ -5,7 +5,9 @@ const ShowTeacherTimeslots = props => {
   return (
     <div className="EditTeacher">
       <p>Book Appointments</p>
-      <CalendarForBooking teacherID={props.history.location.state} />
+      <div className="calendar">
+        <CalendarForBooking teacherID={props.history.location.state} />
+      </div>
     </div>
   );
 };

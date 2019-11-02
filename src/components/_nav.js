@@ -70,12 +70,6 @@ export default function Nav(props) {
             <li>Teacher Dashboard</li>
           </Link>
         )}
-        {/* Displayed for SIGNED IN teachers */}
-        {user.user.type === "Teacher" && (
-          <Link to="/teachers/schedule/day">
-            <li>Teacher Schedule Day</li>
-          </Link>
-        )}
         {!user.user.type && (
           <Link to="/login">
             <li>Login</li>

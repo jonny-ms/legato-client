@@ -80,7 +80,7 @@ const parseLoadedEvents = (courses, timeslots) => {
   return { loadedEvents, maxID };
 };
 
-class Calendar extends Component {
+class TeacherCalendar extends Component {
   state = {
     calendarEvents: [],
     courses: {},
@@ -328,27 +328,20 @@ class Calendar extends Component {
   };
 
   cancelLesson = id => {
-    console.log("delete this lesson", id);
-
     let events = this.state.calendarEvents;
 
     events = events.filter(event => {
       return event.id !== id;
     });
 
-    // axios(`/api/lessons/${id}`, {
-    //   method: "delete",
-    //   withCredentials: true
-    // }).then(resp => {
-    //   this.setState({
-    //     calendarEvents: events,
-    //     showLesson: false
-    //   });
-    // });
-
-    this.setState({
-      calendarEvents: events,
-      showLesson: false
+    axios(`/api/lessons/${id}`, {
+      method: "delete",
+      withCredentials: true
+    }).then(resp => {
+      this.setState({
+        calendarEvents: events,
+        showLesson: false
+      });
     });
   };
 
@@ -390,6 +383,9 @@ class Calendar extends Component {
             listWeekPlugin,
             interactionPlugin
           ]}
+          minTime={"06:00:00"}
+          aspectRatio={1.83}
+          allDaySlot={false}
           selectable={true}
           editable={true}
           droppable={true}
@@ -404,4 +400,4 @@ class Calendar extends Component {
   }
 }
 
-export default Calendar;
+export default TeacherCalendar;

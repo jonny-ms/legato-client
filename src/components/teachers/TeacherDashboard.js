@@ -1,5 +1,5 @@
 import React from "react";
-import Calendar from "../Calendar";
+import TeacherCalendar from "../TeacherCalendar";
 
 const TeacherDashboard = () => {
   return (
@@ -11,7 +11,7 @@ const TeacherDashboard = () => {
         <p>Appointments</p>
       </div>
       <div className="calendar">
-        <Calendar />
+        <TeacherCalendar />
       </div>
     </div>
   );
