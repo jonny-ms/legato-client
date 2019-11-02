@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 
@@ -14,10 +15,27 @@ import ShowTeacherTimeslots from "./components/teachers/ShowTeacherTimeslots";
 import Login from "./components/Login";
 
 const App = () => {
+  const [user, setUser] = useState({});
+
+  const fetchItems = async () => {
+    const data = await axios("/api/sessions", { withCredentials: true });
+    // console.log("data", JSON.parse(data.data.teachers));
+    // setTeacher(JSON.parse(data.data.teachers));
+    const user = data.data.user;
+    user.type = data.data.type;
+    // console.log("user from App.js :", user);
+    setUser(user);
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+  // console.log("user from App.js: ", user);
+
   return (
     <Router>
       <div className="App">
-        <Nav />
+        <Nav user={user} setUser={setUser} />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/students/new" component={() => <NewStudent />} />
@@ -27,7 +45,11 @@ const App = () => {
           <Route exact path="/teachers/schedule" component={TeacherDashboard} />
           <Route exact path="/teachers/schedule/day" component={TeacherDay} />
           <Route path="/teachers/" component={ShowTeacherTimeslots} />
-          <Route exact path="/login" component={() => <Login />} />
+          <Route
+            exact
+            path="/login"
+            component={() => <Login setUser={setUser} />}
+          />
         </Switch>
       </div>
     </Router>
