@@ -1,13 +1,15 @@
 import React from "react";
 import StudentCalendar from "../StudentCalendar";
 
-const StudentSchedule = () => {
+const StudentDashboard = () => {
   return (
     <div>
       <p>My Lessons</p>
-      < StudentCalendar/>
+      <div className="calendar">
+        <StudentCalendar />
+      </div>
     </div>
   );
 };
 
-export default StudentSchedule;
+export default StudentDashboard;

@@ -4,7 +4,14 @@ import axios from "axios";
 import SearchBar from "./search/SearchBar";
 import { isPropsEqual } from "@fullcalendar/core";
 
+<<<<<<< HEAD
 const Home = props => {
+=======
+// ============== BUGS ============
+// If a user doesn't upload a photo, it doesn't display properly
+
+const Home = () => {
+>>>>>>> b2212fcd020558ee27ace6d853fd9d482a9a006a
   const [teachers, setTeachers] = useState([]);
   // console.log("props from Home.js: ", props);
   // const [user, setUser] = useState({});

@@ -16,21 +16,22 @@ class CalendarForBooking extends Component {
     course_id: null
   };
 
-  // const courses = [
-
-  // ]
-
   calendarRef = React.createRef();
 
   getCalendarEvents = () => {
-    // TODO: Dynamically set which teacher's calendar is requested
     axios(`/api/teachers/${this.props.teacherID.teacher}`, {
       method: "get",
       withCredentials: true
     }).then(({ data }) => {
+      const lessons = JSON.parse(data.lessons);
+
       let loadedEvents = [];
       // create calendar events for timeslots
+<<<<<<< HEAD
       // console.log("LOOK HERE", data)
+=======
+      console.log("LOOK HERE", data);
+>>>>>>> b2212fcd020558ee27ace6d853fd9d482a9a006a
       for (let i in data.timeslots) {
         const startTime = data.timeslots[i].datetime;
         loadedEvents.push({
@@ -43,43 +44,47 @@ class CalendarForBooking extends Component {
         });
       }
 
+<<<<<<< HEAD
       for (let i in data.lessons) {
         const startTime = data.lessons[i].datetime;
 
         if (!data.lessons[i].is_booked) {
+=======
+      for (let i in lessons) {
+        const timeslots = lessons[i].timeslots;
+        const startTime = timeslots[0].datetime;
+
+        const lastTimeslot = timeslots[timeslots.length - 1];
+        const endTime = moment(lastTimeslot.datetime)
+          .add(30, "m")
+          .toDate();
+
+        if (!timeslots[0].is_booked) {
+>>>>>>> b2212fcd020558ee27ace6d853fd9d482a9a006a
           loadedEvents.push({
             title: "Pending lessons",
             start: moment(startTime).toDate(),
-            end: moment(startTime)
-              .add(30, "m")
-              .toDate(),
-            id: data.lessons[i].id,
+            end: endTime,
+            id: lessons[i].id,
             backgroundColor: "orange",
             borderColor: "orange"
           });
         } else {
           loadedEvents.push({
-            title: "My lessons",
+            title: "Lessons",
             start: moment(startTime).toDate(),
-            end: moment(startTime)
-              .add(30, "m")
-              .toDate(),
-            id: data.lessons[i].id,
+            end: endTime,
+            id: lessons[i].id,
             backgroundColor: "green",
             borderColor: "green"
           });
         }
       }
-      // console.log(loadedEvents);
-      // Create courses
-      // console.log(data.courses)
       let courses = {};
       for (let course of data.courses) {
-        // console.log(course)
         const courseName = course.instrument + " - " + course.level;
         courses[courseName] = course.id;
       }
-      // console.log(courses)
       this.setState({
         calendarEvents: loadedEvents,
         courses: courses
@@ -95,33 +100,47 @@ class CalendarForBooking extends Component {
     // Send requested bookings to server
     e.preventDefault();
     const events = this.state.calendarEvents;
-    const timeslotInMilliseconds = 1000 * 60 * 30;
 
-    let timeslots = [];
+    let requests = [];
     for (let event of events) {
-      const numberOfTimeslots =
-        (event.end - event.start) / timeslotInMilliseconds;
-      for (let i = 0; i < numberOfTimeslots; i++) {
-        const newTimeslot = event.id;
-        // Only send timeslots which have a booking request
-        if (event.title === "Booking Request") {
-          // TODO: Check if timeslots are next to each other and send as one lesson
-          timeslots.push(newTimeslot);
-        }
+      if (event.title === "Booking Request") {
+        requests.push(event);
       }
     }
-    // console.log(timeslots);
-    // console.log(this.state.course_id);
-    axios(`/api/lessons`, {
-      method: "post",
-      withCredentials: true,
-      data: {
-        lesson: {
-          timeslots,
-          course_id: this.state.course_id
-        }
-      }
+
+    const sortedRequests = requests.sort((a, b) => {
+      return moment(a.start).diff(moment(b.start));
     });
+
+    // Only send timeslots which have a booking request
+    let checkValidTimeslots = true;
+    for (let i = 0; i < sortedRequests.length - 1; i++) {
+      if (
+        moment(sortedRequests[Number(i) + 1].start).diff(
+          moment(sortedRequests[i].start)
+            .add(30, "m")
+            .toDate()
+        )
+      ) {
+        alert("Please request one lesson at a time.");
+        return (checkValidTimeslots = false);
+      }
+    }
+
+    if (checkValidTimeslots) {
+      axios(`/api/lessons`, {
+        method: "post",
+        withCredentials: true,
+        data: {
+          lesson: {
+            timeslots: sortedRequests.map(request => {
+              return request.id;
+            }),
+            course_id: this.state.course_id
+          }
+        }
+      });
+    }
   };
 
   requestBooking = arg => {
@@ -129,10 +148,18 @@ class CalendarForBooking extends Component {
     let events = [...this.state.calendarEvents];
     let newEvents = [];
 
-    // Must create a new instance for state to update
+    // Must create a copy of the event for state to update
     for (let event of events) {
       let newEvent = { ...event };
-      if (event.id === eventId) {
+      if (event.id === eventId && event.title === "Available") {
+        newEvent = {
+          ...event,
+          title: "Booking Request",
+          backgroundColor: "green",
+          borderColor: "green"
+        };
+      }
+      if (event.id === eventId && event.title === "Available") {
         newEvent = {
           ...event,
           title: "Booking Request",
@@ -153,11 +180,6 @@ class CalendarForBooking extends Component {
   render() {
     return (
       <Fragment>
-        {/* <select onChange={e => this.setState({course_id: e.target.value})}>
-          {courses.map((course) => {
-            return <option>{course}</option>
-          })}
-        </select> */}
         <select
           onChange={e =>
             this.setState({ course_id: this.state.courses[e.target.value] })
@@ -175,9 +197,9 @@ class CalendarForBooking extends Component {
           events={this.state.calendarEvents}
           defaultView="timeGridWeek"
           header={{
-            left: "prev,next today",
+            left: "prev today",
             center: "title",
-            right: "timeGridWeek,listWeek"
+            right: "next"
           }}
           plugins={[
             dayGridPlugin,
@@ -185,14 +207,9 @@ class CalendarForBooking extends Component {
             listWeekPlugin,
             interactionPlugin
           ]}
-          // eventRender={e => console.log(e.event)}
-          // selectable={true}
-          // editable={true}
-          // droppable={true}
-          // draggable={true}
-          // select={this.handleSelect}
-          // eventDrop={this.handleDrop}
-          // eventResize={this.handleResize}
+          minTime={"08:00:00"}
+          aspectRatio={1.8}
+          allDaySlot={false}
           eventClick={this.requestBooking}
         />
       </Fragment>
