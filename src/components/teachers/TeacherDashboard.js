@@ -1,7 +1,7 @@
 import React from "react";
-import Calendar from "../Calendar";
+import TeacherCalendar from "../TeacherCalendar";
 
-const TeacherSchedule = () => {
+const TeacherDashboard = () => {
   return (
     <div className="EditTeacher">
       <p>Your Dashboard</p>
@@ -11,10 +11,10 @@ const TeacherSchedule = () => {
         <p>Appointments</p>
       </div>
       <div className="calendar">
-        <Calendar />
+        <TeacherCalendar />
       </div>
     </div>
   );
 };
 
-export default TeacherSchedule;
+export default TeacherDashboard;
