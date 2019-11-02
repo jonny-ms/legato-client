@@ -13,6 +13,7 @@ export default function EditProfile(props) {
   const [instrument, setInstrument] = useState("");
   const [level, setLevel] = useState("");
   const [rate, setRate] = useState(0);
+  const [error, setError] = useState("")
 
   const instruments = [
     "Select",
@@ -48,12 +49,16 @@ export default function EditProfile(props) {
   const fetchTeacherInfo = () => {
     axios('/api/teachers/new', { withCredentials: true,})
       .then(({data}) => {
+
+        const currentCourses = data.courses.filter(course => course.is_available)
+        
         setId(data.id)
         setFirstName(data.first_name)
         setLastName(data.last_name)
         setEmail(data.email)
+        setTagline(data.tagline)
         setBio(data.bio)
-        setCourses(data.courses)
+        setCourses(currentCourses)
       })
   }
 
@@ -61,6 +66,7 @@ export default function EditProfile(props) {
   const addCourse = (e) => {
     e.preventDefault()
     e.stopPropagation()
+    if (instrument && level && rate) {
       axios(`/api/courses`, {
         method: "post",
         withCredentials: true,
@@ -78,17 +84,24 @@ export default function EditProfile(props) {
         setLevel("")
         setRate(0)
       })
+    }
   }
 
   const destroyCourse = (e, id) => {
     e.preventDefault()
     e.stopPropagation()
     axios(`/api/courses/${id}`, {
-      method: "delete",
+      method: "put",
       withCredentials: true
-    }).then(() => {
-      const newCourses = courses.filter(course => course.id !== id);
-      setCourses(newCourses)
+    }).then(({data}) => {
+      console.log(data.status)
+      if (data.status === 401) {
+        setError("Cannot remove a course with future lessons.")
+      } else {
+        fetchTeacherInfo()
+      }
+      // const newCourses = courses.filter(course => course.id !== id);
+      // setCourses(newCourses)
     })
 
   }
@@ -101,12 +114,12 @@ export default function EditProfile(props) {
       withCredentials: true,
       data: {
         teacher: {
-          // tagline,
+          tagline,
           bio
         }
       }
-    }).then((resp) => {
-      console.log(resp)
+    }).then(() => {
+      fetchTeacherInfo()
     })
   }
   
@@ -143,6 +156,7 @@ export default function EditProfile(props) {
       {/* </label> */}
       <label>
         Courses:
+          {error}
           {courses.map((course, i) => {
             return(
               <li key={i}>
