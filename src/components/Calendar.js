@@ -19,6 +19,7 @@ const moment = require("moment");
 
 // When rejecting a pending booking, it also removes the availability with the same id from state
 // When deleting an availability, it also removes the lesson with the same id from state
+// Need to refresh when booking a second appointment even after hitting submit
 
 class Calendar extends Component {
   state = {
