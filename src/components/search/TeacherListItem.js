@@ -32,12 +32,12 @@ export default function TeacherListItem(props) {
   }
   let coursesArray = Object.keys(courses);
 
-  const clickFalse = e => {
-    props.setTrigger(false);
-  };
-  const clickTrue = e => {
-    props.setTrigger(false);
-  };
+  // const clickFalse = e => {
+  //   props.setTrigger(false);
+  // };
+  // const clickTrue = e => {
+  //   props.setTrigger(true);
+  // };
 
   return (
     <div>
@@ -79,11 +79,12 @@ export default function TeacherListItem(props) {
             <Link
               to={{
                 pathname: `/teachers/${props.teacher.id}`,
-                state: { teacher: props.teacher.id, trigger: false }
+                // sending teacher id as state to /teachers/ url
+                state: { teacher: props.teacher.id }
               }}
-              onClick={e => {
-                clickFalse(e);
-              }}
+              // onClick={e => {
+              //   clickFalse(e);
+              // }}
             >
               View Profile
             </Link>
@@ -92,11 +93,11 @@ export default function TeacherListItem(props) {
             <Link
               to={{
                 pathname: `/teachers/${props.teacher.id}`,
-                state: { teacher: props.teacher.id, trigger: true }
+                state: { teacher: props.teacher.id }
               }}
-              onClick={e => {
-                clickTrue(e);
-              }}
+              // onClick={e => {
+              //   clickTrue(e);
+              // }}
             >
               Book Now
             </Link>

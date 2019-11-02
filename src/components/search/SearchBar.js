@@ -34,7 +34,7 @@ export default function SearchBar(props) {
   const [instrument, setInstrument] = useState("Select");
   const [level, setLevel] = useState("Select");
   const [rate, setRate] = useState("");
-  console.log("props from SearchBar.js: ", props);
+  // console.log("props from SearchBar.js: ", props);
 
   const instruments = [
     "Select",
@@ -80,7 +80,7 @@ export default function SearchBar(props) {
     return check;
   });
 
-  console.log("props from SearchBar.js: ", props);
+  // console.log("props from SearchBar.js: ", props);
 
   // console.log("props", props);
 

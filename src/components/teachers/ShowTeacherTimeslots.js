@@ -7,33 +7,27 @@ import TeacherProfile from "../TeacherProfile";
 
 const ShowTeacherTimeslots = props => {
   const [teacher, setTeacher] = useState();
-  const [trigger, setTrigger] = useState(false);
+  const [trigger, setTrigger] = useState();
   const teacherID = props.history.location.state.teacher;
   // console.log("teacherID from ShowTeacherTimeSlots.js: ", teacherID);
   console.log("trigger before useEffect: ", trigger);
-
-  console.log("props.history....trigger: ");
 
   const fetch = () => {
     axios(`/api/teachers/${teacherID}`, {
       method: "get",
       withCredentials: true
     }).then(({ data }) => {
-      console.log("data from ShowTeacherTimeSlots.js: ", data);
+      // console.log("data from ShowTeacherTimeSlots.js: ", data);
       setTeacher(data.teachers);
+      setTrigger(false);
     });
   };
 
-  console.log("props.location: ", props.location);
+  // console.log("props.location: ", props.location);
 
   useEffect(() => {
     fetch();
   }, []);
-
-  // useEffect(() => {
-  //   setTrigger(props.location.state.trigger);
-  // });
-  // console.log("trigger after useEffect: ", trigger);
 
   const triggerCalendar = e => {
     setTrigger(true);
@@ -46,58 +40,12 @@ const ShowTeacherTimeslots = props => {
   return (
     <div className="EditTeacher">
       <p>Book Appointments</p>
-      {!trigger && (
-        <Button
-          onClick={() => {
-            triggerProfile();
-          }}
-          style={{ color: "grey" }}
-          disabled={true}
-        >
-          Book Me
-        </Button>
-      )}
-      {!trigger && (
-        <Button
-          onClick={() => {
-            triggerCalendar();
-          }}
-        >
-          My Profile
-        </Button>
-      )}
-      {trigger && (
-        <Button
-          onClick={() => {
-            triggerProfile();
-          }}
-        >
-          Book Me
-        </Button>
-      )}
-      {trigger && (
-        <Button
-          onClick={() => {
-            triggerCalendar();
-          }}
-          style={{ color: "grey" }}
-          disabled={true}
-        >
-          My Profile
-        </Button>
-      )}
 
       <div>
-        {!trigger && (
-          <div>
-            <CalendarForBooking teacherID={teacherID} />
-          </div>
-        )}
-
-        {trigger && (
-          <div>
-            <TeacherProfile teacher={teacher} />
-          </div>
+        {trigger ? (
+          <div>{/* <CalendarForBooking teacherID={teacherID} /> */}</div>
+        ) : (
+          <div>{teacher ? <TeacherProfile teacher={teacher} /> : null}</div>
         )}
       </div>
     </div>

@@ -6,7 +6,7 @@ import { isPropsEqual } from "@fullcalendar/core";
 
 const Home = props => {
   const [teachers, setTeachers] = useState([]);
-  console.log("props from Home.js: ", props);
+  // console.log("props from Home.js: ", props);
   // const [user, setUser] = useState({});
 
   const fetchItems = async () => {
