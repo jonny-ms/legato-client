@@ -19,21 +19,22 @@ class StudentCalendar extends Component {
   calendarRef = React.createRef();
 
   getCalendarEvents = () => {
-    // TODO: Dynamically set which teacher's calendar is requested
     axios(`/api/lessons`, {
       method: "get",
       withCredentials: true
-    }).then(({data}) => {
-      const parsedLessons = JSON.parse(data.lessons)
+    }).then(({ data }) => {
+      const parsedLessons = JSON.parse(data.lessons);
       let loadedEvents = [];
-      console.log("in students", parsedLessons)
-      console.log(data.courses)
+      console.log("in students", parsedLessons);
+      console.log(data.courses);
       for (let i in parsedLessons) {
-        const timeslot = parsedLessons[i].timeslots
+        const timeslot = parsedLessons[i].timeslots;
         const startTime = timeslot[0].datetime;
 
-        const lastTimeslot = timeslot[timeslot.length -1];
-        const endTime = moment(lastTimeslot.datetime).add(30, "m").toDate();
+        const lastTimeslot = timeslot[timeslot.length - 1];
+        const endTime = moment(lastTimeslot.datetime)
+          .add(30, "m")
+          .toDate();
 
         if (!timeslot[0].is_booked) {
           loadedEvents.push({
@@ -43,7 +44,7 @@ class StudentCalendar extends Component {
             id: parsedLessons[i].id,
             backgroundColor: "orange",
             borderColor: "orange"
-          }); 
+          });
         } else {
           loadedEvents.push({
             title: "Lessons",
@@ -52,16 +53,15 @@ class StudentCalendar extends Component {
             id: parsedLessons[i].id,
             backgroundColor: "green",
             borderColor: "green"
-          }); 
+          });
         }
       }
 
       this.setState({
         calendarEvents: loadedEvents
-      })
-
+      });
     });
-  }
+  };
 
   componentDidMount() {
     this.getCalendarEvents();

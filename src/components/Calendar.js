@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -7,18 +8,30 @@ import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
 
+import Lesson from "./Lesson";
+import PendingLesson from "./PendingLesson";
+
 const moment = require("moment");
 
-// List of Todos
-// TODO stop teacher from dragging booking requests or booked
-// TODO stop teacher from deleting booking request or booked
+// ======== BUGS ==========
+// All to do with ids of events => when they are too low,
+// they will be a problem, when they are higher, it should be ok
+
+// When rejecting a pending booking, it also removes the availability with the same id from state
+// When deleting an availability, it also removes the lesson with the same id from state
 
 class Calendar extends Component {
   state = {
     calendarEvents: [],
-    coruses: {},
+    courses: {},
     maxIDFromServer: 0,
-    maxID: 0
+    maxID: 0,
+    showPendingLesson: false,
+    showLesson: false,
+    showStudent: "",
+    showCourse: "",
+    showTime: "",
+    currentLessonID: null
   };
 
   getCalendarEvents = () => {
@@ -32,46 +45,57 @@ class Calendar extends Component {
         withCredentials: true
       })
     ]).then(all => {
-      const data = all[0].data
-      const timeslots = all[1].data
+      const students = all[0].data.students;
+      // console.log(students);
+      const courses = JSON.parse(all[0].data.courses);
+      const timeslots = all[1].data;
+      // console.log(timeslots);
 
       let loadedEvents = [];
-      
-      for (let course of data) {
-        const lessons = course.lessons
+
+      for (let course of courses) {
+        const lessons = course.lessons;
         for (let i in lessons) {
-          const timeslots = lessons[i].timeslots
+          const timeslots = lessons[i].timeslots;
           const startTime = timeslots[0].datetime;
-  
-          const lastTimeslot = timeslots[timeslots.length -1];
-          const endTime = moment(lastTimeslot.datetime).add(30, "m").toDate();
-  
-          if (!timeslots[0].is_booked) {
+
+          const lastTimeslot = timeslots[timeslots.length - 1];
+          const endTime = moment(lastTimeslot.datetime)
+            .add(30, "m")
+            .toDate();
+
+          if (timeslots[0].is_booked) {
             loadedEvents.push({
-              title: "Pending lessons",
-              start: moment(startTime).toDate(),
-              end: endTime,
-              id: lessons[i].id,
-              backgroundColor: "orange",
-              borderColor: "orange"
-            }); 
-          } else {
-            loadedEvents.push({
-              title: "Lessons",
+              title: "Lesson",
               start: moment(startTime).toDate(),
               end: endTime,
               id: lessons[i].id,
               backgroundColor: "green",
               borderColor: "green"
-            }); 
+              // student: students.find(student => {
+              //   return student.id === lessons[i].student_id;
+              // }).first_name
+            });
+          } else {
+            loadedEvents.push({
+              title: "Pending Lesson",
+              start: moment(startTime).toDate(),
+              end: endTime,
+              id: lessons[i].id,
+              backgroundColor: "orange",
+              borderColor: "orange"
+              // student: students.find(student => {
+              //   return student.id === lessons[i].student_id;
+              // }).first_name
+            });
           }
         }
       }
-      
+
       // let courses = {};
       // for (let course of rawCourses) {
-        // const courseName = course.instrument + " - " + course.level;
-        // courses[courseName] = course.id;
+      // const courseName = course.instrument + " - " + course.level;
+      // courses[courseName] = course.id;
       // }
       let maxID = 0;
       for (let i in timeslots) {
@@ -86,14 +110,15 @@ class Calendar extends Component {
             start: moment(startTime).toDate(),
             end: moment(startTime)
               .add(30, "m")
-              .toDate(),
+              .toDate()
           });
         }
       }
       // console.log(loadedEvents);
       this.setState({
         calendarEvents: loadedEvents,
-        // courses: courses,
+        courses,
+        students,
         maxIDFromServer: maxID,
         maxID: ++maxID
       });
@@ -103,7 +128,6 @@ class Calendar extends Component {
   componentDidMount() {
     this.getCalendarEvents();
   }
-
 
   handleSelect = arg => {
     let newMaxID = this.state.maxID;
@@ -118,7 +142,7 @@ class Calendar extends Component {
       maxID: ++newMaxID
     });
     // this.setState({ maxID: newMaxID++ });
-    console.log(this.state);
+    // console.log(this.state);
   };
 
   handleDrop = arg => {
@@ -163,47 +187,66 @@ class Calendar extends Component {
   };
 
   removeEvent = arg => {
-    const id = Number(arg.event.id);
+    const lessonID = Number(arg.event.id);
     let events = this.state.calendarEvents;
-    if (arg.event.title === "Booking Request") {
-      if (confirm("Do you want to accept the booking?")) {
-        // console.log("Accepted");
 
-        events = events.map(event => {
-          if (event.id === id) {
-            let newEvent = {
-              ...event,
-              title: "Accepted",
-              backgroundColor: "Green",
-              borderColor: "Green"
-            };
-            return newEvent;
-          }
-          return event;
-        });
+    const students = this.state.students;
+    const courses = this.state.courses;
+    for (let course of courses) {
+      var tempLesson = course.lessons.find(lesson => {
+        return lesson.id === lessonID;
+      });
+      if (tempLesson) {
+        break;
+      }
+    }
+    const student = students.find(student => {
+      return student.id === tempLesson.student_id;
+    });
+    const course = courses.find(course => {
+      return course.id === tempLesson.course_id;
+    });
+    const studentName = student.first_name + " " + student.last_name;
+    const courseName = course.level + " " + course.instrument;
+    const startTime = moment(arg.event.start).format(
+      "dddd, MMMM Do YYYY, h:mm a"
+    );
+
+    if (arg.event.title === "Pending Lesson") {
+      if (this.state.showPendingLesson) {
         this.setState({
-          calendarEvents: events
-        });
-        // console.log(events);
-        // console.log(this.state);
-
-        axios(`/api/timeslots/${id}`, {
-          method: "put",
-          withCredentials: true,
-          data: {
-            timeslot: id
-          }
+          showPendingLesson: false
         });
       } else {
-        console.log("rejected");
-        // modify state so booking is rejected - returned to available
+        this.setState({
+          showPendingLesson: true,
+          showStudent: studentName,
+          showCourse: courseName,
+          showTime: startTime,
+          currentLessonID: lessonID
+        });
       }
-    } else if (arg.event.title === "Booked" || arg.event.title === "Accepted") {
-      // console.log("NOPE");
-    } else {
-      console.log(this.state);
+    } else if (arg.event.title === "Lesson") {
+      console.log("clicked on a lesson");
+      if (this.state.showLesson) {
+        console.log("I can see the lesson");
+        this.setState({
+          showLesson: false
+        });
+      } else {
+        this.setState({
+          showLesson: true,
+          // showPendingLesson: true,
+          showStudent: studentName,
+          showCourse: courseName,
+          showTime: startTime,
+          currentLessonID: lessonID
+        });
+      }
+    } else if (arg.event.title === "Available") {
+      // console.log(this.state);
       events = events.filter(event => {
-        return event.id !== id;
+        return event.id !== lessonID;
       });
 
       // for (let i in events) {
@@ -216,13 +259,13 @@ class Calendar extends Component {
 
       // console.log("new state -->", this.state);
       // console.log("arg.event.id -->", id);
-      if (id <= this.state.maxIDFromServer) {
+      if (lessonID <= this.state.maxIDFromServer) {
         // console.log("delete event on server");
-        axios(`/api/timeslots/${id}`, {
+        axios(`/api/timeslots/${lessonID}`, {
           method: "delete",
           withCredentials: true,
           data: {
-            timeslot: id
+            timeslot: lessonID
           }
         });
       }
@@ -255,10 +298,114 @@ class Calendar extends Component {
     });
   };
 
+  acceptBooking = id => {
+    console.log("accept booking in Calendar.js");
+    console.log("id:", id);
+
+    let events = this.state.calendarEvents;
+
+    events = events.map(event => {
+      if (event.id === id) {
+        let newEvent = {
+          ...event,
+          title: "Accepted",
+          backgroundColor: "Green",
+          borderColor: "Green"
+        };
+        return newEvent;
+      }
+      return event;
+    });
+
+    axios(`/api/lessons/${id}`, {
+      method: "put",
+      withCredentials: true,
+      data: {
+        timeslot: id
+      }
+    });
+
+    this.setState({
+      calendarEvents: events
+    });
+  };
+
+  rejectBooking = id => {
+    console.log("reject booking in Calendar.js");
+    console.log("id:", id);
+
+    let events = this.state.calendarEvents;
+
+    events = events.filter(event => {
+      return event.id !== id;
+    });
+
+    axios(`/api/lessons/${id}`, {
+      method: "delete",
+      withCredentials: true
+    }).then(resp => {
+      this.setState({
+        calendarEvents: events,
+        showPendingLesson: false
+      });
+    });
+  };
+
+  notNow = () => {
+    this.setState({
+      showPendingLesson: false
+    });
+  };
+
+  cancelLesson = id => {
+    console.log("delete this lesson", id);
+
+    let events = this.state.calendarEvents;
+
+    events = events.filter(event => {
+      return event.id !== id;
+    });
+
+    // axios(`/api/lessons/${id}`, {
+    //   method: "delete",
+    //   withCredentials: true
+    // }).then(resp => {
+    //   this.setState({
+    //     calendarEvents: events,
+    //     showLesson: false
+    //   });
+    // });
+
+    this.setState({
+      calendarEvents: events,
+      showLesson: false
+    });
+  };
+
   render() {
     return (
       <Fragment>
-        <button onClick={this.submitTimeSlots}>Submit</button>
+        {this.state.showPendingLesson && (
+          <PendingLesson
+            student={this.state.showStudent}
+            course={this.state.showCourse}
+            time={this.state.showTime}
+            currentLessonID={this.state.currentLessonID}
+            acceptBooking={this.acceptBooking}
+            rejectBooking={this.rejectBooking}
+            notNow={this.notNow}
+          />
+        )}
+        {this.state.showLesson && (
+          <Lesson
+            student={this.state.showStudent}
+            course={this.state.showCourse}
+            time={this.state.showTime}
+            currentLessonID={this.state.currentLessonID}
+            cancelLesson={this.cancelLesson}
+          />
+        )}
+        <button onClick={this.submitTimeSlots}>Submit Availabilities</button>
         <FullCalendar
           // dateClick={this.handleDateClick}
           events={this.state.calendarEvents}

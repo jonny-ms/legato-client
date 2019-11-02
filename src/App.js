@@ -8,7 +8,7 @@ import NewStudent from "./components/students/New";
 import NewTeacher from "./components/teachers/new";
 import EditTeacher from "./components/teachers/edit";
 import StudentSchedule from "./components/students/StudentSchedule";
-import TeacherMonth from "./components/teachers/scheduleMonth";
+import TeacherDashboard from "./components/teachers/TeacherDashboard";
 import TeacherDay from "./components/teachers/scheduleDay";
 import ShowTeacherTimeslots from "./components/teachers/ShowTeacherTimeslots";
 import Login from "./components/Login";
@@ -24,7 +24,7 @@ const App = () => {
           <Route exact path="/teachers/new" component={() => <NewTeacher />} />
           <Route exact path="/teachers/edit" component={EditTeacher} />
           <Route exact path="/students" component={() => <StudentSchedule />} />
-          <Route exact path="/teachers/schedule" component={TeacherMonth} />
+          <Route exact path="/teachers/schedule" component={TeacherDashboard} />
           <Route exact path="/teachers/schedule/day" component={TeacherDay} />
           <Route path="/teachers/" component={ShowTeacherTimeslots} />
           <Route exact path="/login" component={() => <Login />} />
