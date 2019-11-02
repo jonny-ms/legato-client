@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useState } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -31,6 +31,13 @@ export default function TeacherListItem(props) {
   }
   let coursesArray = Object.keys(courses);
 
+  const clickFalse = e => {
+    props.setTrigger(false);
+  };
+  const clickTrue = e => {
+    props.setTrigger(true);
+  };
+
   return (
     <div>
       <Card className={classes.card}>
@@ -42,6 +49,7 @@ export default function TeacherListItem(props) {
               image={props.teacher.profile_pic}
               title="Contemplative Reptile"
               style={{ height: "400px" }}
+              alt={"hee"}
             />
           </Box>
           <CardContent>
@@ -67,13 +75,26 @@ export default function TeacherListItem(props) {
         </Box>
         <CardActions>
           <Button size="small" color="primary">
-            Share
+            <Link
+              to={{
+                pathname: `/teachers/${props.teacher.id}`,
+                state: { teacher: props.teacher.id, trigger: false }
+              }}
+              onClick={e => {
+                clickFalse(e);
+              }}
+            >
+              View Profile
+            </Link>
           </Button>
           <Button size="small" color="primary">
             <Link
               to={{
                 pathname: `/teachers/${props.teacher.id}`,
-                state: { teacher: props.teacher.id }
+                state: { teacher: props.teacher.id, trigger: true }
+              }}
+              onClick={e => {
+                clickTrue(e);
               }}
             >
               Book Now

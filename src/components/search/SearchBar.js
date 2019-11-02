@@ -79,6 +79,8 @@ export default function SearchBar(props) {
     return check;
   });
 
+  console.log("props from SearchBar.js: ", props);
+
   // console.log("props", props);
 
   const classes = useStyles();
@@ -119,8 +121,12 @@ export default function SearchBar(props) {
       <div>
         <div className={classes.root}>
           {filteredTeachers.map((teacher, i) => (
-            <GridList cellHeight={180}>
-              <TeacherListItem key={i} teacher={teacher} />
+            <GridList key={i} cellHeight={180}>
+              <TeacherListItem
+                key={i}
+                teacher={teacher}
+                setTrigger={props.setTrigger}
+              />
             </GridList>
           ))}
         </div>

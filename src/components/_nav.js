@@ -26,15 +26,10 @@ export default function Nav(props) {
     return <Redirect to="/" />;
   };
 
-  console.log("user from _nav.js: ", user);
-  console.log("REDIRECT", redirect);
+  // console.log("user from _nav.js: ", user);
+  // console.log("REDIRECT", redirect);
   return (
     <nav>
-      {user.user && (
-        <p>
-          {user.user.type} {user.user.first_name}
-        </p>
-      )}
       <Link to="/">
         <h3>Home</h3>
       </Link>
@@ -61,19 +56,13 @@ export default function Nav(props) {
         {/*  DISPLAYED FOR SIGNED IN STUDENT */}
         {user.user.type === "Student" && (
           <Link to="/students">
-            <li>Student Dashboard</li>
+            <li>Dashboard</li>
           </Link>
         )}
         {/* Displayed for SIGNED IN teachers */}
         {user.user.type === "Teacher" && (
           <Link to="/teachers/schedule">
-            <li>Teacher Dashboard</li>
-          </Link>
-        )}
-        {/* Displayed for SIGNED IN teachers */}
-        {user.user.type === "Teacher" && (
-          <Link to="/teachers/schedule/day">
-            <li>Teacher Schedule Day</li>
+            <li>Dashboard</li>
           </Link>
         )}
         {!user.user.type && (
@@ -88,6 +77,11 @@ export default function Nav(props) {
               Logout
             </li>
           </Button>
+        )}
+        {user.user && (
+          <li>
+            {user.user.type} {user.user.first_name}
+          </li>
         )}
       </ul>
     </nav>
