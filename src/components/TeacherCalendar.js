@@ -393,7 +393,7 @@ class TeacherCalendar extends Component {
         )}
         <div>
           <span>Repeat for</span>
-          <input type="number" min="0" onChange={this.changeRepeatWeeks} />
+          <input type="number" min="1" onChange={this.changeRepeatWeeks} />
           <span>weeks | </span>
           <button onClick={this.submitTimeSlots}>Submit Availabilities</button>
         </div>

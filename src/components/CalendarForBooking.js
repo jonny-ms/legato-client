@@ -51,7 +51,7 @@ class CalendarForBooking extends Component {
 
         if (!timeslots[0].is_booked) {
           loadedEvents.push({
-            title: "Pending lessons",
+            title: "Pending lesson",
             start: moment(startTime).toDate(),
             end: endTime,
             id: lessons[i].id,
@@ -60,7 +60,7 @@ class CalendarForBooking extends Component {
           });
         } else {
           loadedEvents.push({
-            title: "Lessons",
+            title: "Lesson",
             start: moment(startTime).toDate(),
             end: endTime,
             id: lessons[i].id,
@@ -70,6 +70,8 @@ class CalendarForBooking extends Component {
         }
       }
       let courses = {};
+      console.log("All this works");
+      console.log(courses);
       for (let course of data.courses) {
         const courseName = course.instrument + " - " + course.level;
         courses[courseName] = course.id;
