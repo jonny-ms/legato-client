@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import YouTube from "react-youtube"
 
 export default function EditProfile(props) {
+  
+  
   const [id, setId] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -12,6 +15,7 @@ export default function EditProfile(props) {
   const [instrument, setInstrument] = useState("");
   const [level, setLevel] = useState("");
   const [rate, setRate] = useState(0);
+  const [videos, setVideos] = useState([]);
   const [url, setUrl] = useState("");
   const [videoInstrument, setVideoInstrument] = useState("");
   const [videoLevel, setVideoLevel] = useState("");
@@ -48,19 +52,28 @@ export default function EditProfile(props) {
 
   const levels = ["Select", "Beginner", "Intermediate", "Advanced"];
 
-  const fetchTeacherInfo = () => {
-    axios("/api/teachers/new", { withCredentials: true }).then(({ data }) => {
-      const currentCourses = data.courses.filter(course => course.is_available);
+  const videoSpecs = {
+    height: '200',
+    width: '300'
+  }
 
-      setId(data.id);
-      setFirstName(data.first_name);
-      setLastName(data.last_name);
-      setEmail(data.email);
-      setTagline(data.tagline);
-      setBio(data.bio);
-      setCourses(currentCourses);
-    });
+  const fetchTeacherInfo = () => {
+    axios('/api/teachers/new', { withCredentials: true,})
+      .then(({data}) => {
+
+        const currentCourses = data.courses.filter(course => course.is_available)
+        
+        setId(data.id)
+        setFirstName(data.first_name)
+        setLastName(data.last_name)
+        setEmail(data.email)
+        setTagline(data.tagline)
+        setBio(data.bio)
+        setCourses(currentCourses)
+        setVideos(data.videos)
+      })
   };
+
 
   const addCourse = e => {
     e.preventDefault();
@@ -78,11 +91,11 @@ export default function EditProfile(props) {
           }
         }
       }).then(() => {
-        fetchTeacherInfo();
-        setInstrument("");
-        setLevel("");
-        setRate(0);
-      });
+        fetchTeacherInfo()
+        setInstrument("")
+        setLevel("")
+        setRate(0)
+      })
     } else {
       setError("Missing field");
     }
@@ -101,8 +114,20 @@ export default function EditProfile(props) {
       } else {
         fetchTeacherInfo();
       }
-    });
-  };
+    })
+  }
+
+  const destroyVideo = (e, id) => {
+    e.preventDefault()
+    e.stopPropagation()
+    axios(`/api/videos/${id}`, {
+      method: "delete",
+      withCredentials: true
+    }).then(() => {
+      const newVideos = videos.filter(video => video.id !== id)
+      setVideos(newVideos)
+    })
+  }
 
   const editProfile = (e, id) => {
     e.preventDefault();
@@ -196,28 +221,15 @@ export default function EditProfile(props) {
       {/* //!COURSES */}
       <label>
         Courses:
-        {courses.map((course, i) => {
-          return (
-            <li key={i}>
-              {course.level} {course.instrument} for {course.rate}$/hour
-              {/* <label>
-                  Instrument:
-                <input type="text" name="instrument" value={course.instrument} readOnly />
-                </label>
-                <label>
-                  Level:
-                <input type="text" name="level" value={course.level} readOnly />
-                </label>
-                <label>
-                  Rate:
-                <input type="number" name="rate" value={course.rate} readOnly />
-                </label> */}
-              <button type="submit" onClick={e => destroyCourse(e, course.id)}>
-                Remove Course
-              </button>
-            </li>
-          );
-        })}
+          {courses.map((course, i) => {
+            return(
+              <li key={i}>
+                {course.level} {course.instrument} for {course.rate}$/hour
+
+                <button type="submit" onClick={(e) => destroyCourse(e, course.id)} >Remove Course</button>
+              </li>
+            )
+          })}
         <label>
           Instrument:
           <select
@@ -255,6 +267,19 @@ export default function EditProfile(props) {
 
       <label>
         Youtube Videos:
+        <ul>
+          {videos.map((video, i) => {
+              return(
+                <li key={i}>
+                  <YouTube videoId={video.file} opts={videoSpecs} />
+                  {video.level} {video.instrument}
+                  
+                  <button type="submit" onClick={(e) => destroyVideo(e, video.id)} >Remove Video</button>
+                </li>
+              )
+            })
+          }
+        </ul>
         <label>
           Url:
           <input

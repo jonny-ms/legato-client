@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import TeacherListItem from "./TeacherListItem";
+import VideoListItem from "./VideoListItem"
 
 import GridList from "@material-ui/core/GridList";
 import { makeStyles } from "@material-ui/core/styles";
@@ -9,7 +10,7 @@ import {
   isTeacherNameIncluded,
   isLevelIncluded,
   isInstrumentIncluded,
-  isRateIncluded
+  isRateIncluded,
 } from "./helpers/isIncluded";
 
 const useStyles = makeStyles(theme => ({
@@ -35,6 +36,9 @@ export default function SearchBar(props) {
   const [level, setLevel] = useState("Select");
   const [rate, setRate] = useState("");
   // console.log("props from SearchBar.js: ", props);
+
+  const [isVideo, setIsVideo] = useState(false)
+  const [isProfile, setIsProfile] = useState(true)
 
   const instruments = [
     "Select",
@@ -80,9 +84,19 @@ export default function SearchBar(props) {
     return check;
   });
 
-  // console.log("props from SearchBar.js: ", props);
+  const searchByVideo = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsProfile(false);
+    setIsVideo(true);   
+  }
 
-  // console.log("props", props);
+  const searchByProfile = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsVideo(false);
+    setIsProfile(true);
+  }
 
   const classes = useStyles();
 
@@ -118,8 +132,35 @@ export default function SearchBar(props) {
           return <option key={i}>{level}</option>;
         })}
       </select>
+      
+      <button type="submit" onClick={(e) => searchByProfile(e)}>Profiles</button>
+      <button type="submit" onClick={(e) => searchByVideo(e)}>Videos</button>
+      
+      {isVideo &&
+        <div>
+          <ul>
 
-      <div>
+            {filteredTeachers.map((teacher) => (
+              teacher.videos &&
+                teacher.videos.filter(video => {
+                  if (instrument !== "Select" && level !== "Select") {
+                    if (video.instrument === instrument && video.level === level) return video
+                  } else if (instrument === "Select") {
+                    if (video.level === level || level === "Select") return video
+                  } else if (level === "Select") {
+                  if (video.instrument === instrument || instrument === "Select") return video
+                  }
+                })
+                .map((video, i) => (
+                  <VideoListItem key={i} video={video} teacher={teacher} />
+                ))
+            ))}
+
+          </ul>
+        </div>
+      }
+
+      {isProfile &&
         <div className={classes.root}>
           {filteredTeachers.map((teacher, i) => (
             <GridList key={i} cellHeight={180}>
@@ -131,7 +172,7 @@ export default function SearchBar(props) {
             </GridList>
           ))}
         </div>
-      </div>
+      }
     </div>
   );
 }
