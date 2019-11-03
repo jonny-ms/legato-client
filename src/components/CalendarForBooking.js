@@ -13,7 +13,8 @@ class CalendarForBooking extends Component {
   state = {
     calendarEvents: [],
     courses: {},
-    course_id: null
+    course_id: null,
+    mobile: false
   };
 
   calendarRef = React.createRef();
@@ -69,14 +70,22 @@ class CalendarForBooking extends Component {
           });
         }
       }
+
       let courses = {};
       for (let course of data.courses) {
         const courseName = course.instrument + " - " + course.level;
         courses[courseName] = course.id;
       }
+
+      let mobile = false;
+      if (window.innerWidth < 680) {
+        mobile = true;
+      }
+
       this.setState({
         calendarEvents: loadedEvents,
-        courses: courses
+        courses,
+        mobile
       });
     });
   };
@@ -180,27 +189,39 @@ class CalendarForBooking extends Component {
           })}
         </select>
         <button onClick={this.submitBookings}>Submit</button>
-        <FullCalendar
-          // dateClick={this.handleDateClick}
-          ref={this.calendarRef}
-          events={this.state.calendarEvents}
-          defaultView="timeGridWeek"
-          header={{
-            left: "prev today",
-            center: "title",
-            right: "next"
-          }}
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            listWeekPlugin,
-            interactionPlugin
-          ]}
-          minTime={"08:00:00"}
-          aspectRatio={1.8}
-          allDaySlot={false}
-          eventClick={this.requestBooking}
-        />
+        {this.state.mobile && (
+          <FullCalendar
+            ref={this.calendarRef}
+            events={this.state.calendarEvents}
+            defaultView="timeGrid"
+            header={{
+              left: "prev today",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, interactionPlugin]}
+            minTime={"08:00:00"}
+            aspectRatio={0.7}
+            allDaySlot={false}
+            eventClick={this.requestBooking}
+          />
+        )}
+        {!this.state.mobile && (
+          <FullCalendar
+            ref={this.calendarRef}
+            events={this.state.calendarEvents}
+            defaultView="timeGridWeek"
+            header={{
+              left: "prev today",
+              center: "title",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, interactionPlugin]}
+            minTime={"08:00:00"}
+            aspectRatio={1.8}
+            allDaySlot={false}
+            eventClick={this.requestBooking}
+          />
+        )}
       </Fragment>
     );
   }

@@ -24,7 +24,8 @@ class StudentCalendar extends Component {
     course_id: null,
     showLesson: false,
     showPendingLesson: false,
-    showTeacher: ""
+    showTeacher: "",
+    mobile: false
   };
 
   calendarRef = React.createRef();
@@ -69,11 +70,17 @@ class StudentCalendar extends Component {
         }
       }
 
+      let mobile = false;
+      if (window.innerWidth < 680) {
+        mobile = true;
+      }
+
       this.setState({
         calendarEvents: loadedEvents,
         courses,
         teachers,
-        lessons
+        lessons,
+        mobile
       });
     });
   };
@@ -180,25 +187,37 @@ class StudentCalendar extends Component {
             />
           )}
         </div>
-        <FullCalendar
-          events={this.state.calendarEvents}
-          defaultView="timeGridWeek"
-          header={{
-            left: "prev today",
-            center: "title",
-            right: "next"
-          }}
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            listWeekPlugin,
-            interactionPlugin
-          ]}
-          minTime={"08:00:00"}
-          aspectRatio={1.8}
-          allDaySlot={false}
-          eventClick={this.handleEventClick}
-        />
+        {this.state.mobile && (
+          <FullCalendar
+            events={this.state.calendarEvents}
+            defaultView="timeGrid"
+            header={{
+              left: "prev today",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, interactionPlugin]}
+            minTime={"08:00:00"}
+            aspectRatio={0.6}
+            allDaySlot={false}
+            eventClick={this.handleEventClick}
+          />
+        )}
+        {!this.state.mobile && (
+          <FullCalendar
+            events={this.state.calendarEvents}
+            defaultView="timeGridWeek"
+            header={{
+              left: "prev today",
+              center: "title",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, interactionPlugin]}
+            minTime={"08:00:00"}
+            aspectRatio={1.8}
+            allDaySlot={false}
+            eventClick={this.handleEventClick}
+          />
+        )}
       </Fragment>
     );
   }

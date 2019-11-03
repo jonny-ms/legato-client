@@ -92,10 +92,12 @@ class TeacherCalendar extends Component {
     showCourse: "",
     showTime: "",
     currentLessonID: null,
-    repeatWeeks: 1
+    repeatWeeks: 1,
+    mobile: false
   };
 
   getCalendarEvents = () => {
+    console.log("width: ", window.innerWidth);
     Promise.all([
       // Courses includes lessons and associated timeslots
       axios(`/api/courses`, {
@@ -114,12 +116,18 @@ class TeacherCalendar extends Component {
 
       let { loadedEvents, maxID } = parseLoadedEvents(courses, timeslots);
 
+      let mobile = false;
+      if (window.innerWidth < 680) {
+        mobile = true;
+      }
+
       this.setState({
         calendarEvents: loadedEvents,
         courses,
         students,
         maxIDFromServer: maxID,
-        maxID: ++maxID
+        maxID: ++maxID,
+        mobile
       });
     });
   };
@@ -398,27 +406,53 @@ class TeacherCalendar extends Component {
           <span>weeks | </span>
           <button onClick={this.submitTimeSlots}>Submit Availabilities</button>
         </div>
-        <FullCalendar
-          events={this.state.calendarEvents}
-          defaultView="timeGridWeek"
-          header={{
-            left: "prev today",
-            center: "title",
-            right: "next"
-          }}
-          plugins={[timeGridPlugin, interactionPlugin]}
-          minTime={"08:00:00"}
-          aspectRatio={1.8}
-          allDaySlot={false}
-          selectable={true}
-          editable={true}
-          droppable={true}
-          draggable={true}
-          select={this.handleSelect}
-          eventDrop={this.handleDrop}
-          eventResize={this.handleResize}
-          eventClick={this.handleEventClick}
-        />
+        {this.state.mobile && (
+          <FullCalendar
+            events={this.state.calendarEvents}
+            defaultView="timeGrid"
+            views={this.state.views}
+            header={{
+              left: "prev today",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+            minTime={"08:00:00"}
+            aspectRatio={0.7}
+            allDaySlot={false}
+            selectable={true}
+            editable={true}
+            droppable={true}
+            draggable={true}
+            select={this.handleSelect}
+            eventDrop={this.handleDrop}
+            eventResize={this.handleResize}
+            eventClick={this.handleEventClick}
+          />
+        )}
+        {!this.state.mobile && (
+          <FullCalendar
+            events={this.state.calendarEvents}
+            defaultView="timeGridWeek"
+            views={this.state.views}
+            header={{
+              left: "prev today",
+              center: "title",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+            minTime={"08:00:00"}
+            aspectRatio={1.8}
+            allDaySlot={false}
+            selectable={true}
+            editable={true}
+            droppable={true}
+            draggable={true}
+            select={this.handleSelect}
+            eventDrop={this.handleDrop}
+            eventResize={this.handleResize}
+            eventClick={this.handleEventClick}
+          />
+        )}
       </Fragment>
     );
   }
