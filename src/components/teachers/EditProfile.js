@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import YouTube from "react-youtube"
 
 export default function EditProfile(props) {
 
-  const [id, setId] = useState(0)
+  const [id, setId] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,10 +14,11 @@ export default function EditProfile(props) {
   const [instrument, setInstrument] = useState("");
   const [level, setLevel] = useState("");
   const [rate, setRate] = useState(0);
+  const [videos, setVideos] = useState([]);
   const [url, setUrl] = useState("");
   const [videoInstrument, setVideoInstrument] = useState("");
   const [videoLevel, setVideoLevel] = useState("");
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
 
   
   const instruments = [
@@ -50,6 +52,11 @@ export default function EditProfile(props) {
 
   const levels = ["Select", "Beginner", "Intermediate", "Advanced"];
 
+  const videoSpecs = {
+    height: '200',
+    width: '300'
+  }
+
   const fetchTeacherInfo = () => {
     axios('/api/teachers/new', { withCredentials: true,})
       .then(({data}) => {
@@ -63,6 +70,7 @@ export default function EditProfile(props) {
         setTagline(data.tagline)
         setBio(data.bio)
         setCourses(currentCourses)
+        setVideos(data.videos)
       })
   }
 
@@ -82,8 +90,8 @@ export default function EditProfile(props) {
             rate
           }
         }
-      }).then(({data}) => {
-        setCourses(data)
+      }).then(() => {
+        fetchTeacherInfo()
         setInstrument("")
         setLevel("")
         setRate(0)
@@ -107,7 +115,18 @@ export default function EditProfile(props) {
         fetchTeacherInfo()
       }
     })
+  }
 
+  const destroyVideo = (e, id) => {
+    e.preventDefault()
+    e.stopPropagation()
+    axios(`/api/videos/${id}`, {
+      method: "delete",
+      withCredentials: true
+    }).then(() => {
+      const newVideos = videos.filter(video => video.id !== id)
+      setVideos(newVideos)
+    })
   }
 
   const editProfile = (e, id) => {
@@ -197,18 +216,7 @@ export default function EditProfile(props) {
             return(
               <li key={i}>
                 {course.level} {course.instrument} for {course.rate}$/hour
-                {/* <label>
-                  Instrument:
-                <input type="text" name="instrument" value={course.instrument} readOnly />
-                </label>
-                <label>
-                  Level:
-                <input type="text" name="level" value={course.level} readOnly />
-                </label>
-                <label>
-                  Rate:
-                <input type="number" name="rate" value={course.rate} readOnly />
-                </label> */}
+
                 <button type="submit" onClick={(e) => destroyCourse(e, course.id)} >Remove Course</button>
               </li>
             )
@@ -242,6 +250,19 @@ export default function EditProfile(props) {
 
       <label>
         Youtube Videos:
+        <ul>
+          {videos.map((video, i) => {
+              return(
+                <li key={i}>
+                  <YouTube videoId={video.file} opts={videoSpecs} />
+                  {video.level} {video.instrument}
+                  
+                  <button type="submit" onClick={(e) => destroyVideo(e, video.id)} >Remove Video</button>
+                </li>
+              )
+            })
+          }
+        </ul>
         <label>
           Url:
           <input type="url" name="video" value={url} onChange={e => setUrl(e.target.value)} />

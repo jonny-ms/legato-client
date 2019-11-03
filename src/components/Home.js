@@ -19,6 +19,8 @@ const Home = () => {
     // user.type = data.data.type;
     // setUser(user);
     // setTeachers(data.data);
+
+
   };
 
   useEffect(() => {
