@@ -30,7 +30,7 @@ export default function TeacherListItem(props) {
     const courseName = `${course.instrument} - ${course.level} - ${course.rate}/hr`;
     courses[courseName] = course.id;
   }
-  let coursesArray = Object.keys(courses);
+  const coursesArray = Object.keys(courses);
 
   const clickFalse = e => {
     props.setTrigger(false);
