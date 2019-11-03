@@ -254,20 +254,33 @@ class TeacherCalendar extends Component {
   submitTimeSlots = e => {
     e.preventDefault();
     const events = this.state.calendarEvents;
+    const repeatWeeks = this.state.repeatWeeks;
+    const maxIDFromServer = this.state.maxIDFromServer;
     const timeslotInMilliseconds = 1000 * 60 * 30;
 
     // Group all timeslots into one lesson
     let timeslots = [];
-    for (let event of events) {
-      const numberOfTimeslots =
-        (event.end - event.start) / timeslotInMilliseconds;
-      for (let i = 0; i < numberOfTimeslots; i++) {
-        const newTimeslot = moment(event.start)
-          .add(30 * i, "m")
-          .toDate();
-        timeslots.push(newTimeslot);
+    for (let i = 0; i < repeatWeeks; i++) {
+      console.log("repeat for week", i);
+
+      for (let event of events) {
+        if (event.id > maxIDFromServer) {
+          console.log("this is a new event");
+          console.log("event id: ", event.id);
+          console.log("max id of existing events: ", maxIDFromServer);
+          const numberOfTimeslots =
+            (event.end - event.start) / timeslotInMilliseconds;
+          for (let j = 0; j < numberOfTimeslots; j++) {
+            const newTimeslot = moment(event.start)
+              .add(1 * i, "weeks")
+              .add(30 * j, "minutes")
+              .toDate();
+            timeslots.push(newTimeslot);
+          }
+        }
       }
     }
+    console.log(timeslots);
 
     axios(`/api/timeslots`, {
       method: "post",
@@ -275,6 +288,13 @@ class TeacherCalendar extends Component {
       data: {
         timeslot: timeslots
       }
+    });
+  };
+
+  changeRepeatWeeks = e => {
+    e.preventDefault();
+    this.setState({
+      repeatWeeks: e.target.value
     });
   };
 
@@ -370,7 +390,12 @@ class TeacherCalendar extends Component {
             cancelLesson={this.cancelLesson}
           />
         )}
-        <button onClick={this.submitTimeSlots}>Submit Availabilities</button>
+        <div>
+          <span>Repeat for</span>
+          <input type="number" min="1" onChange={this.changeRepeatWeeks} />
+          <span>weeks | </span>
+          <button onClick={this.submitTimeSlots}>Submit Availabilities</button>
+        </div>
         <FullCalendar
           events={this.state.calendarEvents}
           defaultView="timeGridWeek"

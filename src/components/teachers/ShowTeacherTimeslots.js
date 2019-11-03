@@ -8,11 +8,11 @@ import TeacherProfile from "../TeacherProfile";
 const ShowTeacherTimeslots = props => {
   const [teacher, setTeacher] = useState();
   const [trigger, setTrigger] = useState();
-  const teacherID = props.history.location.state.teacher;
+  const teacherID = props.history.location.state;
   // console.log("teacherID from ShowTeacherTimeSlots.js: ", teacherID);
 
   const fetch = () => {
-    axios(`/api/teachers/${teacherID}`, {
+    axios(`/api/teachers/${teacherID.teacher}`, {
       method: "get",
       withCredentials: true
     }).then(({ data }) => {
@@ -73,11 +73,11 @@ const ShowTeacherTimeslots = props => {
       </div>
       <div>
         {!trigger ? (
-          <div>
+          <div className="calendar">
             <CalendarForBooking teacherID={teacherID} />
           </div>
         ) : (
-          <div>{teacher ? <TeacherProfile teacher={teacher} /> : null}</div>
+          <div>{teacher && <TeacherProfile teacher={teacher} />}</div>
         )}
       </div>
     </div>
