@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import SearchBar from "./search/SearchBar";
-import { isPropsEqual } from "@fullcalendar/core";
 
 const Home = props => {
   const [teachers, setTeachers] = useState([]);

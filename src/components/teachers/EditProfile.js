@@ -77,7 +77,7 @@ export default function EditProfile(props) {
             rate
           }
         }
-      }).then(({ data }) => {
+      }).then(() => {
         fetchTeacherInfo();
         setInstrument("");
         setLevel("");

@@ -70,8 +70,6 @@ class CalendarForBooking extends Component {
         }
       }
       let courses = {};
-      console.log("All this works");
-      console.log(courses);
       for (let course of data.courses) {
         const courseName = course.instrument + " - " + course.level;
         courses[courseName] = course.id;
