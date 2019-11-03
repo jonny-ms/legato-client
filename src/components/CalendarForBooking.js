@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from "react";
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import listWeekPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
@@ -13,7 +11,9 @@ class CalendarForBooking extends Component {
   state = {
     calendarEvents: [],
     courses: {},
-    course_id: null
+    course_id: null,
+    startDay: 7,
+    mobile: false
   };
 
   calendarRef = React.createRef();
@@ -27,7 +27,7 @@ class CalendarForBooking extends Component {
 
       let loadedEvents = [];
       // create calendar events for timeslots
-      console.log("LOOK HERE", data);
+      // console.log("LOOK HERE", data)
       for (let i in data.timeslots) {
         const startTime = data.timeslots[i].datetime;
         loadedEvents.push({
@@ -51,7 +51,7 @@ class CalendarForBooking extends Component {
 
         if (!timeslots[0].is_booked) {
           loadedEvents.push({
-            title: "Pending lessons",
+            title: "Pending lesson",
             start: moment(startTime).toDate(),
             end: endTime,
             id: lessons[i].id,
@@ -60,7 +60,7 @@ class CalendarForBooking extends Component {
           });
         } else {
           loadedEvents.push({
-            title: "Lessons",
+            title: "Lesson",
             start: moment(startTime).toDate(),
             end: endTime,
             id: lessons[i].id,
@@ -69,14 +69,25 @@ class CalendarForBooking extends Component {
           });
         }
       }
+
       let courses = {};
       for (let course of data.courses) {
         const courseName = course.instrument + " - " + course.level;
         courses[courseName] = course.id;
       }
+
+      let mobile = false;
+      if (window.innerWidth < 680) {
+        mobile = true;
+      }
+
+      let startDay = moment().isoWeekday();
+
       this.setState({
         calendarEvents: loadedEvents,
-        courses: courses
+        courses,
+        startDay,
+        mobile
       });
     });
   };
@@ -162,8 +173,6 @@ class CalendarForBooking extends Component {
     this.setState({
       calendarEvents: newEvents
     });
-
-    // console.log(this.state);
   };
 
   render() {
@@ -180,27 +189,40 @@ class CalendarForBooking extends Component {
           })}
         </select>
         <button onClick={this.submitBookings}>Submit</button>
-        <FullCalendar
-          // dateClick={this.handleDateClick}
-          ref={this.calendarRef}
-          events={this.state.calendarEvents}
-          defaultView="timeGridWeek"
-          header={{
-            left: "prev today",
-            center: "title",
-            right: "next"
-          }}
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            listWeekPlugin,
-            interactionPlugin
-          ]}
-          minTime={"08:00:00"}
-          aspectRatio={1.8}
-          allDaySlot={false}
-          eventClick={this.requestBooking}
-        />
+        {this.state.mobile && (
+          <FullCalendar
+            ref={this.calendarRef}
+            events={this.state.calendarEvents}
+            defaultView="timeGrid"
+            header={{
+              left: "prev today",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, interactionPlugin]}
+            minTime={"08:00:00"}
+            aspectRatio={0.7}
+            allDaySlot={false}
+            eventClick={this.requestBooking}
+          />
+        )}
+        {!this.state.mobile && (
+          <FullCalendar
+            ref={this.calendarRef}
+            events={this.state.calendarEvents}
+            defaultView="timeGridWeek"
+            header={{
+              left: "prev today",
+              center: "title",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, interactionPlugin]}
+            minTime={"08:00:00"}
+            startDay={this.state.startDay}
+            aspectRatio={1.8}
+            allDaySlot={false}
+            eventClick={this.requestBooking}
+          />
+        )}
       </Fragment>
     );
   }

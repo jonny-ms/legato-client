@@ -3,7 +3,6 @@ import React, { Component, Fragment } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import listWeekPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
@@ -91,7 +90,10 @@ class TeacherCalendar extends Component {
     showStudent: "",
     showCourse: "",
     showTime: "",
-    currentLessonID: null
+    currentLessonID: null,
+    repeatWeeks: 1,
+    startDay: 4,
+    mobile: false
   };
 
   getCalendarEvents = () => {
@@ -113,12 +115,21 @@ class TeacherCalendar extends Component {
 
       let { loadedEvents, maxID } = parseLoadedEvents(courses, timeslots);
 
+      let mobile = false;
+      if (window.innerWidth < 680) {
+        mobile = true;
+      }
+
+      let startDay = moment().isoWeekday();
+
       this.setState({
         calendarEvents: loadedEvents,
         courses,
         students,
         maxIDFromServer: maxID,
-        maxID: ++maxID
+        maxID: ++maxID,
+        startDay,
+        mobile
       });
     });
   };
@@ -254,20 +265,29 @@ class TeacherCalendar extends Component {
   submitTimeSlots = e => {
     e.preventDefault();
     const events = this.state.calendarEvents;
+    const repeatWeeks = this.state.repeatWeeks;
+    const maxIDFromServer = this.state.maxIDFromServer;
     const timeslotInMilliseconds = 1000 * 60 * 30;
 
-    // Group all timeslots into one lesson
+    // Break out fullCalendar events into separate timeslots
+    // Add repeating availabilities
     let timeslots = [];
-    for (let event of events) {
-      const numberOfTimeslots =
-        (event.end - event.start) / timeslotInMilliseconds;
-      for (let i = 0; i < numberOfTimeslots; i++) {
-        const newTimeslot = moment(event.start)
-          .add(30 * i, "m")
-          .toDate();
-        timeslots.push(newTimeslot);
+    for (let i = 0; i < repeatWeeks; i++) {
+      for (let event of events) {
+        if (event.id > maxIDFromServer) {
+          const numberOfTimeslots =
+            (event.end - event.start) / timeslotInMilliseconds;
+          for (let j = 0; j < numberOfTimeslots; j++) {
+            const newTimeslot = moment(event.start)
+              .add(1 * i, "weeks")
+              .add(30 * j, "minutes")
+              .toDate();
+            timeslots.push(newTimeslot);
+          }
+        }
       }
     }
+    console.log(timeslots);
 
     axios(`/api/timeslots`, {
       method: "post",
@@ -275,6 +295,13 @@ class TeacherCalendar extends Component {
       data: {
         timeslot: timeslots
       }
+    });
+  };
+
+  changeRepeatWeeks = e => {
+    e.preventDefault();
+    this.setState({
+      repeatWeeks: e.target.value
     });
   };
 
@@ -370,33 +397,65 @@ class TeacherCalendar extends Component {
             cancelLesson={this.cancelLesson}
           />
         )}
-        <button onClick={this.submitTimeSlots}>Submit Availabilities</button>
-        <FullCalendar
-          events={this.state.calendarEvents}
-          defaultView="timeGridWeek"
-          header={{
-            left: "prev today",
-            center: "title",
-            right: "next"
-          }}
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            listWeekPlugin,
-            interactionPlugin
-          ]}
-          minTime={"08:00:00"}
-          aspectRatio={1.8}
-          allDaySlot={false}
-          selectable={true}
-          editable={true}
-          droppable={true}
-          draggable={true}
-          select={this.handleSelect}
-          eventDrop={this.handleDrop}
-          eventResize={this.handleResize}
-          eventClick={this.handleEventClick}
-        />
+        <div>
+          <span>Repeat for</span>
+          <input
+            type="number"
+            value={this.state.repeatWeeks}
+            min="1"
+            onChange={this.changeRepeatWeeks}
+          />
+          <span>weeks | </span>
+          <button onClick={this.submitTimeSlots}>Submit Availabilities</button>
+        </div>
+        {this.state.mobile && (
+          <FullCalendar
+            events={this.state.calendarEvents}
+            defaultView="timeGrid"
+            views={this.state.views}
+            header={{
+              left: "prev today",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+            minTime={"08:00:00"}
+            aspectRatio={0.7}
+            allDaySlot={false}
+            selectable={true}
+            editable={true}
+            droppable={true}
+            draggable={true}
+            select={this.handleSelect}
+            eventDrop={this.handleDrop}
+            eventResize={this.handleResize}
+            eventClick={this.handleEventClick}
+          />
+        )}
+        {!this.state.mobile && (
+          <FullCalendar
+            events={this.state.calendarEvents}
+            defaultView="timeGridWeek"
+            views={this.state.views}
+            header={{
+              left: "prev today",
+              center: "title",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+            firstDay={this.state.startDay}
+            minTime={"08:00:00"}
+            aspectRatio={1.8}
+            allDaySlot={false}
+            selectable={true}
+            editable={true}
+            droppable={true}
+            draggable={true}
+            select={this.handleSelect}
+            eventDrop={this.handleDrop}
+            eventResize={this.handleResize}
+            eventClick={this.handleEventClick}
+          />
+        )}
       </Fragment>
     );
   }

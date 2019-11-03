@@ -22,7 +22,7 @@ export default function LoginForm(props) {
       if (resp.data.status === 401) {
         alert("Nice try!");
       } else {
-        console.log("resp.data.teacher from Login.js: ", resp.data.teacher);
+        // console.log("resp.data.teacher from Login.js: ", resp.data.teacher);
         let tempStudent = resp.data.student;
         let tempTeacher = resp.data.teacher;
         axios("/api/sessions", { withCredentials: true }).then(data => {

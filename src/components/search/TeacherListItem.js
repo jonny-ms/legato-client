@@ -21,6 +21,7 @@ const useStyles = makeStyles({
 });
 
 export default function TeacherListItem(props) {
+  // console.log("props from TeacherListItem.js: ", props);
   // console.log(props.teacher.id);
   const classes = useStyles();
 
@@ -29,7 +30,14 @@ export default function TeacherListItem(props) {
     const courseName = `${course.instrument} - ${course.level} - ${course.rate}/hr`;
     courses[courseName] = course.id;
   }
-  let coursesArray = Object.keys(courses);
+  const coursesArray = Object.keys(courses);
+
+  const clickFalse = e => {
+    props.setTrigger(false);
+  };
+  const clickTrue = e => {
+    props.setTrigger(true);
+  };
 
   return (
     <div>
@@ -41,6 +49,8 @@ export default function TeacherListItem(props) {
               className={classes.media}
               image={props.teacher.profile_pic}
               title="Profile Pic"
+              style={{ height: "400px" }}
+              alt={"hee"}
             />
           </Box>
           <CardContent>
@@ -66,13 +76,27 @@ export default function TeacherListItem(props) {
         </Box>
         <CardActions>
           <Button size="small" color="primary">
-            Share
+            <Link
+              to={{
+                pathname: `/teachers/${props.teacher.id}`,
+                // sending teacher id as state to /teachers/
+                state: { teacher: props.teacher.id }
+              }}
+              onClick={e => {
+                clickTrue(e);
+              }}
+            >
+              View Profile
+            </Link>
           </Button>
           <Button size="small" color="primary">
             <Link
               to={{
                 pathname: `/teachers/${props.teacher.id}`,
                 state: { teacher: props.teacher.id }
+              }}
+              onClick={e => {
+                clickFalse(e);
               }}
             >
               Book Now
