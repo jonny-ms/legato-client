@@ -31,7 +31,7 @@ export default function Nav(props) {
   return (
     <nav>
       <Link to="/">
-        <h3>Home</h3>
+        <h3>Legato</h3>
       </Link>
 
       <ul className="nav-links">

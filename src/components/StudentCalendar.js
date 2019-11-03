@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from "react";
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import listWeekPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
@@ -25,6 +23,7 @@ class StudentCalendar extends Component {
     showLesson: false,
     showPendingLesson: false,
     showTeacher: "",
+    startDay: 7,
     mobile: false
   };
 
@@ -75,11 +74,14 @@ class StudentCalendar extends Component {
         mobile = true;
       }
 
+      let startDay = moment().isoWeekday();
+
       this.setState({
         calendarEvents: loadedEvents,
         courses,
         teachers,
         lessons,
+        startDay,
         mobile
       });
     });
@@ -212,6 +214,7 @@ class StudentCalendar extends Component {
               right: "next"
             }}
             plugins={[timeGridPlugin, interactionPlugin]}
+            firstDay={this.state.startDay}
             minTime={"08:00:00"}
             aspectRatio={1.8}
             allDaySlot={false}

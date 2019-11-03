@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from "react";
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import listWeekPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
@@ -14,6 +12,7 @@ class CalendarForBooking extends Component {
     calendarEvents: [],
     courses: {},
     course_id: null,
+    startDay: 7,
     mobile: false
   };
 
@@ -82,9 +81,12 @@ class CalendarForBooking extends Component {
         mobile = true;
       }
 
+      let startDay = moment().isoWeekday();
+
       this.setState({
         calendarEvents: loadedEvents,
         courses,
+        startDay,
         mobile
       });
     });
@@ -171,8 +173,6 @@ class CalendarForBooking extends Component {
     this.setState({
       calendarEvents: newEvents
     });
-
-    // console.log(this.state);
   };
 
   render() {
@@ -217,6 +217,7 @@ class CalendarForBooking extends Component {
             }}
             plugins={[timeGridPlugin, interactionPlugin]}
             minTime={"08:00:00"}
+            startDay={this.state.startDay}
             aspectRatio={1.8}
             allDaySlot={false}
             eventClick={this.requestBooking}
