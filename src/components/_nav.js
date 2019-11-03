@@ -50,7 +50,7 @@ export default function Nav(props) {
         {/* Displayed for SIGNED IN TEACHER */}
         {user.user.type === "Teacher" && (
           <Link to="/teachers/edit">
-            <li>Edit teacher</li>
+            <li>Edit Profile</li>
           </Link>
         )}
         {/*  DISPLAYED FOR SIGNED IN STUDENT */}
@@ -62,7 +62,7 @@ export default function Nav(props) {
         {/* Displayed for SIGNED IN teachers */}
         {user.user.type === "Teacher" && (
           <Link to="/teachers/schedule">
-            <li>Teacher Dashboard</li>
+            <li>Dashboard</li>
           </Link>
         )}
         {!user.user.type && (

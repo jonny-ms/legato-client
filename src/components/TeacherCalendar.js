@@ -406,12 +406,7 @@ class TeacherCalendar extends Component {
             center: "title",
             right: "next"
           }}
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            listWeekPlugin,
-            interactionPlugin
-          ]}
+          plugins={[timeGridPlugin, interactionPlugin]}
           minTime={"08:00:00"}
           aspectRatio={1.8}
           allDaySlot={false}
