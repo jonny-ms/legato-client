@@ -3,6 +3,10 @@
 @import "~@fullcalendar/timegrid/main.css";
 @import "~@fullcalendar/list/main.css";
 
+body {
+  background-color: rgb(236, 236, 236);
+}
+
 .App {
   text-align: center;
 }
@@ -11,7 +15,7 @@ nav {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  min-height: 10vh;
+  min-height: 6vh;
   background: grey;
   color: white;
 }

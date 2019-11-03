@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import TeacherCalendar from "../TeacherCalendar";
 import TeacherAppointmentList from "../TeacherAppointmentList";
 
+import Box from "@material-ui/core/Box";
+
 const TeacherDashboard = () => {
-  const [showCalendar, setShowCalendar] = useState(true);
-  const [showAppointments, setShowAppointments] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showAppointments, setShowAppointments] = useState(true);
 
   const showCalendarFunc = () => {
     setShowAppointments(false);
@@ -17,7 +19,7 @@ const TeacherDashboard = () => {
   };
 
   return (
-    <div className="EditTeacher">
+    <Box className="EditTeacher">
       <p>Your Dashboard</p>
       <div className="dashboard-links">
         <button onClick={() => showCalendarFunc()}>Schedule</button>
@@ -33,7 +35,7 @@ const TeacherDashboard = () => {
           <TeacherAppointmentList />
         </div>
       )}
-    </div>
+    </Box>
   );
 };
 
