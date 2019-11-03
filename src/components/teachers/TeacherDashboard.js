@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import TeacherCalendar from "../TeacherCalendar";
 import TeacherAppointmentList from "../TeacherAppointmentList";
+import { Paper, Tabs, Tab } from "@material-ui/core";
 
 import Box from "@material-ui/core/Box";
 
 const TeacherDashboard = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [showAppointments, setShowAppointments] = useState(true);
+  const [tab, setTab] = useState(0);
+  const handleChange = (e, newValue) => {
+    setTab(newValue);
+  };
 
   const showCalendarFunc = () => {
     setShowAppointments(false);
@@ -19,12 +24,19 @@ const TeacherDashboard = () => {
   };
 
   return (
-    <Box className="EditTeacher">
-      <p>Your Dashboard</p>
-      <div className="dashboard-links">
-        <button onClick={() => showCalendarFunc()}>Schedule</button>
-        <button onClick={() => showAppointmentsFunc()}>Appointments</button>
-      </div>
+    <div>
+      <Paper>
+        <Tabs
+          value={tab}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="fullWidth"
+        >
+          <Tab label="Schedule" onClick={e => showCalendarFunc(e)} />
+          <Tab label="Appointments" onClick={e => showAppointmentsFunc(e)} />
+        </Tabs>
+      </Paper>
       {showCalendar && (
         <div className="calendar">
           <TeacherCalendar />
@@ -35,7 +47,7 @@ const TeacherDashboard = () => {
           <TeacherAppointmentList />
         </div>
       )}
-    </Box>
+    </div>
   );
 };
 
