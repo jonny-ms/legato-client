@@ -1,9 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import YouTube from "react-youtube"
-import { Container, Grid, TextField, Paper, Card, CardContent, Box, CardMedia, Typography, Button, MenuItem, InputAdornment, Link, CardActionArea, CssBaseline, FormControl, InputLabel, OutlinedInput, IconButton} from "@material-ui/core";
+import YouTube from "react-youtube";
+import {
+  Container,
+  Grid,
+  TextField,
+  Paper,
+  Card,
+  CardContent,
+  Box,
+  CardMedia,
+  Typography,
+  Button,
+  MenuItem,
+  InputAdornment,
+  Link,
+  CardActionArea,
+  CssBaseline,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  IconButton
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import DeleteIcon from "@material-ui/icons/Delete"
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,9 +34,9 @@ const useStyles = makeStyles(theme => ({
   },
   container: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
   addCourse: {
     display: "flex",
@@ -24,16 +44,13 @@ const useStyles = makeStyles(theme => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
-  },
+    minWidth: 120
+  }
 }));
 
-
-
 export default function EditProfile(props) {
-  
   const classes = useStyles();
-  
+
   const [id, setId] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -79,34 +96,31 @@ export default function EditProfile(props) {
     "Voice"
   ];
 
-  const teacherInstruments = courses.map((course) =>{
-    return course.instrument
-  })
+  const teacherInstruments = courses.map(course => {
+    return course.instrument;
+  });
 
   const levels = ["Select", "Beginner", "Intermediate", "Advanced"];
 
   const videoSpecs = {
-    height: '200',
-    width: '300'
-  }
-
-  const fetchTeacherInfo = () => {
-    axios('/api/teachers/new', { withCredentials: true,})
-      .then(({data}) => {
-
-        const currentCourses = data.courses.filter(course => course.is_available)
-        
-        setId(data.id)
-        setFirstName(data.first_name)
-        setLastName(data.last_name)
-        setEmail(data.email)
-        setTagline(data.tagline)
-        setBio(data.bio)
-        setCourses(currentCourses)
-        setVideos(data.videos)
-      })
+    height: "200",
+    width: "300"
   };
 
+  const fetchTeacherInfo = () => {
+    axios("/api/teachers/new", { withCredentials: true }).then(({ data }) => {
+      const currentCourses = data.courses.filter(course => course.is_available);
+
+      setId(data.id);
+      setFirstName(data.first_name);
+      setLastName(data.last_name);
+      setEmail(data.email);
+      setTagline(data.tagline);
+      setBio(data.bio);
+      setCourses(currentCourses);
+      setVideos(data.videos);
+    });
+  };
 
   const addCourse = e => {
     e.preventDefault();
@@ -124,11 +138,11 @@ export default function EditProfile(props) {
           }
         }
       }).then(() => {
-        fetchTeacherInfo()
-        setInstrument("")
-        setLevel("")
-        setRate(0)
-      })
+        fetchTeacherInfo();
+        setInstrument("");
+        setLevel("");
+        setRate(0);
+      });
     } else {
       setError("Missing field");
     }
@@ -141,26 +155,25 @@ export default function EditProfile(props) {
       method: "put",
       withCredentials: true
     }).then(({ data }) => {
-      console.log(data.status);
       if (data.status === 401) {
         setError("Cannot remove a course with future lessons.");
       } else {
         fetchTeacherInfo();
       }
-    })
-  }
+    });
+  };
 
   const destroyVideo = (e, id) => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
     axios(`/api/videos/${id}`, {
       method: "delete",
       withCredentials: true
     }).then(() => {
-      const newVideos = videos.filter(video => video.id !== id)
-      setVideos(newVideos)
-    })
-  }
+      const newVideos = videos.filter(video => video.id !== id);
+      setVideos(newVideos);
+    });
+  };
 
   const editProfile = (e, id) => {
     e.preventDefault();
@@ -217,7 +230,7 @@ export default function EditProfile(props) {
   return (
     <div>
       <CssBaseline />
-      <Container >
+      <Container>
         <Typography component="h1" variant="h5">
           Edit Profile
         </Typography>
@@ -239,12 +252,7 @@ export default function EditProfile(props) {
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <TextField
-              type="email"
-              variant="outlined"
-              value={email}
-              disabled
-            />
+            <TextField type="email" variant="outlined" value={email} disabled />
           </Grid>
 
           <Grid item xs={12} sm={6}>
@@ -267,29 +275,27 @@ export default function EditProfile(props) {
             />
           </Grid>
         </Grid>
-      
-      
 
-      {/* <label> */}
-      {/* Certifications: */}
-      {/* <input type="text" name="certifications" value={certification} onChange={e => setCertification(e.target.value)} /> */}
-      {/* </label> */}
+        {/* <label> */}
+        {/* Certifications: */}
+        {/* <input type="text" name="certifications" value={certification} onChange={e => setCertification(e.target.value)} /> */}
+        {/* </label> */}
 
-      {/* //!COURSES */}
+        {/* //!COURSES */}
         <Grid container spacing={2}>
           {courses.map((course, i) => {
-            return(
+            return (
               <Paper>
                 <Grid item key={i} xs={12}>
                   <Typography>
                     {course.level} {course.instrument} for {course.rate}$/hour
                   </Typography>
                 </Grid>
-                  <IconButton aria-label="delete">
-                    <DeleteIcon onClick={(e) => destroyCourse(e, course.id)}/>
-                  </IconButton>
-                </Paper>
-            )
+                <IconButton aria-label="delete">
+                  <DeleteIcon onClick={e => destroyCourse(e, course.id)} />
+                </IconButton>
+              </Paper>
+            );
           })}
         </Grid>
 
@@ -304,13 +310,17 @@ export default function EditProfile(props) {
               onChange={e => setInstrument(e.target.value)}
               className={classes.formControl}
               fullWidth
-              >
-                {instruments.map((instrument, i) => {
-                  return <MenuItem key={i} value={instrument}>{instrument}</MenuItem>;
-                })}
+            >
+              {instruments.map((instrument, i) => {
+                return (
+                  <MenuItem key={i} value={instrument}>
+                    {instrument}
+                  </MenuItem>
+                );
+              })}
             </TextField>
           </Grid>
-  
+
           {/* Level */}
           <Grid item xs={12} sm={6} md={4}>
             <TextField
@@ -321,106 +331,117 @@ export default function EditProfile(props) {
               defaultValue="Select"
               className={classes.formControl}
               fullWidth
-              >
-                {levels.map((level, i) => {
-                  return <MenuItem key={i} value={level}>{level}</MenuItem>;
-                })}
+            >
+              {levels.map((level, i) => {
+                return (
+                  <MenuItem key={i} value={level}>
+                    {level}
+                  </MenuItem>
+                );
+              })}
             </TextField>
-          </Grid>  
+          </Grid>
 
           {/* Rate */}
           <Grid item xs={6} md={2}>
-            <FormControl variant="outlined" fullWidth className={classes.formControl} >
+            <FormControl
+              variant="outlined"
+              fullWidth
+              className={classes.formControl}
+            >
               <InputLabel>Hourly Rate</InputLabel>
               <OutlinedInput
                 type="number"
                 onChange={event => setRate(event.target.value)}
-                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
                 labelWidth={90}
               />
             </FormControl>
           </Grid>
           {/* <Grid item xs={6} md={2}> */}
-          <Button onClick={e => addCourse(e)}>
-            Add Course
-          </Button>
+          <Button onClick={e => addCourse(e)}>Add Course</Button>
           {/* </Grid> */}
-
         </Grid>
 
-      {/* //!VIDEOS */}
+        {/* //!VIDEOS */}
 
-          <Grid container spacing={2}>
+        <Grid container spacing={2}>
           {videos.map((video, i) => {
-              return(
-                  <Grid item key={i} xs={12} sm={6} md={4} lg={3}>
-                    <YouTube videoId={video.file} opts={videoSpecs} />
-                    {video.level} {video.instrument}
-                    <Button onClick={(e) => destroyVideo(e, video.id)} >Remove Video</Button>
-                  </Grid>
-                  
-              )
-            })
-          }
+            return (
+              <Grid item key={i} xs={12} sm={6} md={4} lg={3}>
+                <YouTube videoId={video.file} opts={videoSpecs} />
+                {video.level} {video.instrument}
+                <Button onClick={e => destroyVideo(e, video.id)}>
+                  Remove Video
+                </Button>
+              </Grid>
+            );
+          })}
+        </Grid>
+
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              type="url"
+              label="YouTube URL"
+              variant="outlined"
+              value={url}
+              onChange={e => setUrl(e.target.value)}
+              className={classes.formControl}
+              fullWidth
+            />
           </Grid>
-
-          <Grid container spacing={2}>          
-            <Grid item xs={12} sm={6}>          
-              <TextField
-                type="url"
-                label="YouTube URL"
-                variant="outlined"
-                value={url}
-                onChange={e => setUrl(e.target.value)}
-                className={classes.formControl}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={6} sm={3}>
-              <TextField
-                select
-                label="Instrument"
-                variant="outlined"
-                onChange={e => setVideoInstrument(e.target.value)}
-                defaultValue="Select"
-                className={classes.formControl}
-                fullWidth
-                >
-                  {teacherInstruments.map((instrument, i) => {
-                    return <MenuItem key={i} value={instrument}>{instrument}</MenuItem>;
-                  })}
-              </TextField>
-            </Grid>
-            <Grid item xs={6} sm={3}>
-              <TextField
-                select
-                label="Level"
-                variant="outlined"
-                onChange={e => setVideoLevel(e.target.value)}
-                defaultValue="Select"
-                className={classes.formControl}
-                fullWidth
-                >
-                  {levels.map((level, i) => {
-                    return <MenuItem key={i} value={level}>{level}</MenuItem>;
-                  })}
-              </TextField>
-            </Grid>
+          <Grid item xs={6} sm={3}>
+            <TextField
+              select
+              label="Instrument"
+              variant="outlined"
+              onChange={e => setVideoInstrument(e.target.value)}
+              defaultValue="Select"
+              className={classes.formControl}
+              fullWidth
+            >
+              {teacherInstruments.map((instrument, i) => {
+                return (
+                  <MenuItem key={i} value={instrument}>
+                    {instrument}
+                  </MenuItem>
+                );
+              })}
+            </TextField>
           </Grid>
- 
-        <Button onClick={e => addVideo(e, id)}>
-          Add Video
-        </Button>
+          <Grid item xs={6} sm={3}>
+            <TextField
+              select
+              label="Level"
+              variant="outlined"
+              onChange={e => setVideoLevel(e.target.value)}
+              defaultValue="Select"
+              className={classes.formControl}
+              fullWidth
+            >
+              {levels.map((level, i) => {
+                return (
+                  <MenuItem key={i} value={level}>
+                    {level}
+                  </MenuItem>
+                );
+              })}
+            </TextField>
+          </Grid>
+        </Grid>
 
-      {/* will travel */}
-      {/* will host */}
+        <Button onClick={e => addVideo(e, id)}>Add Video</Button>
 
-      <button onClick={e => editProfile(e, id)}>Edit Teacher</button>
+        {/* will travel */}
+        {/* will host */}
 
-      {error}
+        <button onClick={e => editProfile(e, id)}>Edit Teacher</button>
+
+        {error}
       </Container>
-
-      </div>
+    </div>
   );
-
 }

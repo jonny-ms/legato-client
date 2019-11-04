@@ -88,8 +88,6 @@ const parseLoadedEvents = (courses, students) => {
     }
   }
 
-  console.log(loadedLessons);
-
   return loadedLessons;
 };
 

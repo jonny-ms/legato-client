@@ -108,13 +108,8 @@ class TeacherCalendar extends Component {
     currentLessonID: null,
     repeatWeeks: 1,
     startDay: 4,
-    mobile: false,
-    theme: {}
+    mobile: false
   };
-
-  // theme = {
-  //   spacing: 8
-  // };
 
   getCalendarEvents = () => {
     Promise.all([

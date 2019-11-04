@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@material-ui/core";
+import { Paper, Tabs, Tab } from "@material-ui/core";
 
 import CalendarForBooking from "../CalendarForBooking";
 import TeacherProfile from "../TeacherProfile";
@@ -8,78 +9,65 @@ import TeacherProfile from "../TeacherProfile";
 const ShowTeacherTimeslots = props => {
   const [teacher, setTeacher] = useState();
   const [trigger, setTrigger] = useState();
+  const [showCalendar, setShowCalendar] = useState(true);
+  const [showProfile, setShowProfile] = useState(false);
+  const [tab, setTab] = useState(props.trigger ? 0 : 1);
+
   const teacherID = props.history.location.state;
-  // console.log("teacherID from ShowTeacherTimeSlots.js: ", teacherID);
 
   const fetch = () => {
     axios(`/api/teachers/${teacherID.teacher}`, {
       method: "get",
       withCredentials: true
     }).then(({ data }) => {
-      // console.log("data from ShowTeacherTimeSlots.js: ", data);
       setTeacher(data.teachers);
-      setTrigger(props.trigger);
+      setShowProfile(props.trigger);
+      setShowCalendar(!props.trigger);
     });
   };
-
-  // console.log("props.location: ", props.location);
 
   useEffect(() => {
     fetch();
   }, []);
 
-  const triggerCalendar = e => {
-    setTrigger(false);
+  const showCalendarFunc = () => {
+    setShowProfile(false);
+    setShowCalendar(true);
   };
 
-  const triggerProfile = e => {
-    setTrigger(true);
+  const showProfileFunc = () => {
+    setShowProfile(true);
+    setShowCalendar(false);
+  };
+
+  const handleChange = (e, newValue) => {
+    setTab(newValue);
   };
 
   return (
-    <div className="EditTeacher">
-      <p>Book Appointments</p>
-      <div>
-        <div>
-          {!trigger ? (
-            <Button disabled={true} style={{ color: "grey" }}>
-              Book Now
-            </Button>
-          ) : (
-            <Button disabled={true} style={{ color: "grey" }}>
-              Profile
-            </Button>
-          )}
+    <div>
+      <Paper>
+        <Tabs
+          value={tab}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="fullWidth"
+        >
+          <Tab label="Profile" onClick={e => showProfileFunc(e)} />
+          <Tab label="Book a Lesson" onClick={e => showCalendarFunc(e)} />
+        </Tabs>
+      </Paper>
+      {showCalendar && (
+        <div className="calendar">
+          <CalendarForBooking teacherID={teacherID} />
         </div>
+      )}
+      {showProfile && teacher && (
         <div>
-          {trigger ? (
-            <Button
-              onClick={e => {
-                triggerCalendar(e);
-              }}
-            >
-              Book Now
-            </Button>
-          ) : (
-            <Button
-              onClick={e => {
-                triggerProfile(e);
-              }}
-            >
-              Profile
-            </Button>
-          )}
+          <TeacherProfile teacher={teacher} />
         </div>
-      </div>
-      <div>
-        {!trigger ? (
-          <div className="calendar">
-            <CalendarForBooking teacherID={teacherID} />
-          </div>
-        ) : (
-          <div>{teacher && <TeacherProfile teacher={teacher} />}</div>
-        )}
-      </div>
+      )}
     </div>
   );
 };

@@ -1,24 +1,3 @@
-// import React from "react";
-
-// const PendingLessonTeacher = props => {
-//   return (
-//     <div>
-//       <span>
-//         Confirm {props.course} lesson with {props.student} on {props.time}?
-//       </span>
-//       <button onClick={() => props.acceptBooking(props.currentLessonID)}>
-//         Confirm
-//       </button>
-//       <button onClick={() => props.rejectBooking(props.currentLessonID)}>
-//         Reject
-//       </button>
-//       <button onClick={() => props.notNow()}>Not Now</button>
-//     </div>
-//   );
-// };
-
-// export default PendingLessonTeacher;
-
 import React from "react";
 
 import {
@@ -37,24 +16,10 @@ import {
   TextField
 } from "@material-ui/core";
 
-// const theme = createMuiTheme({
-//   palette: {
-//     primary: green,
-//     secondary: orange
-//   }
-// });
-
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     textAlign: "center"
-  },
-  paper: {
-    height: 140,
-    width: 100
-  },
-  control: {
-    padding: theme.spacing(2)
   },
   appointment: {
     margin: theme.spacing(2)
@@ -136,7 +101,3 @@ const PendingLessonTeacher = props => {
 };
 
 export default PendingLessonTeacher;
-
-// acceptBooking = { this.acceptBooking }
-// rejectBooking = { this.rejectBooking }
-// notNow = { this.notNow }

@@ -5,6 +5,21 @@ import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
 
+import {
+  makeStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from "@material-ui/core/styles";
+import {
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+  TextField
+} from "@material-ui/core";
+import { green, purple, red, orange } from "@material-ui/core/colors";
+
 import PendingLessonStudent from "./PendingLessonStudent";
 import LessonStudent from "./LessonStudent";
 
@@ -23,7 +38,7 @@ class StudentCalendar extends Component {
     showLesson: false,
     showPendingLesson: false,
     showTeacher: "",
-    startDay: 7,
+    startDay: 4,
     mobile: false
   };
 
@@ -189,38 +204,42 @@ class StudentCalendar extends Component {
             />
           )}
         </div>
-        {this.state.mobile && (
-          <FullCalendar
-            events={this.state.calendarEvents}
-            defaultView="timeGrid"
-            header={{
-              left: "prev today",
-              right: "next"
-            }}
-            plugins={[timeGridPlugin, interactionPlugin]}
-            minTime={"08:00:00"}
-            aspectRatio={0.6}
-            allDaySlot={false}
-            eventClick={this.handleEventClick}
-          />
-        )}
-        {!this.state.mobile && (
-          <FullCalendar
-            events={this.state.calendarEvents}
-            defaultView="timeGridWeek"
-            header={{
-              left: "prev today",
-              center: "title",
-              right: "next"
-            }}
-            plugins={[timeGridPlugin, interactionPlugin]}
-            firstDay={this.state.startDay}
-            minTime={"08:00:00"}
-            aspectRatio={1.8}
-            allDaySlot={false}
-            eventClick={this.handleEventClick}
-          />
-        )}
+        <Card>
+          <CardContent>
+            {this.state.mobile && (
+              <FullCalendar
+                events={this.state.calendarEvents}
+                defaultView="timeGrid"
+                header={{
+                  left: "prev today",
+                  right: "next"
+                }}
+                plugins={[timeGridPlugin, interactionPlugin]}
+                minTime={"08:00:00"}
+                aspectRatio={0.6}
+                allDaySlot={false}
+                eventClick={this.handleEventClick}
+              />
+            )}
+            {!this.state.mobile && (
+              <FullCalendar
+                events={this.state.calendarEvents}
+                defaultView="timeGridWeek"
+                header={{
+                  left: "prev today",
+                  center: "title",
+                  right: "next"
+                }}
+                plugins={[timeGridPlugin, interactionPlugin]}
+                firstDay={this.state.startDay}
+                minTime={"08:00:00"}
+                aspectRatio={1.8}
+                allDaySlot={false}
+                eventClick={this.handleEventClick}
+              />
+            )}
+          </CardContent>
+        </Card>
       </Fragment>
     );
   }

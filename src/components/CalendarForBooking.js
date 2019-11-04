@@ -5,15 +5,48 @@ import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
 
-const moment = require("moment");
+import {
+  makeStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from "@material-ui/core/styles";
+import {
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
+} from "@material-ui/core";
+import { green, purple, red, orange } from "@material-ui/core/colors";
+
+import moment from "moment";
+
+const useStyles = makeStyles(theme => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2)
+  }
+}));
 
 class CalendarForBooking extends Component {
   state = {
     calendarEvents: [],
     courses: {},
     course_id: null,
-    startDay: 7,
-    mobile: false
+    startDay: 4,
+    mobile: false,
+    teacher: {},
+    eventSelected: false,
+    courseSelected: false,
+    submitBackgroundColor: false
   };
 
   calendarRef = React.createRef();
@@ -24,10 +57,9 @@ class CalendarForBooking extends Component {
       withCredentials: true
     }).then(({ data }) => {
       const lessons = JSON.parse(data.lessons);
+      const teacher = data.teachers[0];
 
       let loadedEvents = [];
-      // create calendar events for timeslots
-      // console.log("LOOK HERE", data)
       for (let i in data.timeslots) {
         const startTime = data.timeslots[i].datetime;
         loadedEvents.push({
@@ -83,11 +115,22 @@ class CalendarForBooking extends Component {
 
       let startDay = moment().isoWeekday();
 
+      const useStyles = makeStyles(theme => ({
+        formControl: {
+          margin: theme.spacing(1),
+          minWidth: 120
+        },
+        selectEmpty: {
+          marginTop: theme.spacing(2)
+        }
+      }));
+
       this.setState({
         calendarEvents: loadedEvents,
         courses,
         startDay,
-        mobile
+        mobile,
+        teacher
       });
     });
   };
@@ -99,48 +142,64 @@ class CalendarForBooking extends Component {
   submitBookings = e => {
     // Send requested bookings to server
     e.preventDefault();
-    const events = this.state.calendarEvents;
+    if (this.state.submitBackgroundColor) {
+      const events = this.state.calendarEvents;
 
-    let requests = [];
-    for (let event of events) {
-      if (event.title === "Booking Request") {
-        requests.push(event);
-      }
-    }
-
-    const sortedRequests = requests.sort((a, b) => {
-      return moment(a.start).diff(moment(b.start));
-    });
-
-    // Only send timeslots which have a booking request
-    let checkValidTimeslots = true;
-    for (let i = 0; i < sortedRequests.length - 1; i++) {
-      if (
-        moment(sortedRequests[Number(i) + 1].start).diff(
-          moment(sortedRequests[i].start)
-            .add(30, "m")
-            .toDate()
-        )
-      ) {
-        alert("Please request one lesson at a time.");
-        return (checkValidTimeslots = false);
-      }
-    }
-
-    if (checkValidTimeslots) {
-      axios(`/api/lessons`, {
-        method: "post",
-        withCredentials: true,
-        data: {
-          lesson: {
-            timeslots: sortedRequests.map(request => {
-              return request.id;
-            }),
-            course_id: this.state.course_id
-          }
+      let requests = [];
+      for (let event of events) {
+        if (event.title === "Booking Request") {
+          requests.push(event);
         }
+      }
+
+      const sortedRequests = requests.sort((a, b) => {
+        return moment(a.start).diff(moment(b.start));
       });
+
+      // Only send timeslots which have a booking request
+      let checkValidTimeslots = true;
+      for (let i = 0; i < sortedRequests.length - 1; i++) {
+        if (
+          moment(sortedRequests[Number(i) + 1].start).diff(
+            moment(sortedRequests[i].start)
+              .add(30, "m")
+              .toDate()
+          )
+        ) {
+          alert("Please request one lesson at a time.");
+          return (checkValidTimeslots = false);
+        }
+      }
+
+      if (checkValidTimeslots) {
+        axios(`/api/lessons`, {
+          method: "post",
+          withCredentials: true,
+          data: {
+            lesson: {
+              timeslots: sortedRequests.map(request => {
+                return request.id;
+              }),
+              course_id: this.state.course_id
+            }
+          }
+        });
+      }
     }
+  };
+
+  activeSubmit = (eventSelected, courseSelected) => {
+    return eventSelected && courseSelected;
+  };
+
+  selectCourse = e => {
+    this.setState({
+      course_id: this.state.courses[e.target.value],
+      courseSelected: true,
+      submitBackgroundColor: this.activeSubmit(this.state.eventSelected, true)
+        ? true
+        : false
+    });
   };
 
   requestBooking = arg => {
@@ -171,58 +230,107 @@ class CalendarForBooking extends Component {
     }
 
     this.setState({
-      calendarEvents: newEvents
+      calendarEvents: newEvents,
+      eventSelected: true,
+      submitBackgroundColor: this.activeSubmit(true, this.state.courseSelected)
+        ? true
+        : false
     });
   };
 
   render() {
     return (
       <Fragment>
-        <select
-          onChange={e =>
-            this.setState({ course_id: this.state.courses[e.target.value] })
-          }
-        >
-          <option>Select a course</option>
-          {Object.keys(this.state.courses).map((course, i) => {
-            return <option key={i}>{course}</option>;
-          })}
-        </select>
-        <button onClick={this.submitBookings}>Submit</button>
-        {this.state.mobile && (
-          <FullCalendar
-            ref={this.calendarRef}
-            events={this.state.calendarEvents}
-            defaultView="timeGrid"
-            header={{
-              left: "prev today",
-              right: "next"
-            }}
-            plugins={[timeGridPlugin, interactionPlugin]}
-            minTime={"08:00:00"}
-            aspectRatio={0.7}
-            allDaySlot={false}
-            eventClick={this.requestBooking}
-          />
-        )}
-        {!this.state.mobile && (
-          <FullCalendar
-            ref={this.calendarRef}
-            events={this.state.calendarEvents}
-            defaultView="timeGridWeek"
-            header={{
-              left: "prev today",
-              center: "title",
-              right: "next"
-            }}
-            plugins={[timeGridPlugin, interactionPlugin]}
-            minTime={"08:00:00"}
-            startDay={this.state.startDay}
-            aspectRatio={1.8}
-            allDaySlot={false}
-            eventClick={this.requestBooking}
-          />
-        )}
+        <Card className={"repeat-card"}>
+          <CardContent>
+            <Typography variant="h5" className={"repeat-card-title"}>
+              Request a Lesson - {this.state.teacher.first_name}{" "}
+              {this.state.teacher.last_name}
+            </Typography>
+            <Typography variant="body2" className={"repeat-card-title"}>
+              Select availabilities in the calendar, select a course and hit
+              submit!
+            </Typography>
+            <Grid
+              container
+              direction="row"
+              alignItems={"center"}
+              style={{ display: "flex" }}
+            >
+              <Grid item style={{ marginRight: 30 }}>
+                <TextField
+                  select
+                  fullWidth
+                  label="Courses"
+                  variant="outlined"
+                  value={this.state.course}
+                  style={{ minWidth: 200 }}
+                  onChange={e => this.selectCourse(e)}
+                >
+                  {Object.keys(this.state.courses).map((course, i) => {
+                    return (
+                      <MenuItem value={course} key={i}>
+                        {course}
+                      </MenuItem>
+                    );
+                  })}
+                </TextField>
+              </Grid>
+              <Grid item>
+                <Button
+                  onClick={this.submitBookings}
+                  variant={"contained"}
+                  style={{
+                    backgroundColor: this.state.submitBackgroundColor
+                      ? "green"
+                      : "grey"
+                  }}
+                >
+                  Request a Lesson
+                </Button>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent>
+            {this.state.mobile && (
+              <FullCalendar
+                ref={this.calendarRef}
+                events={this.state.calendarEvents}
+                defaultView="timeGrid"
+                header={{
+                  left: "prev today",
+                  right: "next"
+                }}
+                plugins={[timeGridPlugin, interactionPlugin]}
+                firstDay={this.state.startDay}
+                minTime={"08:00:00"}
+                aspectRatio={0.7}
+                allDaySlot={false}
+                eventClick={this.requestBooking}
+              />
+            )}
+            {!this.state.mobile && (
+              <FullCalendar
+                ref={this.calendarRef}
+                events={this.state.calendarEvents}
+                defaultView="timeGridWeek"
+                header={{
+                  left: "prev today",
+                  center: "title",
+                  right: "next"
+                }}
+                plugins={[timeGridPlugin, interactionPlugin]}
+                firstDay={this.state.startDay}
+                minTime={"08:00:00"}
+                aspectRatio={1.8}
+                allDaySlot={false}
+                eventClick={this.requestBooking}
+              />
+            )}
+          </CardContent>
+        </Card>
       </Fragment>
     );
   }

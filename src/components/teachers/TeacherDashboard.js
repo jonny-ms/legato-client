@@ -9,6 +9,7 @@ const TeacherDashboard = () => {
   const [showCalendar, setShowCalendar] = useState(true);
   const [showAppointments, setShowAppointments] = useState(false);
   const [tab, setTab] = useState(0);
+
   const handleChange = (e, newValue) => {
     setTab(newValue);
   };
