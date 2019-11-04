@@ -58,7 +58,7 @@ export default function TeacherListItem(props) {
               {`${props.teacher.first_name}  ${props.teacher.last_name}`}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              {props.teacher.bio}
+              {props.teacher.tagline}
             </Typography>
             <Typography variant="body2" color="textPrimary" component="div">
               {coursesArray.map((courseData, i) => (
