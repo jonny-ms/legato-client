@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, Box, CardMedia } from "@material-ui/core";
+import { Card, CardContent, Box, CardMedia, Typography, Button, Link, CardActionArea } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import YouTube from "react-youtube"
 
@@ -31,8 +31,21 @@ export default function VideoListItem (props) {
       <Card >
         <Box>
           <YouTube videoId={props.video.file} opts={opts}></YouTube>
-          {props.video.level} {props.video.instrument} {props.teacher.first_name}
         </Box>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            {props.video.level} {props.video.instrument}
+          </Typography>
+        </CardContent>
+        <CardActionArea>
+        <Button size="small" color="primary">
+            <Link
+              to={`/teachers/${props.teacher.id}`}
+            >
+              View {props.teacher.first_name}'s Profile
+            </Link>
+          </Button>
+        </CardActionArea>
       </Card>
     </div>
   );

@@ -1,9 +1,38 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import YouTube from "react-youtube"
+import { Container, Grid, TextField, Paper, Card, CardContent, Box, CardMedia, Typography, Button, MenuItem, InputAdornment, Link, CardActionArea, CssBaseline, FormControl, InputLabel, OutlinedInput, IconButton} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import DeleteIcon from "@material-ui/icons/Delete"
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: "flex",
+    flexWrap: "wrap",
+    overflow: "hidden",
+    justifyContent: "center"
+  },
+  container: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  addCourse: {
+    display: "flex",
+    justifyContent: "flex-start"
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+}));
+
+
 
 export default function EditProfile(props) {
   
+  const classes = useStyles();
   
   const [id, setId] = useState(0);
   const [firstName, setFirstName] = useState("");
@@ -49,6 +78,10 @@ export default function EditProfile(props) {
     "Violin",
     "Voice"
   ];
+
+  const teacherInstruments = courses.map((course) =>{
+    return course.instrument
+  })
 
   const levels = ["Select", "Beginner", "Intermediate", "Advanced"];
 
@@ -182,139 +215,202 @@ export default function EditProfile(props) {
   }, []);
 
   return (
-    <form>
-      <label>
-        First Name:
-        <input type="text" name="firstName" value={firstName} readOnly />
-      </label>
-      <label>
-        Last Name:
-        <input type="text" name="lastName" value={lastName} readOnly />
-      </label>
-      <label>
-        Email:
-        <input type="text" name="email" value={email} readOnly />
-      </label>
-      <label>
-        Tagline:
-        <input
-          type="text"
-          name="tagline"
-          value={tagline}
-          onChange={e => setTagline(e.target.value)}
-        />
-      </label>
-      <label>
-        Bio:
-        <input
-          type="text"
-          name="bio"
-          value={bio}
-          onChange={e => setBio(e.target.value)}
-        />
-      </label>
+    <div>
+      <CssBaseline />
+      <Container >
+        <Typography component="h1" variant="h5">
+          Edit Profile
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              type="text"
+              variant="outlined"
+              value={firstName}
+              disabled
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              type="text"
+              variant="outlined"
+              value={lastName}
+              disabled
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              type="email"
+              variant="outlined"
+              value={email}
+              disabled
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              type="text"
+              variant="outlined"
+              label="Tagline"
+              value={tagline}
+              onChange={e => setTagline(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              multiline
+              type="text"
+              variant="outlined"
+              label="Bio"
+              value={bio}
+              onChange={e => setBio(e.target.value)}
+            />
+          </Grid>
+        </Grid>
+      
+      
+
       {/* <label> */}
       {/* Certifications: */}
       {/* <input type="text" name="certifications" value={certification} onChange={e => setCertification(e.target.value)} /> */}
       {/* </label> */}
 
       {/* //!COURSES */}
-      <label>
-        Courses:
+        <Grid container spacing={2}>
           {courses.map((course, i) => {
             return(
-              <li key={i}>
-                {course.level} {course.instrument} for {course.rate}$/hour
-
-                <button type="submit" onClick={(e) => destroyCourse(e, course.id)} >Remove Course</button>
-              </li>
+              <Grid item key={i} xs={12}>
+                <Paper>
+                  <Typography>
+                    {course.level} {course.instrument} for {course.rate}$/hour
+                  </Typography>
+                  <IconButton aria-label="delete">
+                    <DeleteIcon onClick={(e) => destroyCourse(e, course.id)}/>
+                  </IconButton>
+                </Paper>
+              </Grid>
             )
           })}
-        <label>
-          Instrument:
-          <select
-            value={instrument}
-            onChange={e => setInstrument(e.target.value)}
-          >
-            {instruments.map((instrument, i) => {
-              return <option key={i}>{instrument}</option>;
-            })}
-          </select>
-        </label>
-        <label>
-          Level:
-          <select value={level} onChange={e => setLevel(e.target.value)}>
-            {levels.map((level, i) => {
-              return <option key={i}>{level}</option>;
-            })}
-          </select>
-        </label>
-        <label>
-          Rate:
-          <input
-            type="number"
-            name="rate"
-            value={rate}
-            onChange={e => setRate(e.target.value)}
-          />
-        </label>
-        <button type="submit" onClick={e => addCourse(e)}>
-          Add Course
-        </button>
-      </label>
+        </Grid>
+
+        <Grid container spacing={2} className={classes.addCourse}>
+          {/* Instrument */}
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              select
+              label="Instrument"
+              variant="outlined"
+              defaultValue="Select"
+              onChange={e => setInstrument(e.target.value)}
+              className={classes.formControl}
+              fullWidth
+              >
+                {instruments.map((instrument, i) => {
+                  return <MenuItem key={i} value={instrument}>{instrument}</MenuItem>;
+                })}
+            </TextField>
+          </Grid>
+  
+          {/* Level */}
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              select
+              label="Level"
+              variant="outlined"
+              onChange={e => setLevel(e.target.value)}
+              defaultValue="Select"
+              className={classes.formControl}
+              fullWidth
+              >
+                {levels.map((level, i) => {
+                  return <MenuItem key={i} value={level}>{level}</MenuItem>;
+                })}
+            </TextField>
+          </Grid>  
+
+          {/* Rate */}
+          <Grid item xs={6} md={2}>
+            <FormControl variant="outlined" fullWidth className={classes.formControl} >
+              <InputLabel>Hourly Rate</InputLabel>
+              <OutlinedInput
+                type="number"
+                onChange={event => setRate(event.target.value)}
+                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                labelWidth={90}
+              />
+            </FormControl>
+          </Grid>
+          {/* <Grid item xs={6} md={2}> */}
+          <Button onClick={e => addCourse(e)}>
+            Add Course
+          </Button>
+          {/* </Grid> */}
+
+        </Grid>
 
       {/* //!VIDEOS */}
 
-      <label>
-        Youtube Videos:
-        <ul>
+          <Grid container spacing={2}>
           {videos.map((video, i) => {
               return(
-                <li key={i}>
-                  <YouTube videoId={video.file} opts={videoSpecs} />
-                  {video.level} {video.instrument}
+                  <Grid item key={i} xs={12} sm={6} md={4} lg={3}>
+                    <YouTube videoId={video.file} opts={videoSpecs} />
+                    {video.level} {video.instrument}
+                    <Button onClick={(e) => destroyVideo(e, video.id)} >Remove Video</Button>
+                  </Grid>
                   
-                  <button type="submit" onClick={(e) => destroyVideo(e, video.id)} >Remove Video</button>
-                </li>
               )
             })
           }
-        </ul>
-        <label>
-          Url:
-          <input
-            type="url"
-            name="video"
-            value={url}
-            onChange={e => setUrl(e.target.value)}
-          />
-        </label>
-        <label>
-          Instrument:
-          <select
-            value={videoInstrument}
-            onChange={e => setVideoInstrument(e.target.value)}
-          >
-            {instruments.map((instrument, i) => {
-              return <option key={i}>{instrument}</option>;
-            })}
-          </select>
-        </label>
-        <label>
-          Level:
-          <select
-            value={videoLevel}
-            onChange={e => setVideoLevel(e.target.value)}
-          >
-            {levels.map((level, i) => {
-              return <option key={i}>{level}</option>;
-            })}
-          </select>
-        </label>
-        <button type="submit" onClick={e => addVideo(e, id)}>
+          </Grid>
+
+          <Grid container spacing={2}>          
+            <Grid item xs={12} sm={6}>          
+              <TextField
+                type="url"
+                label="YouTube URL"
+                variant="outlined"
+                value={url}
+                onChange={e => setUrl(e.target.value)}
+                className={classes.formControl}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <TextField
+                select
+                label="Instrument"
+                variant="outlined"
+                onChange={e => setVideoInstrument(e.target.value)}
+                defaultValue="Select"
+                className={classes.formControl}
+                fullWidth
+                >
+                  {teacherInstruments.map((instrument, i) => {
+                    return <MenuItem key={i} value={instrument}>{instrument}</MenuItem>;
+                  })}
+              </TextField>
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <TextField
+                select
+                label="Level"
+                variant="outlined"
+                onChange={e => setVideoLevel(e.target.value)}
+                defaultValue="Select"
+                className={classes.formControl}
+                fullWidth
+                >
+                  {levels.map((level, i) => {
+                    return <MenuItem key={i} value={level}>{level}</MenuItem>;
+                  })}
+              </TextField>
+            </Grid>
+          </Grid>
+ 
+        <Button onClick={e => addVideo(e, id)}>
           Add Video
-        </button>
-      </label>
+        </Button>
 
       {/* will travel */}
       {/* will host */}
@@ -322,6 +418,9 @@ export default function EditProfile(props) {
       <button onClick={e => editProfile(e, id)}>Edit Teacher</button>
 
       {error}
-    </form>
+      </Container>
+
+      </div>
   );
+
 }
