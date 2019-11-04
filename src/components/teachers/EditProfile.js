@@ -279,16 +279,16 @@ export default function EditProfile(props) {
         <Grid container spacing={2}>
           {courses.map((course, i) => {
             return(
-              <Grid item key={i} xs={12}>
-                <Paper>
+              <Paper>
+                <Grid item key={i} xs={12}>
                   <Typography>
                     {course.level} {course.instrument} for {course.rate}$/hour
                   </Typography>
+                </Grid>
                   <IconButton aria-label="delete">
                     <DeleteIcon onClick={(e) => destroyCourse(e, course.id)}/>
                   </IconButton>
                 </Paper>
-              </Grid>
             )
           })}
         </Grid>
