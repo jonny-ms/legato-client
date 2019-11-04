@@ -1,17 +1,29 @@
 import React, { useState } from "react";
 
 import TeacherListItem from "./TeacherListItem";
-import VideoListItem from "./VideoListItem"
+import VideoListItem from "./VideoListItem";
 
-import { TextField, MenuItem, Paper, Tabs, Tab, FormControl, InputLabel, OutlinedInput, InputAdornment, Grid } from "@material-ui/core"
+import {
+  TextField,
+  MenuItem,
+  Paper,
+  Tabs,
+  Tab,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+  Grid
+} from "@material-ui/core";
 import GridList from "@material-ui/core/GridList";
+
 import { makeStyles } from "@material-ui/core/styles";
 
 import {
   isTeacherNameIncluded,
   isLevelIncluded,
   isInstrumentIncluded,
-  isRateIncluded,
+  isRateIncluded
 } from "./helpers/isIncluded";
 
 const useStyles = makeStyles(theme => ({
@@ -30,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     color: "rgba(255, 255, 255, 0.54)"
   },
   formControl: {
-    margin: theme.spacing(1),
+    margin: theme.spacing(1)
     // minWidth: 80,
     // width: "80%"
   },
@@ -38,9 +50,8 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
     display: "flex",
-    alignItems: 'center',
+    alignItems: "center",
     justify: "center"
-
   }
 }));
 
@@ -49,15 +60,19 @@ export default function SearchBar(props) {
   const [instrument, setInstrument] = useState("Select");
   const [level, setLevel] = useState("Select");
   const [rate, setRate] = useState("");
-  // console.log("props from SearchBar.js: ", props);
+  console.log("props from SearchBar.js: ", props);
 
-  const [isVideo, setIsVideo] = useState(false)
-  const [isProfile, setIsProfile] = useState(true)
+  // const getTimeSlots = () => {
+  //   axios(`/teachers/${}`)
+  // }
 
-  const [tab, setTab] = useState(0)
+  const [isVideo, setIsVideo] = useState(false);
+  const [isProfile, setIsProfile] = useState(true);
+
+  const [tab, setTab] = useState(0);
   const handleChange = (e, newValue) => {
-    setTab(newValue)
-  }
+    setTab(newValue);
+  };
 
   const instruments = [
     "Select",
@@ -103,25 +118,24 @@ export default function SearchBar(props) {
     return check;
   });
 
-  const searchByVideo = (e) => {
+  const searchByVideo = e => {
     e.preventDefault();
     e.stopPropagation();
     setIsProfile(false);
-    setIsVideo(true);   
-  }
+    setIsVideo(true);
+  };
 
-  const searchByProfile = (e) => {
+  const searchByProfile = e => {
     e.preventDefault();
     e.stopPropagation();
     setIsVideo(false);
     setIsProfile(true);
-  }
+  };
 
   const classes = useStyles();
 
   return (
     <div className="search">
-
       <Paper>
         <Tabs
           value={tab}
@@ -130,15 +144,15 @@ export default function SearchBar(props) {
           textColor="primary"
           variant="fullWidth"
         >
-          <Tab label="Profiles" onClick={(e) => searchByProfile(e)}/>
-          <Tab label="Videos" onClick={(e) => searchByVideo(e)}/>
+          <Tab label="Profiles" onClick={e => searchByProfile(e)} />
+          <Tab label="Videos" onClick={e => searchByVideo(e)} />
         </Tabs>
       </Paper>
 
       <Grid container spacing={3} className={classes.searchBar}>
         <Grid item xs={8} sm={4}>
           <TextField
-            className={classes.formControl}          
+            className={classes.formControl}
             type="text"
             label="Teacher Name"
             variant="outlined"
@@ -151,7 +165,9 @@ export default function SearchBar(props) {
             <OutlinedInput
               type="number"
               onChange={event => setRate(event.target.value)}
-              startAdornment={<InputAdornment position="start">$</InputAdornment>}
+              startAdornment={
+                <InputAdornment position="start">$</InputAdornment>
+              }
               labelWidth={70}
             />
           </FormControl>
@@ -163,12 +179,16 @@ export default function SearchBar(props) {
             label="Instrument"
             variant="outlined"
             className={classes.formControl}
-            defaultValue="Select"
+            value={instrument}
             onChange={e => setInstrument(e.target.value)}
-            >
-              {instruments.map((instrument, i) => {
-                return <MenuItem key={i} value={instrument}>{instrument}</MenuItem>;
-              })}
+          >
+            {instruments.map((instrument, i) => {
+              return (
+                <MenuItem key={i} value={instrument}>
+                  {instrument}
+                </MenuItem>
+              );
+            })}
           </TextField>
         </Grid>
 
@@ -179,53 +199,77 @@ export default function SearchBar(props) {
             variant="outlined"
             className={classes.formControl}
             onChange={e => setLevel(e.target.value)}
-            defaultValue="Select"
-            >
-
-              {levels.map((level, i) => {
-                return <MenuItem key={i} value={level}>{level}</MenuItem>;
-              })}
+            value={level}
+          >
+            {levels.map((level, i) => {
+              return (
+                <MenuItem key={i} value={level}>
+                  {level}
+                </MenuItem>
+              );
+            })}
           </TextField>
         </Grid>
       </Grid>
 
-      {isVideo &&
+      {isVideo && (
         <div className={classes.root}>
-            {filteredTeachers.map((teacher) => (
+          {filteredTeachers.map(
+            teacher =>
               teacher.videos &&
-                teacher.videos.filter(video => {
+              teacher.videos
+                .filter(video => {
                   if (instrument !== "Select" && level !== "Select") {
-                    if (video.instrument === instrument && video.level === level) return video
+                    if (
+                      video.instrument === instrument &&
+                      video.level === level
+                    )
+                      return video;
                   } else if (instrument === "Select") {
-                    if (video.level === level || level === "Select") return video
+                    if (video.level === level || level === "Select")
+                      return video;
                   } else if (level === "Select") {
-                  if (video.instrument === instrument || instrument === "Select") return video
+                    if (
+                      video.instrument === instrument ||
+                      instrument === "Select"
+                    )
+                      return video;
                   }
                 })
                 .map((video, i) => (
                   <GridList key={i} cellHeight={180}>
-
-                    <VideoListItem key={i} video={video} teacher={teacher} setTrigger={props.setTrigger}/>
+                    <VideoListItem
+                      key={i}
+                      video={video}
+                      teacher={teacher}
+                      setTrigger={props.setTrigger}
+                    />
                   </GridList>
-
                 ))
-            ))}
+          )}
         </div>
-      }
+      )}
 
-      {isProfile &&
-        <div className={classes.root}>
-          {filteredTeachers.map((teacher, i) => (
-            <GridList key={i} cellHeight={180}>
-              <TeacherListItem
-                key={i}
-                teacher={teacher}
-                setTrigger={props.setTrigger}
-              />
-            </GridList>
-          ))}
+      {isProfile && (
+        <div>
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            alignItems="baseline"
+          >
+            {filteredTeachers.map((teacher, i) => (
+              <Grid item>
+                <TeacherListItem
+                  key={i}
+                  teacher={teacher}
+                  setTrigger={props.setTrigger}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </div>
-      }
+      )}
     </div>
   );
 }

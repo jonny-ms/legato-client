@@ -1,13 +1,36 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
+import { Container, TextField, Button, Card, Typography} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
 import axios from "axios";
 
+const useStyles = makeStyles(theme => ({
+  container: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  card: {
+    padding: "5%",
+  },
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(1),
+  },
+}));
+
+
 export default function LoginForm(props) {
+
+  const classes = useStyles();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [teacher, setTeacher] = useState(false);
   const [student, setStudent] = useState(false);
+  const [error, setError] = useState(false)
 
   const login = e => {
     e.preventDefault();
@@ -20,7 +43,7 @@ export default function LoginForm(props) {
       }
     }).then(resp => {
       if (resp.data.status === 401) {
-        alert("Nice try!");
+        setError(true);
       } else {
         // console.log("resp.data.teacher from Login.js: ", resp.data.teacher);
         let tempStudent = resp.data.student;
@@ -39,32 +62,50 @@ export default function LoginForm(props) {
   };
 
   return (
-    <form>
-      <label>
-        Email:
-        <input
-          type="text"
-          name="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Password:
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
-      </label>
-      {teacher && <Redirect to="/teachers/schedule" />}
-      {student && <Redirect to="/" />}
-      <button type="submit" onClick={e => login(e)}>
-        Login
-      </button>
-    </form>
+    <Container maxWidth="sm" className={classes.container}>
+      
+      
+      <Card elevation={4} className={classes.card}>
+        <Typography variant="h4">
+          Sign in
+        </Typography>
+        
+        <form className={classes.form}>
+
+          {error && 
+            <Card elevation={4} style={{backgroundColor: "#f8d7da", color: "#721c24"}}>
+              <Typography variant="h6">
+                Nice try!
+              </Typography>
+            </Card>
+          }
+          
+          <TextField
+            variant="outlined"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            margin="normal"
+            fullWidth
+            required />
+            
+          <TextField
+            variant="outlined"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            margin="normal"
+            fullWidth
+            required />
+
+          {teacher && <Redirect to="/teachers/schedule" />}
+          {student && <Redirect to="/" />}
+
+          <Button onClick={e => login(e)} variant="outlined" color="primary"> Login </Button>
+        </form>
+      </Card>
+    </Container>
   );
 }
