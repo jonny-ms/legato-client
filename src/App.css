@@ -37,3 +37,18 @@ nav {
   width: 90%;
   margin: 0 auto;
 }
+
+.repeat-card {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.repeat-card-title {
+  text-align: left;
+  padding-bottom: 15px;
+}
+
+.calendar-appointment {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
