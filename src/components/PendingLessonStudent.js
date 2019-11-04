@@ -1,37 +1,8 @@
-// import React from "react";
-
-// const PendingLessonStudent = props => {
-//   return (
-//     <div>
-//       <span>
-//         You have a {props.course} lesson with {props.teacher} on {props.time}?
-//       </span>
-//       <button onClick={() => props.cancelLesson(props.currentLessonID)}>
-//         Cancel
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default PendingLessonStudent;
-
 import React from "react";
 
-import {
-  makeStyles,
-  MuiThemeProvider,
-  createMuiTheme
-} from "@material-ui/core/styles";
-import { green, orange } from "@material-ui/core/colors";
+import { makeStyles } from "@material-ui/core/styles";
 
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  TextField
-} from "@material-ui/core";
+import { Button, Card, CardContent, Grid, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {

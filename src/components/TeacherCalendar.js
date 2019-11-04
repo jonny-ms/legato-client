@@ -7,11 +7,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
 
-import {
-  makeStyles,
-  MuiThemeProvider,
-  createMuiTheme
-} from "@material-ui/core/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
 import {
   Button,
   Card,
@@ -20,7 +16,7 @@ import {
   Typography,
   TextField
 } from "@material-ui/core";
-import { green, purple, red, orange } from "@material-ui/core/colors";
+import { green, orange } from "@material-ui/core/colors";
 
 import LessonTeacher from "./LessonTeacher";
 import PendingLessonTeacher from "./PendingLessonTeacher";
@@ -151,12 +147,6 @@ class TeacherCalendar extends Component {
 
   componentDidMount() {
     this.getCalendarEvents();
-    const theme = createMuiTheme({
-      palette: {
-        primary: green,
-        secondary: orange
-      }
-    });
   }
 
   // When a teacher selects availability

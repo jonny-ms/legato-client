@@ -6,35 +6,16 @@ import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
 
 import {
-  makeStyles,
-  MuiThemeProvider,
-  createMuiTheme
-} from "@material-ui/core/styles";
-import {
   Button,
   Card,
   CardContent,
   Grid,
   Typography,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
   MenuItem
 } from "@material-ui/core";
-import { green, purple, red, orange } from "@material-ui/core/colors";
 
 import moment from "moment";
-
-const useStyles = makeStyles(theme => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
-  }
-}));
 
 class CalendarForBooking extends Component {
   state = {
@@ -114,16 +95,6 @@ class CalendarForBooking extends Component {
       }
 
       let startDay = moment().isoWeekday();
-
-      const useStyles = makeStyles(theme => ({
-        formControl: {
-          margin: theme.spacing(1),
-          minWidth: 120
-        },
-        selectEmpty: {
-          marginTop: theme.spacing(2)
-        }
-      }));
 
       this.setState({
         calendarEvents: loadedEvents,

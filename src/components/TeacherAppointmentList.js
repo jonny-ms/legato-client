@@ -2,20 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
 
-import {
-  makeStyles,
-  MuiThemeProvider,
-  createMuiTheme
-} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { Button, Card, CardContent, Grid, Typography } from "@material-ui/core";
-import { green, orange } from "@material-ui/core/colors";
-
-// const theme = createMuiTheme({
-//   palette: {
-//     primary: orange,
-//     secondary: green
-//   }
-// });
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -71,8 +59,6 @@ const parseLoadedEvents = (courses, students) => {
         backgroundColor = "#2e9e2e";
       }
 
-      // What I need: student, pending, starttime, instrument, level, lessonID
-
       loadedLessons.push({
         id: lessons[i].id,
         title: confirmed ? "lesson" : "pending lesson",
@@ -95,7 +81,7 @@ const TeacherAppointmentList = () => {
   const [lessons, setLessons] = useState([]);
   const [students, setStudents] = useState([]);
 
-  const [spacing, setSpacing] = useState(2);
+  // const [spacing, setSpacing] = useState(2);
   const classes = useStyles();
 
   const getCalendarEvents = () => {
@@ -123,8 +109,11 @@ const TeacherAppointmentList = () => {
 
   return (
     <div>
-      {lessons.map(lesson => {
-        if (lesson.future || (lesson.confirmed && !lesson.has_paid))
+      {lessons
+        .filter(lesson => {
+          return lesson.future || (lesson.confirmed && !lesson.has_paid);
+        })
+        .map(lesson => {
           return (
             <Card
               className={classes.appointment}
@@ -202,7 +191,7 @@ const TeacherAppointmentList = () => {
               </CardContent>
             </Card>
           );
-      })}
+        })}
     </div>
   );
 };

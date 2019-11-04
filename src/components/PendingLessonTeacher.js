@@ -1,20 +1,8 @@
 import React from "react";
 
-import {
-  makeStyles,
-  MuiThemeProvider,
-  createMuiTheme
-} from "@material-ui/core/styles";
-import { green, orange } from "@material-ui/core/colors";
+import { makeStyles } from "@material-ui/core/styles";
 
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  TextField
-} from "@material-ui/core";
+import { Button, Card, CardContent, Grid, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {

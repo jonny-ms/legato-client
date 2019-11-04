@@ -5,20 +5,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
 
-import {
-  makeStyles,
-  MuiThemeProvider,
-  createMuiTheme
-} from "@material-ui/core/styles";
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  TextField
-} from "@material-ui/core";
-import { green, purple, red, orange } from "@material-ui/core/colors";
+import { Card, CardContent } from "@material-ui/core";
 
 import PendingLessonStudent from "./PendingLessonStudent";
 import LessonStudent from "./LessonStudent";
