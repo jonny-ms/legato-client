@@ -2,14 +2,25 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
 
-import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
-import Card from "@material-ui/core/Card";
+import {
+  makeStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from "@material-ui/core/styles";
+import { Button, Card, CardContent, Grid, Typography } from "@material-ui/core";
+import { green, purple, red, orange } from "@material-ui/core/colors";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: orange,
+    secondary: green
+  }
+});
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    textAlign: "center"
   },
   paper: {
     height: 140,
@@ -17,6 +28,19 @@ const useStyles = makeStyles(theme => ({
   },
   control: {
     padding: theme.spacing(2)
+  },
+  appointment: {
+    margin: theme.spacing(2)
+  },
+  title: {
+    textAlign: "left"
+  },
+  button: {
+    variant: "contained",
+    margin: theme.spacing(0.5)
+  },
+  buttonGrid: {
+    alignItems: "center"
   }
 }));
 
@@ -36,15 +60,27 @@ const parseLoadedEvents = (courses, students) => {
       const confirmed = timeslots[0].is_booked;
       const future = new Date(timeslots[0].datetime).getTime() > Date.now();
 
+      let backgroundColor = "";
+      if (!confirmed) {
+        backgroundColor = "#ffcc80";
+      }
+      if (confirmed && !future && !lessons[i].has_paid) {
+        backgroundColor = "#88dd88";
+      }
+      if (confirmed && future) {
+        backgroundColor = "#2e9e2e";
+      }
+
       // What I need: student, pending, starttime, instrument, level, lessonID
 
       loadedLessons.push({
         id: lessons[i].id,
-        title: confirmed ? "Lesson" : "Pending Lesson",
+        title: confirmed ? "lesson" : "pending lesson",
         start: startTime,
         has_paid: lessons[i].has_paid,
         confirmed,
         future,
+        backgroundColor,
         level: course.level,
         instrument: course.instrument,
         student: student
@@ -61,7 +97,7 @@ const TeacherAppointmentList = () => {
   const [lessons, setLessons] = useState([]);
   const [students, setStudents] = useState([]);
 
-  const [spacing, setSpacing] = React.useState(2);
+  const [spacing, setSpacing] = useState(2);
   const classes = useStyles();
 
   const getCalendarEvents = () => {
@@ -92,21 +128,79 @@ const TeacherAppointmentList = () => {
       {lessons.map(lesson => {
         if (lesson.future || (lesson.confirmed && !lesson.has_paid))
           return (
-            <div key={lesson.id} style={{ width: "95%", margin: "auto" }}>
-              <Card display="flex" p={1} m={1} bgcolor="text.hint">
-                <span>
-                  You have a {lesson.title} teaching {lesson.level}{" "}
-                  {lesson.instrument} with {lesson.student.first_name}{" "}
-                  {lesson.student.last_name} on {lesson.start}
-                </span>
-                {!lesson.has_paid && !lesson.future && (
-                  <button>Get Paid</button>
-                )}
-                {!lesson.confirmed && <button>Confirm</button>}
-                {!lesson.confirmed && <button>Reject</button>}
-                {lesson.confirmed && lesson.future && <button>Cancel</button>}
-              </Card>
-            </div>
+            <Card
+              className={classes.appointment}
+              style={{ backgroundColor: lesson.backgroundColor }}
+            >
+              <CardContent>
+                <Grid container direction="row">
+                  <Grid item xs={8} sm={10}>
+                    <Typography
+                      className={classes.title}
+                      color="textSecondary"
+                      gutterBottom
+                    >
+                      {lesson.student.first_name} {lesson.student.last_name}
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      You have a {lesson.title} teaching {lesson.level}{" "}
+                      {lesson.instrument} with {lesson.student.first_name}{" "}
+                      {lesson.student.last_name} on {lesson.start}
+                    </Typography>
+                  </Grid>
+                  <MuiThemeProvider theme={theme}>
+                    <Grid
+                      item
+                      container
+                      xs={4}
+                      sm={2}
+                      direction="column"
+                      alignItems={"center"}
+                      alignContent={"center"}
+                    >
+                      <Grid item aligntContent={"center"}>
+                        {!lesson.confirmed && (
+                          <Button
+                            variant={"contained"}
+                            className={classes.button}
+                            color={"secondary"}
+                          >
+                            Confirm
+                          </Button>
+                        )}
+                        {!lesson.confirmed && (
+                          <Button
+                            variant={"contained"}
+                            className={classes.button}
+                            color={"primary"}
+                          >
+                            Reject
+                          </Button>
+                        )}
+                        {lesson.confirmed && lesson.future && (
+                          <Button
+                            variant={"contained"}
+                            className={classes.button}
+                            color={"primary"}
+                          >
+                            Cancel
+                          </Button>
+                        )}
+                        {!lesson.has_paid && !lesson.future && (
+                          <Button
+                            variant={"contained"}
+                            className={classes.button}
+                            color={"secondary"}
+                          >
+                            Get Paid
+                          </Button>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </MuiThemeProvider>
+                </Grid>
+              </CardContent>
+            </Card>
           );
       })}
       {/* <span>
