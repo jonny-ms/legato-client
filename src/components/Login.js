@@ -70,7 +70,7 @@ export default function LoginForm(props) {
           Sign in
         </Typography>
         
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={e => login(e)}>
 
           {error && 
             <Card elevation={4} style={{backgroundColor: "#f8d7da", color: "#721c24"}}>
@@ -103,7 +103,7 @@ export default function LoginForm(props) {
           {teacher && <Redirect to="/teachers/schedule" />}
           {student && <Redirect to="/" />}
 
-          <Button onClick={e => login(e)} variant="outlined" color="primary"> Login </Button>
+          <Button type="submit" variant="outlined" color="primary"> Login </Button>
         </form>
       </Card>
     </Container>

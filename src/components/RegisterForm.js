@@ -59,7 +59,7 @@ export default function RegisterForm(props) {
           Register as a {props.userType}
         </Typography>
 
-          <form className={classes.form}>
+          <form className={classes.form} onClick={(e) => register(e)}>
             <TextField
               error={error && firstName === ""}
               helperText={error && firstName === "" ? 'Empty field!' : ' '}
@@ -120,7 +120,7 @@ export default function RegisterForm(props) {
               fullWidth
               required />
 
-            <Button variant="outlined" color="primary" onClick={(e) => register(e)}>Register</Button>
+            <Button type="submit" variant="outlined" color="primary">Register</Button>
             
         </form>
       </Card>
