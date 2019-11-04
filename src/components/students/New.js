@@ -5,8 +5,6 @@ const NewStudent = () => {
 
   return (
     <div className="NewStudent">
-      <p>New Students</p>
-      <div>This is the new students form</div>
       <RegisterForm userType={"student"}/>
     </div>
   );
