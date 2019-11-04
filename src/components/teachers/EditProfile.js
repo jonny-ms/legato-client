@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import YouTube from "react-youtube"
-import { Container, Grid, TextField, Paper, Card, CardContent, Box, CardMedia, Typography, Button, MenuItem, InputAdornment, Link, CardActionArea, CssBaseline, FormControl, InputLabel, OutlinedInput, IconButton} from "@material-ui/core";
+import { Container, Grid, TextField, Paper, Card, CardContent, Box, CardMedia, Typography, Button, MenuItem, InputAdornment, Link, CardActionArea, CssBaseline, FormControl, InputLabel, OutlinedInput, IconButton, Divider} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete"
 
@@ -14,18 +14,27 @@ const useStyles = makeStyles(theme => ({
   },
   container: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  addCourse: {
-    display: "flex",
-    justifyContent: "flex-start"
   },
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+    width: "80%"
   },
+  gridContainer: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    display: 'flex',
+    justifyContent: "space-around"
+  },
+  videoContainer: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    display: 'flex',
+    justifyContent: "flex-start"
+  },
+  courses: {
+    marginTop: theme.spacing(2)
+  }
 }));
 
 
@@ -130,7 +139,7 @@ export default function EditProfile(props) {
         setRate(0)
       })
     } else {
-      setError("Missing field");
+      setError("Empty field!");
     }
   };
 
@@ -141,11 +150,10 @@ export default function EditProfile(props) {
       method: "put",
       withCredentials: true
     }).then(({ data }) => {
-      console.log(data.status);
       if (data.status === 401) {
-        setError("Cannot remove a course with future lessons.");
+        setError(`${data.course.instrument} lessons have been booked or requested.`);
       } else {
-        fetchTeacherInfo();
+        fetchTeacherInfo()
       }
     })
   }
@@ -217,17 +225,20 @@ export default function EditProfile(props) {
   return (
     <div>
       <CssBaseline />
-      <Container >
-        <Typography component="h1" variant="h5">
+      <Container className={classes.container} >
+        <Card style={{padding: "5%", borderRadius: 10}} elevation={4}>
+        <Typography variant="h3">
           Edit Profile
         </Typography>
-        <Grid container spacing={2}>
+
+        <Grid container spacing={2} className={classes.gridContainer}>
           <Grid item xs={12} sm={6} md={4}>
             <TextField
               type="text"
               variant="outlined"
               value={firstName}
               disabled
+              className={classes.formControl}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
@@ -236,6 +247,7 @@ export default function EditProfile(props) {
               variant="outlined"
               value={lastName}
               disabled
+              className={classes.formControl}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
@@ -244,27 +256,42 @@ export default function EditProfile(props) {
               variant="outlined"
               value={email}
               disabled
+              className={classes.formControl}
             />
           </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <TextField
-              type="text"
-              variant="outlined"
-              label="Tagline"
-              value={tagline}
-              onChange={e => setTagline(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              multiline
-              type="text"
-              variant="outlined"
-              label="Bio"
-              value={bio}
-              onChange={e => setBio(e.target.value)}
-            />
+          <Grid container spacing={2} 
+            display="flex"
+            justifyContent="space-between">          
+            <Grid item xs={12} sm={6}>
+              <TextField
+                multiline
+                type="text"
+                variant="outlined"
+                label="Bio"
+                value={bio}
+                onChange={e => setBio(e.target.value)}
+                rows="4"
+                className={classes.formControl}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>          
+
+              <Grid item xs={12}>
+                <TextField
+                  type="text"
+                  variant="outlined"
+                  label="Tagline"
+                  value={tagline}
+                  onChange={e => setTagline(e.target.value)}
+                  className={classes.formControl}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+              <Button variant="outlined" style={{marginTop: "1.2em"}} onClick={e => editProfile(e, id)}>Edit Teacher</Button>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       
@@ -275,35 +302,58 @@ export default function EditProfile(props) {
       {/* <input type="text" name="certifications" value={certification} onChange={e => setCertification(e.target.value)} /> */}
       {/* </label> */}
 
+      <Divider variant="middle" />
+
       {/* //!COURSES */}
-        <Grid container spacing={2}>
+      <Typography variant="h4" style={{marginTop: "0.4em"}}> Courses </Typography>
+
+
+        {error && error !== "Empty field!" && 
+          <Paper elevation={4} style={{backgroundColor: "#f8d7da", color: "#721c24"}}>
+            <Typography variant="h6" style={{marginTop: "0.4em"}}>
+              {error}
+            </Typography>
+          </Paper>
+        }
+      
+        <Grid container >
           {courses.map((course, i) => {
             return(
-              <Paper>
-                <Grid item key={i} xs={12}>
-                  <Typography>
-                    {course.level} {course.instrument} for {course.rate}$/hour
-                  </Typography>
+              <Grid container key={i} className={classes.courses}>    
+                <Grid item xs={12} >
+                  <Paper elevation={2} >
+                    <Grid container>    
+                      <Grid item xs={10} >
+                        <Typography align="left" variant="h5" style={{marginTop: "0.4em", marginLeft: "5%"}}>
+                          {course.level} {course.instrument} for {course.rate}$/hour
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={2}>
+                        <IconButton aria-label="delete" >
+                          <DeleteIcon onClick={(e) => destroyCourse(e, course.id)}/>
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  </Paper>
                 </Grid>
-                  <IconButton aria-label="delete">
-                    <DeleteIcon onClick={(e) => destroyCourse(e, course.id)}/>
-                  </IconButton>
-                </Paper>
+              </Grid>
+
             )
           })}
         </Grid>
 
-        <Grid container spacing={2} className={classes.addCourse}>
+        <Grid container spacing={2} className={classes.gridContainer}>
           {/* Instrument */}
           <Grid item xs={12} sm={6} md={4}>
             <TextField
               select
+              error={error === "Empty field!" && instrument === ""}
+              helperText={error && instrument === "" ? 'Empty field!' : ' '}
               label="Instrument"
               variant="outlined"
-              defaultValue="Select"
-              onChange={e => setInstrument(e.target.value)}
+              value={instrument}
+              onChange={e => {setInstrument(e.target.value)}}
               className={classes.formControl}
-              fullWidth
               >
                 {instruments.map((instrument, i) => {
                   return <MenuItem key={i} value={instrument}>{instrument}</MenuItem>;
@@ -315,12 +365,13 @@ export default function EditProfile(props) {
           <Grid item xs={12} sm={6} md={4}>
             <TextField
               select
+              error={error === "Empty field!" && level === ""}
+              helperText={error === "Empty field!" && level === "" ? 'Empty field!' : ' '}
               label="Level"
               variant="outlined"
-              onChange={e => setLevel(e.target.value)}
-              defaultValue="Select"
+              onChange={e => {setLevel(e.target.value)}}
+              value={level}
               className={classes.formControl}
-              fullWidth
               >
                 {levels.map((level, i) => {
                   return <MenuItem key={i} value={level}>{level}</MenuItem>;
@@ -330,30 +381,37 @@ export default function EditProfile(props) {
 
           {/* Rate */}
           <Grid item xs={6} md={2}>
-            <FormControl variant="outlined" fullWidth className={classes.formControl} >
+            <FormControl variant="outlined" className={classes.formControl} >
               <InputLabel>Hourly Rate</InputLabel>
               <OutlinedInput
                 type="number"
+                value={rate}
+                error={error === "Empty field!" && rate === 0}
+                helperText={error === "Empty field!" && rate === 0 ? "Empty field!" : " "}
                 onChange={event => setRate(event.target.value)}
                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                 labelWidth={90}
               />
             </FormControl>
           </Grid>
-          {/* <Grid item xs={6} md={2}> */}
-          <Button onClick={e => addCourse(e)}>
+          <Grid item xs={6} md={2}>
+          <Button onClick={e => addCourse(e)}  variant="outlined" style={{marginTop: "1.2em"}}>
             Add Course
           </Button>
-          {/* </Grid> */}
+          </Grid>
 
         </Grid>
 
+        <Divider variant="middle" />
+
       {/* //!VIDEOS */}
 
-          <Grid container spacing={2}>
+      <Typography variant="h4" style={{marginTop: "0.4em"}}> Videos </Typography>
+
+          <Grid container spacing={2} className={classes.videoContainer}>
           {videos.map((video, i) => {
               return(
-                  <Grid item key={i} xs={12} sm={6} md={4} lg={3}>
+                  <Grid item key={i} xs={12} sm={6} md={4} lg={4}>
                     <YouTube videoId={video.file} opts={videoSpecs} />
                     {video.level} {video.instrument}
                     <Button onClick={(e) => destroyVideo(e, video.id)} >Remove Video</Button>
@@ -364,8 +422,8 @@ export default function EditProfile(props) {
           }
           </Grid>
 
-          <Grid container spacing={2}>          
-            <Grid item xs={12} sm={6}>          
+          <Grid container spacing={2} className={classes.gridContainer} >          
+            <Grid item xs={12} sm={5}>          
               <TextField
                 type="url"
                 label="YouTube URL"
@@ -382,7 +440,7 @@ export default function EditProfile(props) {
                 label="Instrument"
                 variant="outlined"
                 onChange={e => setVideoInstrument(e.target.value)}
-                defaultValue="Select"
+                value={videoInstrument}
                 className={classes.formControl}
                 fullWidth
                 >
@@ -391,13 +449,13 @@ export default function EditProfile(props) {
                   })}
               </TextField>
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid item xs={6} sm={2}>
               <TextField
                 select
                 label="Level"
                 variant="outlined"
                 onChange={e => setVideoLevel(e.target.value)}
-                defaultValue="Select"
+                value={videoLevel}
                 className={classes.formControl}
                 fullWidth
                 >
@@ -406,18 +464,15 @@ export default function EditProfile(props) {
                   })}
               </TextField>
             </Grid>
+            <Grid item xs={6} sm={2}>
+              <Button onClick={e => addVideo(e, id)} variant="outlined" style={{marginTop: "1.2em"}}>Add Video</Button>
+            </Grid>
           </Grid>
- 
-        <Button onClick={e => addVideo(e, id)}>
-          Add Video
-        </Button>
 
       {/* will travel */}
       {/* will host */}
 
-      <button onClick={e => editProfile(e, id)}>Edit Teacher</button>
-
-      {error}
+        </Card>
       </Container>
 
       </div>

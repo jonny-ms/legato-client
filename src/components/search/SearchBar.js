@@ -179,7 +179,7 @@ export default function SearchBar(props) {
             label="Instrument"
             variant="outlined"
             className={classes.formControl}
-            defaultValue="Select"
+            value={instrument}
             onChange={e => setInstrument(e.target.value)}
           >
             {instruments.map((instrument, i) => {
@@ -199,7 +199,7 @@ export default function SearchBar(props) {
             variant="outlined"
             className={classes.formControl}
             onChange={e => setLevel(e.target.value)}
-            defaultValue="Select"
+            value={level}
           >
             {levels.map((level, i) => {
               return (
