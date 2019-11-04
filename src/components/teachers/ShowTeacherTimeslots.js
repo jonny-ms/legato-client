@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button } from "@material-ui/core";
+import { Button, Paper } from "@material-ui/core";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 import CalendarForBooking from "../CalendarForBooking";
 import TeacherProfile from "../TeacherProfile";
@@ -8,6 +10,11 @@ import TeacherProfile from "../TeacherProfile";
 const ShowTeacherTimeslots = props => {
   const [teacher, setTeacher] = useState();
   const [trigger, setTrigger] = useState();
+  const [tab, setTab] = useState(0);
+  const handleChange = (e, newValue) => {
+    setTab(newValue);
+  };
+
   const teacherID = props.history.location.state;
   // console.log("teacherID from ShowTeacherTimeSlots.js: ", teacherID);
 
@@ -40,7 +47,20 @@ const ShowTeacherTimeslots = props => {
     <div className="EditTeacher">
       <p>Book Appointments</p>
       <div>
-        <div>
+        <Paper>
+          <Tabs
+            value={tab}
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+          >
+            <Tab label="Profile" onClick={e => triggerProfile(e)} />
+            <Tab label="Book Me" onClick={e => triggerCalendar(e)} />
+          </Tabs>
+        </Paper>
+
+        {/* <div>
           {!trigger ? (
             <Button disabled={true} style={{ color: "grey" }}>
               Book Now
@@ -69,7 +89,7 @@ const ShowTeacherTimeslots = props => {
               Profile
             </Button>
           )}
-        </div>
+        </div> */}
       </div>
       <div>
         {!trigger ? (
