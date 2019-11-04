@@ -23,7 +23,6 @@ export default function RegisterForm(props) {
 
   const classes = useStyles();
 
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -123,7 +122,7 @@ export default function RegisterForm(props) {
 
             <Button variant="outlined" color="primary" onClick={(e) => register(e)}>Register</Button>
             
-      </form>
+        </form>
       </Card>
     </Container>
   )
