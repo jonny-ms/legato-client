@@ -3,7 +3,6 @@ import React, { Component, Fragment } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import listWeekPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
@@ -11,7 +10,8 @@ import axios from "axios";
 import LessonTeacher from "./LessonTeacher";
 import PendingLessonTeacher from "./PendingLessonTeacher";
 
-const moment = require("moment");
+// const moment = require("moment");
+import moment from "moment";
 
 // ======== BUGS ==========
 // All to do with ids of events => when they are too low,
@@ -92,7 +92,9 @@ class TeacherCalendar extends Component {
     showCourse: "",
     showTime: "",
     currentLessonID: null,
-    repeatWeeks: 1
+    repeatWeeks: 1,
+    startDay: 4,
+    mobile: false
   };
 
   getCalendarEvents = () => {
@@ -114,12 +116,21 @@ class TeacherCalendar extends Component {
 
       let { loadedEvents, maxID } = parseLoadedEvents(courses, timeslots);
 
+      let mobile = false;
+      if (window.innerWidth < 680) {
+        mobile = true;
+      }
+
+      let startDay = moment().isoWeekday();
+
       this.setState({
         calendarEvents: loadedEvents,
         courses,
         students,
         maxIDFromServer: maxID,
-        maxID: ++maxID
+        maxID: ++maxID,
+        startDay,
+        mobile
       });
     });
   };
@@ -398,32 +409,54 @@ class TeacherCalendar extends Component {
           <span>weeks | </span>
           <button onClick={this.submitTimeSlots}>Submit Availabilities</button>
         </div>
-        <FullCalendar
-          events={this.state.calendarEvents}
-          defaultView="timeGridWeek"
-          header={{
-            left: "prev today",
-            center: "title",
-            right: "next"
-          }}
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            listWeekPlugin,
-            interactionPlugin
-          ]}
-          minTime={"08:00:00"}
-          aspectRatio={1.8}
-          allDaySlot={false}
-          selectable={true}
-          editable={true}
-          droppable={true}
-          draggable={true}
-          select={this.handleSelect}
-          eventDrop={this.handleDrop}
-          eventResize={this.handleResize}
-          eventClick={this.handleEventClick}
-        />
+        {this.state.mobile && (
+          <FullCalendar
+            events={this.state.calendarEvents}
+            defaultView="timeGrid"
+            views={this.state.views}
+            header={{
+              left: "prev today",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+            minTime={"08:00:00"}
+            aspectRatio={0.7}
+            allDaySlot={false}
+            selectable={true}
+            editable={true}
+            droppable={true}
+            draggable={true}
+            select={this.handleSelect}
+            eventDrop={this.handleDrop}
+            eventResize={this.handleResize}
+            eventClick={this.handleEventClick}
+          />
+        )}
+        {!this.state.mobile && (
+          <FullCalendar
+            events={this.state.calendarEvents}
+            defaultView="timeGridWeek"
+            views={this.state.views}
+            header={{
+              left: "prev today",
+              center: "title",
+              right: "next"
+            }}
+            plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+            firstDay={this.state.startDay}
+            minTime={"08:00:00"}
+            aspectRatio={1.8}
+            allDaySlot={false}
+            selectable={true}
+            editable={true}
+            droppable={true}
+            draggable={true}
+            select={this.handleSelect}
+            eventDrop={this.handleDrop}
+            eventResize={this.handleResize}
+            eventClick={this.handleEventClick}
+          />
+        )}
       </Fragment>
     );
   }

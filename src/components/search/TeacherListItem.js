@@ -30,7 +30,7 @@ export default function TeacherListItem(props) {
     const courseName = `${course.instrument} - ${course.level} - ${course.rate}/hr`;
     courses[courseName] = course.id;
   }
-  let coursesArray = Object.keys(courses);
+  const coursesArray = Object.keys(courses);
 
   const clickFalse = e => {
     props.setTrigger(false);
@@ -48,7 +48,7 @@ export default function TeacherListItem(props) {
               component="img"
               className={classes.media}
               image={props.teacher.profile_pic}
-              title="Contemplative Reptile"
+              title="Profile Pic"
               style={{ height: "400px" }}
               alt={"hee"}
             />
