@@ -10,7 +10,8 @@ import axios from "axios";
 import LessonTeacher from "./LessonTeacher";
 import PendingLessonTeacher from "./PendingLessonTeacher";
 
-const moment = require("moment");
+// const moment = require("moment");
+import moment from "moment";
 
 // ======== BUGS ==========
 // All to do with ids of events => when they are too low,
