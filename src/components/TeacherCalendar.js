@@ -7,10 +7,24 @@ import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
 
+import {
+  makeStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from "@material-ui/core/styles";
+import {
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+  TextField
+} from "@material-ui/core";
+import { green, purple, red, orange } from "@material-ui/core/colors";
+
 import LessonTeacher from "./LessonTeacher";
 import PendingLessonTeacher from "./PendingLessonTeacher";
 
-// const moment = require("moment");
 import moment from "moment";
 
 // ======== BUGS ==========
@@ -94,8 +108,13 @@ class TeacherCalendar extends Component {
     currentLessonID: null,
     repeatWeeks: 1,
     startDay: 4,
-    mobile: false
+    mobile: false,
+    theme: {}
   };
+
+  // theme = {
+  //   spacing: 8
+  // };
 
   getCalendarEvents = () => {
     Promise.all([
@@ -137,6 +156,12 @@ class TeacherCalendar extends Component {
 
   componentDidMount() {
     this.getCalendarEvents();
+    const theme = createMuiTheme({
+      palette: {
+        primary: green,
+        secondary: orange
+      }
+    });
   }
 
   // When a teacher selects availability
@@ -378,6 +403,46 @@ class TeacherCalendar extends Component {
   render() {
     return (
       <Fragment>
+        <Card className={"repeat-card"}>
+          <CardContent>
+            <Typography variant="h5" className={"repeat-card-title"}>
+              Submit Availabilities
+            </Typography>
+            <Typography variant="body2" className={"repeat-card-title"}>
+              Select availabilities in the calendar, enter number of weeks to
+              repeat and select submit
+            </Typography>
+            <Grid
+              container
+              direction="row"
+              alignItems={"center"}
+              style={{ display: "flex", justifyContent: "space-around" }}
+            >
+              <Grid item textAlign={"center"} margin={10}>
+                <TextField
+                  type="number"
+                  label="Weeks"
+                  variant="outlined"
+                  value={this.state.repeatWeeks}
+                  min="1"
+                  onChange={this.changeRepeatWeeks}
+                  helperText="Number of weeks to repeat"
+                />
+              </Grid>
+              <Grid item textAlign={"center"}>
+                <Button
+                  onClick={this.submitTimeSlots}
+                  variant={"contained"}
+                  // theme={theme}
+                  style={{ backgroundColor: "green" }}
+                  // color={"primary"}
+                >
+                  Submit Availabilities
+                </Button>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
         {this.state.showPendingLesson && (
           <PendingLessonTeacher
             student={this.state.showStudent}
@@ -398,65 +463,59 @@ class TeacherCalendar extends Component {
             cancelLesson={this.cancelLesson}
           />
         )}
-        <div>
-          <span>Repeat for</span>
-          <input
-            type="number"
-            value={this.state.repeatWeeks}
-            min="1"
-            onChange={this.changeRepeatWeeks}
-          />
-          <span>weeks | </span>
-          <button onClick={this.submitTimeSlots}>Submit Availabilities</button>
-        </div>
-        {this.state.mobile && (
-          <FullCalendar
-            events={this.state.calendarEvents}
-            defaultView="timeGrid"
-            views={this.state.views}
-            header={{
-              left: "prev today",
-              right: "next"
-            }}
-            plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
-            minTime={"08:00:00"}
-            aspectRatio={0.7}
-            allDaySlot={false}
-            selectable={true}
-            editable={true}
-            droppable={true}
-            draggable={true}
-            select={this.handleSelect}
-            eventDrop={this.handleDrop}
-            eventResize={this.handleResize}
-            eventClick={this.handleEventClick}
-          />
-        )}
-        {!this.state.mobile && (
-          <FullCalendar
-            events={this.state.calendarEvents}
-            defaultView="timeGridWeek"
-            views={this.state.views}
-            header={{
-              left: "prev today",
-              center: "title",
-              right: "next"
-            }}
-            plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
-            firstDay={this.state.startDay}
-            minTime={"08:00:00"}
-            aspectRatio={1.8}
-            allDaySlot={false}
-            selectable={true}
-            editable={true}
-            droppable={true}
-            draggable={true}
-            select={this.handleSelect}
-            eventDrop={this.handleDrop}
-            eventResize={this.handleResize}
-            eventClick={this.handleEventClick}
-          />
-        )}
+
+        <Card>
+          <CardContent>
+            {this.state.mobile && (
+              <FullCalendar
+                events={this.state.calendarEvents}
+                defaultView="timeGrid"
+                views={this.state.views}
+                header={{
+                  left: "prev today",
+                  right: "next"
+                }}
+                plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+                minTime={"08:00:00"}
+                aspectRatio={0.7}
+                allDaySlot={false}
+                selectable={true}
+                editable={true}
+                droppable={true}
+                draggable={true}
+                select={this.handleSelect}
+                eventDrop={this.handleDrop}
+                eventResize={this.handleResize}
+                eventClick={this.handleEventClick}
+              />
+            )}
+            {!this.state.mobile && (
+              <FullCalendar
+                events={this.state.calendarEvents}
+                defaultView="timeGridWeek"
+                views={this.state.views}
+                header={{
+                  left: "prev today",
+                  center: "title",
+                  right: "next"
+                }}
+                plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+                firstDay={this.state.startDay}
+                minTime={"08:00:00"}
+                aspectRatio={1.5}
+                allDaySlot={false}
+                selectable={true}
+                editable={true}
+                droppable={true}
+                draggable={true}
+                select={this.handleSelect}
+                eventDrop={this.handleDrop}
+                eventResize={this.handleResize}
+                eventClick={this.handleEventClick}
+              />
+            )}
+          </CardContent>
+        </Card>
       </Fragment>
     );
   }

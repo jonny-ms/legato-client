@@ -28,13 +28,6 @@ const Home = props => {
 
   return (
     <div className="App">
-      <p>Home</p>
-
-      <div>This is the home page</div>
-      <div>
-        This will lead to -login -register -create new teacher account -create
-        new student account
-      </div>
       <div>
         <SearchBar teachers={teachers} setTrigger={props.setTrigger} />
       </div>

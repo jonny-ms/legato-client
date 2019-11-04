@@ -8,14 +8,14 @@ import {
   createMuiTheme
 } from "@material-ui/core/styles";
 import { Button, Card, CardContent, Grid, Typography } from "@material-ui/core";
-import { green, purple, red, orange } from "@material-ui/core/colors";
+import { green, orange } from "@material-ui/core/colors";
 
-const theme = createMuiTheme({
-  palette: {
-    primary: orange,
-    secondary: green
-  }
-});
+// const theme = createMuiTheme({
+//   palette: {
+//     primary: orange,
+//     secondary: green
+//   }
+// });
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -139,6 +139,7 @@ const TeacherAppointmentList = () => {
                       className={classes.title}
                       color="textSecondary"
                       gutterBottom
+                      variant="h5"
                     >
                       {lesson.student.first_name} {lesson.student.last_name}
                     </Typography>
@@ -148,67 +149,61 @@ const TeacherAppointmentList = () => {
                       {lesson.student.last_name} on {lesson.start}
                     </Typography>
                   </Grid>
-                  <MuiThemeProvider theme={theme}>
-                    <Grid
-                      item
-                      container
-                      xs={4}
-                      sm={2}
-                      direction="column"
-                      alignItems={"center"}
-                      alignContent={"center"}
-                    >
-                      <Grid item aligntContent={"center"}>
-                        {!lesson.confirmed && (
-                          <Button
-                            variant={"contained"}
-                            className={classes.button}
-                            color={"secondary"}
-                          >
-                            Confirm
-                          </Button>
-                        )}
-                        {!lesson.confirmed && (
-                          <Button
-                            variant={"contained"}
-                            className={classes.button}
-                            color={"primary"}
-                          >
-                            Reject
-                          </Button>
-                        )}
-                        {lesson.confirmed && lesson.future && (
-                          <Button
-                            variant={"contained"}
-                            className={classes.button}
-                            color={"primary"}
-                          >
-                            Cancel
-                          </Button>
-                        )}
-                        {!lesson.has_paid && !lesson.future && (
-                          <Button
-                            variant={"contained"}
-                            className={classes.button}
-                            color={"secondary"}
-                          >
-                            Get Paid
-                          </Button>
-                        )}
-                      </Grid>
+                  <Grid
+                    item
+                    container
+                    xs={4}
+                    sm={2}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                  >
+                    <Grid item alignContent={"center"}>
+                      {!lesson.confirmed && (
+                        <Button
+                          variant={"contained"}
+                          className={classes.button}
+                          style={{ backgroundColor: "green" }}
+                        >
+                          Confirm
+                        </Button>
+                      )}
+                      {!lesson.confirmed && (
+                        <Button
+                          variant={"contained"}
+                          className={classes.button}
+                          style={{ backgroundColor: "orange" }}
+                        >
+                          Reject
+                        </Button>
+                      )}
+                      {lesson.confirmed && lesson.future && (
+                        <Button
+                          variant={"contained"}
+                          className={classes.button}
+                          style={{ backgroundColor: "orange" }}
+                        >
+                          Cancel
+                        </Button>
+                      )}
+                      {!lesson.has_paid && !lesson.future && (
+                        <Button
+                          variant={"contained"}
+                          className={classes.button}
+                          style={{ backgroundColor: "lightblue" }}
+                        >
+                          Get Paid
+                        </Button>
+                      )}
                     </Grid>
-                  </MuiThemeProvider>
+                  </Grid>
                 </Grid>
               </CardContent>
             </Card>
           );
       })}
-      {/* <span>
-        You have a {props.course} lesson with {props.student} on {props.time}!
-      </span> */}
-      {/* <button onClick={() => props.cancelLesson(props.currentLessonID)}>
-        Cancel Lesson
-      </button> */}
     </div>
   );
 };
