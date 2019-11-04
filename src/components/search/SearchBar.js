@@ -4,6 +4,8 @@ import TeacherListItem from "./TeacherListItem";
 import VideoListItem from "./VideoListItem";
 
 import GridList from "@material-ui/core/GridList";
+import Grid, { GridSpacing } from "@material-ui/core/Grid";
+
 import { makeStyles } from "@material-ui/core/styles";
 
 import {
@@ -178,16 +180,23 @@ export default function SearchBar(props) {
       )}
 
       {isProfile && (
-        <div className={classes.root}>
-          {filteredTeachers.map((teacher, i) => (
-            <GridList key={i} cellHeight={180}>
-              <TeacherListItem
-                key={i}
-                teacher={teacher}
-                setTrigger={props.setTrigger}
-              />
-            </GridList>
-          ))}
+        <div>
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            alignItems="baseline"
+          >
+            {filteredTeachers.map((teacher, i) => (
+              <Grid item>
+                <TeacherListItem
+                  key={i}
+                  teacher={teacher}
+                  setTrigger={props.setTrigger}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </div>
       )}
     </div>

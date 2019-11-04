@@ -1,22 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
+import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Rating from "@material-ui/lab/Rating";
-import Box from "@material-ui/core/Box";
-
+import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
 const useStyles = makeStyles({
   card: {
-    maxWidth: 345
+    minWidth: 275,
+    minHeight: 400
   },
   media: {
-    height: 140
+    height: 200
+  },
+  bigAvatar: {
+    margin: 10,
+    width: 90,
+    height: 90
   }
 });
 
@@ -40,70 +44,201 @@ export default function TeacherListItem(props) {
   };
 
   return (
-    <div>
-      <Card className={classes.card}>
-        <CardActionArea>
-          <Box height="100%">
-            <CardMedia
-              component="img"
-              className={classes.media}
-              image={props.teacher.profile_pic}
-              title="Profile Pic"
-              style={{ height: "400px" }}
-              alt={"hee"}
-            />
-          </Box>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              {`${props.teacher.first_name}  ${props.teacher.last_name}`}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              {props.teacher.bio}
-            </Typography>
-            <Typography variant="body2" color="textPrimary" component="div">
-              {coursesArray.map((courseData, i) => (
-                <div key={i}>{courseData}</div>
-              ))}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        <Box component="fieldset" mb={3} borderColor="transparent">
-          <Typography component="legend"></Typography>
-          <Box component="fieldset" mb={3} borderColor="transparent">
-            <Typography component="legend"></Typography>
-            <Rating name="disabled" value={3.6} disabled />
-          </Box>
-        </Box>
-        <CardActions>
-          <Button size="small" color="primary">
-            <Link
-              to={{
-                pathname: `/teachers/${props.teacher.id}`,
-                // sending teacher id as state to /teachers/
-                state: { teacher: props.teacher.id }
-              }}
-              onClick={e => {
-                clickTrue(e);
-              }}
+    <Card
+      style={{
+        maxWidth: "250px",
+        minWidth: "250px",
+        maxHeight: "350px",
+        minHeight: "350px"
+      }}
+    >
+      {/* Continer for the 4 sections of the card: 
+      1. Avatar and Name
+      2. Tagline and Courses
+      3. Rating
+      4. Buttons for Profile and Calendar
+      */}
+
+      <CardContent>
+        <Grid
+          container
+          spacing={1}
+          direction="column"
+          justify="center"
+          alignItems="center"
+        >
+          <Grid item>
+            {/* 1. Container for Avatar and Name */}
+            <Grid
+              container
+              direction="column"
+              justify="space-between"
+              alignItems="center"
             >
-              View Profile
-            </Link>
-          </Button>
-          <Button size="small" color="primary">
-            <Link
-              to={{
-                pathname: `/teachers/${props.teacher.id}`,
-                state: { teacher: props.teacher.id }
-              }}
-              onClick={e => {
-                clickFalse(e);
-              }}
+              <Grid>
+                <Avatar
+                  alt="Remy Sharp"
+                  src={props.teacher.profile_pic}
+                  className={classes.bigAvatar}
+                />
+              </Grid>
+              <Grid item>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {`${props.teacher.first_name}  ${props.teacher.last_name}`}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            {/* 2. Container for tagline and courses */}
+            <Grid container>
+              <Grid item>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {props.teacher.tagline}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body2" color="textPrimary" component="div">
+                  {coursesArray.map((courseData, i) => (
+                    <div key={i}>{courseData}</div>
+                  ))}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Divider variant="middle" />
+          <Grid item style={{}}>
+            {/* 3. Container for rating */}
+            <Grid
+              container
+              justify="space-around"
+              alignItems="center"
+              direction="column"
             >
-              Book Now
-            </Link>
-          </Button>
-        </CardActions>
-      </Card>
-    </div>
+              <Grid item>
+                <Rating name="disabled" value={3.6} disabled />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            {/* 4. Container for Buttons */}
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              justify="space-evenly"
+            >
+              <Grid item>
+                <Button size="small" color="primary">
+                  <Link
+                    to={{
+                      pathname: `/teachers/${props.teacher.id}`,
+                      // sending teacher id as state to /teachers/
+                      state: { teacher: props.teacher.id }
+                    }}
+                    onClick={e => {
+                      clickTrue(e);
+                    }}
+                  >
+                    View Profile
+                  </Link>
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button size="small" color="primary">
+                  <Link
+                    to={{
+                      pathname: `/teachers/${props.teacher.id}`,
+                      state: { teacher: props.teacher.id }
+                    }}
+                    onClick={e => {
+                      clickFalse(e);
+                    }}
+                  >
+                    Book Now
+                  </Link>
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
   );
 }
+
+{
+  /* <Grid
+container
+direction="column"
+justify="space-evenly"
+alignItems="center"
+>
+<Grid item xs={12}>
+  <Card
+    className={classes.card}
+    style={{ maxWidth: "200px", minHeight: "450px" }}
+  >
+    <Grid item xs={12}>
+      <CardContent>
+        <Box height="100%">
+          <Avatar
+            alt="Remy Sharp"
+            src={props.teacher.profile_pic}
+            className={classes.bigAvatar}
+          />
+        </Box>
+
+        <Typography gutterBottom variant="h5" component="h2">
+          {`${props.teacher.first_name}  ${props.teacher.last_name}`}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          {props.teacher.tagline}
+        </Typography>
+        <Typography variant="body2" color="textPrimary" component="div">
+          {coursesArray.map((courseData, i) => (
+            <div key={i}>{courseData}</div>
+          ))}
+        </Typography>
+      </CardContent>
+    </Grid>
+
+    {/* <Typography component="legend"></Typography> */
+}
+//     <Divider variant="middle" />
+//     <Grid item xs={12}>
+//       <Box component="fieldset" mb={3} borderColor="transparent">
+//         <Rating name="disabled" value={3.6} disabled />
+//       </Box>
+//     </Grid>
+
+//     <Button size="small" color="primary">
+//       <Link
+//         to={{
+//           pathname: `/teachers/${props.teacher.id}`,
+//           // sending teacher id as state to /teachers/
+//           state: { teacher: props.teacher.id }
+//         }}
+//         onClick={e => {
+//           clickTrue(e);
+//         }}
+//       >
+//         View Profile
+//       </Link>
+//     </Button>
+//     <Button size="small" color="primary">
+//       <Link
+//         to={{
+//           pathname: `/teachers/${props.teacher.id}`,
+//           state: { teacher: props.teacher.id }
+//         }}
+//         onClick={e => {
+//           clickFalse(e);
+//         }}
+//       >
+//         Book Now
+//       </Link>
+//     </Button>
+//   </Card>
+// </Grid>
+// </Grid> */}
