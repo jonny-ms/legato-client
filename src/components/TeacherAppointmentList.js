@@ -97,7 +97,7 @@ const TeacherAppointmentList = () => {
   const [lessons, setLessons] = useState([]);
   const [students, setStudents] = useState([]);
 
-  const [spacing, setSpacing] = React.useState(2);
+  const [spacing, setSpacing] = useState(2);
   const classes = useStyles();
 
   const getCalendarEvents = () => {
