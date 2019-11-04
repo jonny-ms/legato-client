@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 });
 
 export default function TeacherListItem(props) {
-  // console.log("props from TeacherListItem.js: ", props);
+  console.log("props from TeacherListItem.js: ", props);
   // console.log(props.teacher.id);
   const classes = useStyles();
 
