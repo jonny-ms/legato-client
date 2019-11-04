@@ -56,6 +56,7 @@ const LessonTeacher = props => {
     <Card
       className={"calendar-appointment"}
       style={{ backgroundColor: "green" }}
+      elevation={4}
     >
       <CardContent>
         <Grid container direction="row">

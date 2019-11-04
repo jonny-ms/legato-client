@@ -40,6 +40,7 @@ const PendingLessonTeacher = props => {
     <Card
       className={"calendar-appointment"}
       style={{ backgroundColor: "#ffcc80" }}
+      elevation={4}
     >
       <CardContent>
         <Grid container direction="row">

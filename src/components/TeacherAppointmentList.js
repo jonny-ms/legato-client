@@ -129,6 +129,7 @@ const TeacherAppointmentList = () => {
             <Card
               className={classes.appointment}
               style={{ backgroundColor: lesson.backgroundColor }}
+              elevation={4}
             >
               <CardContent>
                 <Grid container direction="row">

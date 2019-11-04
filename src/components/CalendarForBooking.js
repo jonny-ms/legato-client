@@ -241,7 +241,7 @@ class CalendarForBooking extends Component {
   render() {
     return (
       <Fragment>
-        <Card className={"repeat-card"}>
+        <Card className={"repeat-card"} elevation={4}>
           <CardContent>
             <Typography variant="h5" className={"repeat-card-title"}>
               Request a Lesson - {this.state.teacher.first_name}{" "}
@@ -276,7 +276,7 @@ class CalendarForBooking extends Component {
                   })}
                 </TextField>
               </Grid>
-              <Grid item>
+              <Grid item className={"teacher-submit-button"}>
                 <Button
                   onClick={this.submitBookings}
                   variant={"contained"}
@@ -292,7 +292,7 @@ class CalendarForBooking extends Component {
             </Grid>
           </CardContent>
         </Card>
-        <Card>
+        <Card elevation={4}>
           <CardContent>
             {this.state.mobile && (
               <FullCalendar

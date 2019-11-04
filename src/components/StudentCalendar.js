@@ -204,7 +204,7 @@ class StudentCalendar extends Component {
             />
           )}
         </div>
-        <Card>
+        <Card elevation={4}>
           <CardContent>
             {this.state.mobile && (
               <FullCalendar

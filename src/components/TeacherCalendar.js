@@ -398,7 +398,7 @@ class TeacherCalendar extends Component {
   render() {
     return (
       <Fragment>
-        <Card className={"repeat-card"}>
+        <Card className={"repeat-card"} elevation={4}>
           <CardContent>
             <Typography variant="h5" className={"repeat-card-title"}>
               Submit Availabilities
@@ -424,13 +424,15 @@ class TeacherCalendar extends Component {
                   helperText="Number of weeks to repeat"
                 />
               </Grid>
-              <Grid item textAlign={"center"}>
+              <Grid
+                item
+                textAlign={"center"}
+                className={"teacher-submit-button"}
+              >
                 <Button
                   onClick={this.submitTimeSlots}
                   variant={"contained"}
-                  // theme={theme}
                   style={{ backgroundColor: "green" }}
-                  // color={"primary"}
                 >
                   Submit Availabilities
                 </Button>
@@ -459,7 +461,7 @@ class TeacherCalendar extends Component {
           />
         )}
 
-        <Card>
+        <Card elevation={4}>
           <CardContent>
             {this.state.mobile && (
               <FullCalendar
