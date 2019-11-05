@@ -1,8 +1,16 @@
 import React from "react";
-import { Card, CardContent, Box, CardMedia, Typography, Button, Link, CardActionArea } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import YouTube from "react-youtube"
-
+import {
+  Card,
+  CardContent,
+  Box,
+  Typography,
+  Button,
+  Link,
+  CardActionArea
+} from "@material-ui/core";
+// CardMedia
+// import { makeStyles } from "@material-ui/core/styles";
+import YouTube from "react-youtube";
 
 // const useStyles = makeStyles({
 //   card: {
@@ -13,22 +21,20 @@ import YouTube from "react-youtube"
 //   }
 // });
 
-export default function VideoListItem (props) {
-
+export default function VideoListItem(props) {
   // const classes = useStyles();
 
-
   const opts = {
-    height: '310',
-    width: '540',
-  //   playerVars: { // https://developers.google.com/youtube/player_parameters
-  //   autoplay: 1
-  // }
-}
+    height: "310",
+    width: "540"
+    //   playerVars: { // https://developers.google.com/youtube/player_parameters
+    //   autoplay: 1
+    // }
+  };
 
-    return (
+  return (
     <div>
-      <Card >
+      <Card>
         <Box>
           <YouTube videoId={props.video.file} opts={opts}></YouTube>
         </Box>
@@ -38,10 +44,8 @@ export default function VideoListItem (props) {
           </Typography>
         </CardContent>
         <CardActionArea>
-        <Button size="small" color="primary">
-            <Link
-              to={`/teachers/${props.teacher.id}`}
-            >
+          <Button size="small" color="primary">
+            <Link to={`/teachers/${props.teacher.id}`}>
               View {props.teacher.first_name}'s Profile
             </Link>
           </Button>
@@ -49,5 +53,4 @@ export default function VideoListItem (props) {
       </Card>
     </div>
   );
-
 }

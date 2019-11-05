@@ -259,7 +259,7 @@ export default function SearchBar(props) {
             alignItems="baseline"
           >
             {filteredTeachers.map((teacher, i) => (
-              <Grid item>
+              <Grid item key={i}>
                 <TeacherListItem
                   key={i}
                   teacher={teacher}

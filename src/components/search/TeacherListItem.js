@@ -9,8 +9,6 @@ import Typography from "@material-ui/core/Typography";
 import Rating from "@material-ui/lab/Rating";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
 import Grow from "@material-ui/core/Grow";
 
 const useStyles = makeStyles({
@@ -144,9 +142,8 @@ export default function TeacherListItem(props) {
                       onClick={e => {
                         clickTrue(e);
                       }}
-                    >
-                      View Profile
-                    </Link>
+                    ></Link>
+                    View Profile
                   </Button>
                 </Grid>
                 <Grid item>
@@ -159,9 +156,8 @@ export default function TeacherListItem(props) {
                       onClick={e => {
                         clickFalse(e);
                       }}
-                    >
-                      Book Now
-                    </Link>
+                    ></Link>
+                    Book Now
                   </Button>
                 </Grid>
               </Grid>
