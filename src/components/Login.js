@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import { Container, TextField, Button, Card, Typography} from "@material-ui/core";
+import {
+  Container,
+  TextField,
+  Button,
+  Card,
+  Typography
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import axios from "axios";
@@ -8,29 +14,27 @@ import axios from "axios";
 const useStyles = makeStyles(theme => ({
   container: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
   card: {
-    padding: "5%",
+    padding: "5%"
   },
   form: {
-    width: '100%',
-    marginTop: theme.spacing(1),
-  },
+    width: "100%",
+    marginTop: theme.spacing(1)
+  }
 }));
 
-
 export default function LoginForm(props) {
-
   const classes = useStyles();
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [teacher, setTeacher] = useState(false);
   const [student, setStudent] = useState(false);
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(false);
 
   const login = e => {
     e.preventDefault();
@@ -56,6 +60,7 @@ export default function LoginForm(props) {
             else setStudent(tempStudent);
             return user;
           });
+          props.setAnchorEl(false);
         });
       }
     });
@@ -63,23 +68,19 @@ export default function LoginForm(props) {
 
   return (
     <Container maxWidth="sm" className={classes.container}>
-      
-      
       <Card elevation={4} className={classes.card}>
-        <Typography variant="h4">
-          Sign in
-        </Typography>
-        
-        <form className={classes.form} onSubmit={e => login(e)}>
+        <Typography variant="h4">Sign in</Typography>
 
-          {error && 
-            <Card elevation={4} style={{backgroundColor: "#f8d7da", color: "#721c24"}}>
-              <Typography variant="h6">
-                Nice try!
-              </Typography>
+        <form className={classes.form} onSubmit={e => login(e)}>
+          {error && (
+            <Card
+              elevation={4}
+              style={{ backgroundColor: "#f8d7da", color: "#721c24" }}
+            >
+              <Typography variant="h6">Nice try!</Typography>
             </Card>
-          }
-          
+          )}
+
           <TextField
             variant="outlined"
             label="Email"
@@ -88,8 +89,9 @@ export default function LoginForm(props) {
             onChange={e => setEmail(e.target.value)}
             margin="normal"
             fullWidth
-            required />
-            
+            required
+          />
+
           <TextField
             variant="outlined"
             label="Password"
@@ -98,12 +100,16 @@ export default function LoginForm(props) {
             onChange={e => setPassword(e.target.value)}
             margin="normal"
             fullWidth
-            required />
+            required
+          />
 
           {teacher && <Redirect to="/teachers/schedule" />}
           {student && <Redirect to="/" />}
 
-          <Button type="submit" variant="outlined" color="primary"> Login </Button>
+          <Button type="submit" variant="outlined" color="primary">
+            {" "}
+            Login{" "}
+          </Button>
         </form>
       </Card>
     </Container>

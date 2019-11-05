@@ -66,10 +66,10 @@ export default function TeacherListItem(props) {
       <Card
         elevation={shadow}
         style={{
-          maxWidth: "300px",
-          minWidth: "300px",
-          maxHeight: "375px",
-          minHeight: "375px",
+          maxWidth: "275px",
+          minWidth: "275px",
+          maxHeight: "335px",
+          minHeight: "335px",
           marginTop: "25px"
         }}
       >
@@ -110,8 +110,7 @@ export default function TeacherListItem(props) {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item style={{}}>
-              {/* 2. Container for rating */}
+            {/* <Grid item style={{}}>
               <Grid
                 container
                 justify="space-around"
@@ -122,7 +121,7 @@ export default function TeacherListItem(props) {
                   <Rating name="disabled" value={3.6} disabled />
                 </Grid>
               </Grid>
-            </Grid>
+            </Grid> */}
             <Grid item>
               {/* 3. Container for Buttons */}
               <Grid
