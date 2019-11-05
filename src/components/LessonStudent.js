@@ -75,13 +75,17 @@ const LessonStudent = props => {
           <Grid item xs={8} sm={10}>
             <Typography
               className={classes.title}
-              color="textSecondary"
               gutterBottom
               variant="h5"
+              style={{ color: "white" }}
             >
               {props.teacher}
             </Typography>
-            <Typography variant="body2" component="p">
+            <Typography
+              variant="body2"
+              component="p"
+              style={{ color: "white" }}
+            >
               You have a {props.course} lesson with {props.teacher} on{" "}
               {props.time}
             </Typography>

@@ -543,6 +543,7 @@ class TeacherCalendar extends Component {
                 firstDay={this.state.startDay}
                 minTime={"08:00:00"}
                 aspectRatio={1.5}
+                height={885}
                 allDaySlot={false}
                 selectable={true}
                 editable={true}

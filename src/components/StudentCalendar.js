@@ -221,6 +221,7 @@ class StudentCalendar extends Component {
                 firstDay={this.state.startDay}
                 minTime={"08:00:00"}
                 aspectRatio={1.8}
+                height={885}
                 allDaySlot={false}
                 eventClick={this.handleEventClick}
               />
