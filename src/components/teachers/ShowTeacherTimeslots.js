@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button } from "@material-ui/core";
 import { Paper, Tabs, Tab } from "@material-ui/core";
 
 import CalendarForBooking from "../CalendarForBooking";
@@ -8,7 +7,6 @@ import TeacherProfile from "../TeacherProfile";
 
 const ShowTeacherTimeslots = props => {
   const [teacher, setTeacher] = useState();
-  const [trigger, setTrigger] = useState();
   const [showCalendar, setShowCalendar] = useState(true);
   const [showProfile, setShowProfile] = useState(false);
   const [tab, setTab] = useState(props.trigger ? 0 : 1);

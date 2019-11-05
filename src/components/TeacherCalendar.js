@@ -7,7 +7,6 @@ import interactionPlugin from "@fullcalendar/interaction";
 
 import axios from "axios";
 
-import { createMuiTheme } from "@material-ui/core/styles";
 import {
   Button,
   Card,
@@ -16,10 +15,10 @@ import {
   Typography,
   TextField
 } from "@material-ui/core";
-import { green, orange } from "@material-ui/core/colors";
 
 import LessonTeacher from "./LessonTeacher";
 import PendingLessonTeacher from "./PendingLessonTeacher";
+import PreviousLessonTeacher from "./PreviousLessonTeacher";
 
 import moment from "moment";
 
@@ -46,7 +45,16 @@ const parseLoadedEvents = (courses, timeslots) => {
         .add(30, "m")
         .toDate();
 
-      if (timeslots[0].is_booked) {
+      if (timeslots[0].is_booked && lessons[i].has_paid) {
+        loadedEvents.push({
+          title: "Completed",
+          start: moment(startTime).toDate(),
+          end: endTime,
+          id: lessons[i].id,
+          backgroundColor: "lightblue",
+          borderColor: "lightblue"
+        });
+      } else if (timeslots[0].is_booked) {
         loadedEvents.push({
           title: "Lesson",
           start: moment(startTime).toDate(),
@@ -98,6 +106,7 @@ class TeacherCalendar extends Component {
     maxID: 0,
     showPendingLesson: false,
     showLesson: false,
+    showPreviousLesson: false,
     showStudent: "",
     showCourse: "",
     showTime: "",
@@ -229,6 +238,7 @@ class TeacherCalendar extends Component {
           this.setState({
             showPendingLesson: true,
             showLesson: false,
+            showPreviousLesson: false,
             showStudent: studentName,
             showCourse: courseName,
             showTime: startTime,
@@ -241,14 +251,28 @@ class TeacherCalendar extends Component {
             showLesson: false
           });
         } else {
-          this.setState({
-            showLesson: true,
-            showPendingLesson: false,
-            showStudent: studentName,
-            showCourse: courseName,
-            showTime: startTime,
-            currentLessonID: lessonID
-          });
+          const future = new Date(arg.event.start).getTime() > Date.now();
+          if (future) {
+            this.setState({
+              showLesson: true,
+              showPendingLesson: false,
+              showPreviousLesson: false,
+              showStudent: studentName,
+              showCourse: courseName,
+              showTime: startTime,
+              currentLessonID: lessonID
+            });
+          } else {
+            this.setState({
+              showLesson: false,
+              showPendingLesson: false,
+              showPreviousLesson: true,
+              showStudent: studentName,
+              showCourse: courseName,
+              showTime: startTime,
+              currentLessonID: lessonID
+            });
+          }
         }
       }
     } else if (arg.event.title === "Available") {
@@ -298,7 +322,6 @@ class TeacherCalendar extends Component {
         }
       }
     }
-    console.log(timeslots);
 
     axios(`/api/timeslots`, {
       method: "post",
@@ -385,6 +408,31 @@ class TeacherCalendar extends Component {
     });
   };
 
+  lessonGetPaid = id => {
+    axios(`/api/lessons/${id}`, {
+      method: "put",
+      withCredentials: true,
+      data: {
+        has_paid: true
+      }
+    }).then(resp => {
+      const events = this.state.calendarEvents.map(event => {
+        let newEvent = { ...event };
+        if (newEvent.id === id) {
+          newEvent.title = "Completed";
+          newEvent.backgroundColor = "lightblue";
+          newEvent.borderColor = "lightblue";
+        }
+        return newEvent;
+      });
+
+      this.setState({
+        calendarEvents: events,
+        showPreviousLesson: false
+      });
+    });
+  };
+
   render() {
     return (
       <Fragment>
@@ -448,6 +496,15 @@ class TeacherCalendar extends Component {
             time={this.state.showTime}
             currentLessonID={this.state.currentLessonID}
             cancelLesson={this.cancelLesson}
+          />
+        )}
+        {this.state.showPreviousLesson && (
+          <PreviousLessonTeacher
+            student={this.state.showStudent}
+            course={this.state.showCourse}
+            time={this.state.showTime}
+            currentLessonID={this.state.currentLessonID}
+            lessonGetPaid={this.lessonGetPaid}
           />
         )}
 

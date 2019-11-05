@@ -42,31 +42,24 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const LessonTeacher = props => {
+const PreviousLessonTeacher = props => {
   const classes = useStyles();
+
+  console.log(props);
 
   return (
     <Card
       className={"calendar-appointment"}
-      style={{ backgroundColor: "green" }}
+      style={{ backgroundColor: "lightgreen" }}
       elevation={4}
     >
       <CardContent>
         <Grid container direction="row">
           <Grid item xs={8} sm={10}>
-            <Typography
-              className={classes.title}
-              gutterBottom
-              variant="h5"
-              style={{ color: "white" }}
-            >
+            <Typography className={classes.title} gutterBottom variant="h5">
               {props.student}
             </Typography>
-            <Typography
-              variant="body2"
-              component="p"
-              style={{ color: "white" }}
-            >
+            <Typography variant="body2" component="p">
               You have a lesson teaching {props.course} with {props.student} on{" "}
               {props.time}
             </Typography>
@@ -87,10 +80,10 @@ const LessonTeacher = props => {
                 <Button
                   variant={"contained"}
                   className={classes.button}
-                  color={"secondary"}
-                  onClick={() => props.cancelLesson(props.currentLessonID)}
+                  style={{ backgroundColor: "lightblue" }}
+                  onClick={() => props.lessonGetPaid(props.currentLessonID)}
                 >
-                  Cancel
+                  Get Paid
                 </Button>
               </Grid>
             </Grid>
@@ -101,4 +94,4 @@ const LessonTeacher = props => {
   );
 };
 
-export default LessonTeacher;
+export default PreviousLessonTeacher;

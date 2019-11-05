@@ -28,7 +28,7 @@ export default function Nav(props) {
   const UserContext = React.createContext(props);
 
   const user = useContext(UserContext);
-  console.log("redirect from _nav.js: ", redirect);
+  // console.log("redirect from _nav.js: ", redirect);
 
   // console.log("user from _nav.js: ", user);
   // console.log("REDIRECT", redirect);

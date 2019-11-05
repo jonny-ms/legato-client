@@ -114,7 +114,7 @@ class CalendarForBooking extends Component {
     // Send requested bookings to server
     e.preventDefault();
     if (this.state.submitBackgroundColor) {
-      const events = this.state.calendarEvents;
+      let events = this.state.calendarEvents;
 
       let requests = [];
       for (let event of events) {

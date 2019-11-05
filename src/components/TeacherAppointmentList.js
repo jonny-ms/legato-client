@@ -80,7 +80,6 @@ const parseLoadedEvents = (courses, students) => {
 
 const TeacherAppointmentList = () => {
   const [lessons, setLessons] = useState([]);
-  const [students, setStudents] = useState([]);
 
   // const [spacing, setSpacing] = useState(2);
   const classes = useStyles();
@@ -95,15 +94,12 @@ const TeacherAppointmentList = () => {
       const courses = JSON.parse(data.data.courses);
 
       let loadedEvents = parseLoadedEvents(courses, students);
-      console.log(loadedEvents);
 
       const sortedLoadedEvents = loadedEvents.sort((a, b) => {
         return moment(a.datetimeStart).diff(moment(b.datetimeStart));
       });
-      console.log(sortedLoadedEvents);
 
       setLessons(sortedLoadedEvents);
-      setStudents(students);
     });
   };
 
