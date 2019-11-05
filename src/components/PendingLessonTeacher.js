@@ -30,55 +30,68 @@ const PendingLessonTeacher = props => {
       style={{ backgroundColor: "#ffcc80" }}
       elevation={4}
     >
-      <CardContent>
-        <Grid container direction="row">
-          <Grid item xs={8} sm={10}>
-            <Typography className={classes.title} gutterBottom variant="h5">
-              {props.student}
-            </Typography>
-            <Typography variant="body2" component="p">
-              You have a lesson teaching {props.course} with {props.student} on{" "}
-              {props.time}
-            </Typography>
-          </Grid>
-          <Grid
-            item
-            container
-            xs={4}
-            sm={2}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <Grid item alignContent={"center"}>
-              <Button
-                variant={"contained"}
-                className={classes.button}
-                style={{ backgroundColor: "green" }}
-                onClick={() => props.acceptBooking(props.currentLessonID)}
+      <CardContent style={{ padding: 8 }}>
+        <Card elevation={0}>
+          <CardContent>
+            <Grid container direction="row">
+              <Grid item xs={8} sm={10}>
+                <Typography
+                  className={classes.title}
+                  gutterBottom
+                  variant="h5"
+                  style={{ color: "#696969" }}
+                >
+                  {props.student}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  component="p"
+                  style={{ color: "#696969" }}
+                >
+                  You have a lesson teaching {props.course} with {props.student}{" "}
+                  on {props.time}
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                container
+                xs={4}
+                sm={2}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
               >
-                Confirm
-              </Button>
-              <Button
-                variant={"contained"}
-                className={classes.button}
-                style={{ backgroundColor: "orange" }}
-                onClick={() => props.rejectBooking(props.currentLessonID)}
-              >
-                Reject
-              </Button>
-              <Button
-                variant={"contained"}
-                className={classes.button}
-                onClick={() => props.notNow()}
-              >
-                Not Now
-              </Button>
+                <Grid item alignContent={"center"}>
+                  <Button
+                    variant={"contained"}
+                    className={classes.button}
+                    style={{ backgroundColor: "green" }}
+                    onClick={() => props.acceptBooking(props.currentLessonID)}
+                  >
+                    Confirm
+                  </Button>
+                  <Button
+                    variant={"contained"}
+                    className={classes.button}
+                    style={{ backgroundColor: "orange" }}
+                    onClick={() => props.rejectBooking(props.currentLessonID)}
+                  >
+                    Reject
+                  </Button>
+                  <Button
+                    variant={"contained"}
+                    className={classes.button}
+                    onClick={() => props.notNow()}
+                  >
+                    Not Now
+                  </Button>
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
+          </CardContent>
+        </Card>
       </CardContent>
     </Card>
   );

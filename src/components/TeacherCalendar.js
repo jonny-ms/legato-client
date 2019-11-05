@@ -253,6 +253,7 @@ class TeacherCalendar extends Component {
         } else {
           const future = new Date(arg.event.start).getTime() > Date.now();
           if (future) {
+            console.log("future event");
             this.setState({
               showLesson: true,
               showPendingLesson: false,
@@ -263,6 +264,7 @@ class TeacherCalendar extends Component {
               currentLessonID: lessonID
             });
           } else {
+            console.log("Previous event");
             this.setState({
               showLesson: false,
               showPendingLesson: false,
@@ -363,7 +365,8 @@ class TeacherCalendar extends Component {
       });
 
       this.setState({
-        calendarEvents: events
+        calendarEvents: events,
+        showPendingLesson: false
       });
     });
   };
