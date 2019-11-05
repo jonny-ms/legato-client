@@ -24,6 +24,8 @@ const useStyles = makeStyles(theme => ({
 const PendingLessonStudent = props => {
   const classes = useStyles();
 
+  console.log(props);
+
   return (
     <Card
       className={"calendar-appointment"}
@@ -33,7 +35,7 @@ const PendingLessonStudent = props => {
       <CardContent style={{ padding: 8 }}>
         <Card elevation={0}>
           <CardContent>
-            <Grid container direction="row">
+            <Grid container direction="row" spacing={2}>
               <Grid item xs={8} sm={10}>
                 <Typography
                   className={classes.title}
@@ -43,6 +45,14 @@ const PendingLessonStudent = props => {
                 >
                   {props.teacher}
                 </Typography>
+                <Typography
+                  variant="body2"
+                  component="p"
+                  style={{ color: "#696969" }}
+                >
+                  {props.teacherEmail}
+                </Typography>
+                <br></br>
                 <Typography
                   variant="body2"
                   component="p"

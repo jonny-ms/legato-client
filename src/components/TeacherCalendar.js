@@ -108,6 +108,7 @@ class TeacherCalendar extends Component {
     showLesson: false,
     showPreviousLesson: false,
     showStudent: "",
+    studentEmail: "",
     showCourse: "",
     showTime: "",
     currentLessonID: null,
@@ -224,6 +225,8 @@ class TeacherCalendar extends Component {
         return course.id === tempLesson.course_id;
       });
       const studentName = student.first_name + " " + student.last_name;
+      const studentEmail = student.email;
+      console.log(studentEmail);
       const courseName = course.level + " " + course.instrument;
       const startTime = moment(arg.event.start).format(
         "dddd, MMMM Do YYYY, h:mm a"
@@ -240,6 +243,7 @@ class TeacherCalendar extends Component {
             showLesson: false,
             showPreviousLesson: false,
             showStudent: studentName,
+            studentEmail: studentEmail,
             showCourse: courseName,
             showTime: startTime,
             currentLessonID: lessonID
@@ -259,6 +263,7 @@ class TeacherCalendar extends Component {
               showPendingLesson: false,
               showPreviousLesson: false,
               showStudent: studentName,
+              studentEmail: studentEmail,
               showCourse: courseName,
               showTime: startTime,
               currentLessonID: lessonID
@@ -270,6 +275,7 @@ class TeacherCalendar extends Component {
               showPendingLesson: false,
               showPreviousLesson: true,
               showStudent: studentName,
+              studentEmail: studentEmail,
               showCourse: courseName,
               showTime: startTime,
               currentLessonID: lessonID
@@ -480,6 +486,7 @@ class TeacherCalendar extends Component {
         {this.state.showPendingLesson && (
           <PendingLessonTeacher
             student={this.state.showStudent}
+            studentEmail={this.state.studentEmail}
             course={this.state.showCourse}
             time={this.state.showTime}
             currentLessonID={this.state.currentLessonID}
@@ -491,6 +498,7 @@ class TeacherCalendar extends Component {
         {this.state.showLesson && (
           <LessonTeacher
             student={this.state.showStudent}
+            studentEmail={this.state.studentEmail}
             course={this.state.showCourse}
             time={this.state.showTime}
             currentLessonID={this.state.currentLessonID}
@@ -500,6 +508,7 @@ class TeacherCalendar extends Component {
         {this.state.showPreviousLesson && (
           <PreviousLessonTeacher
             student={this.state.showStudent}
+            studentEmail={this.state.studentEmail}
             course={this.state.showCourse}
             time={this.state.showTime}
             currentLessonID={this.state.currentLessonID}

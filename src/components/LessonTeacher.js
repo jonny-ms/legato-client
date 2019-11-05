@@ -54,7 +54,7 @@ const LessonTeacher = props => {
       <CardContent style={{ padding: 8 }}>
         <Card elevation={0}>
           <CardContent>
-            <Grid container direction="row">
+            <Grid container direction="row" spacing={2}>
               <Grid item xs={8} sm={10}>
                 <Typography
                   className={classes.title}
@@ -64,6 +64,14 @@ const LessonTeacher = props => {
                 >
                   {props.student}
                 </Typography>
+                <Typography
+                  variant="body2"
+                  component="p"
+                  style={{ color: "#696969" }}
+                >
+                  {props.studentEmail}
+                </Typography>
+                <br></br>
                 <Typography
                   variant="body2"
                   component="p"
