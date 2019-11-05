@@ -12,6 +12,7 @@ const StudentDashboard = () => {
           indicatorColor="primary"
           textColor="primary"
           variant="fullWidth"
+          onClick={e => setTab(e)}
         >
           <Tab label="Schedule" />
         </Tabs>

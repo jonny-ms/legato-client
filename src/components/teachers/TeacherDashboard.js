@@ -3,8 +3,6 @@ import TeacherCalendar from "../TeacherCalendar";
 import TeacherAppointmentList from "../TeacherAppointmentList";
 import { Paper, Tabs, Tab } from "@material-ui/core";
 
-import Box from "@material-ui/core/Box";
-
 const TeacherDashboard = () => {
   const [showCalendar, setShowCalendar] = useState(true);
   const [showAppointments, setShowAppointments] = useState(false);

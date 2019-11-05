@@ -114,7 +114,7 @@ class CalendarForBooking extends Component {
     // Send requested bookings to server
     e.preventDefault();
     if (this.state.submitBackgroundColor) {
-      const events = this.state.calendarEvents;
+      let events = this.state.calendarEvents;
 
       let requests = [];
       for (let event of events) {
@@ -154,8 +154,28 @@ class CalendarForBooking extends Component {
               course_id: this.state.course_id
             }
           }
+        }).then(resp => {
+          console.log(sortedRequests);
+          events = events.filter(event => {
+            return event.title !== "Booking Request";
+          });
+
+          let newRequest = sortedRequests[0];
+          let numberOfTimeslots = sortedRequests.length;
+          newRequest.title = "Pending Lesson";
+          newRequest.backgroundColor = "orange";
+          newRequest.borderColor = "orange";
+          newRequest.end = moment(newRequest.start)
+            .add(30 * numberOfTimeslots, "m")
+            .toDate();
+          events.push(newRequest);
+          this.setState({
+            calendarEvents: events
+          });
         });
       }
+
+      // Set requested bookings to Pending Lesson
     }
   };
 
@@ -181,12 +201,12 @@ class CalendarForBooking extends Component {
     // Must create a copy of the event for state to update
     for (let event of events) {
       let newEvent = { ...event };
-      if (event.id === eventId && event.title === "Available") {
+      if (event.id === eventId && event.title === "Booking Request") {
         newEvent = {
           ...event,
-          title: "Booking Request",
-          backgroundColor: "green",
-          borderColor: "green"
+          title: "Available",
+          backgroundColor: "",
+          borderColor: ""
         };
       }
       if (event.id === eventId && event.title === "Available") {
