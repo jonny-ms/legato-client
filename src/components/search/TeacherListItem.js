@@ -134,7 +134,7 @@ export default function TeacherListItem(props) {
                   <Button
                     size="small"
                     color="primary"
-                    style={{ marginLeft: 20 }}
+                    style={{ marginRight: 20 }}
                   >
                     <Link
                       to={{
@@ -145,7 +145,10 @@ export default function TeacherListItem(props) {
                       onClick={e => {
                         clickTrue(e);
                       }}
-                      style={{ color: "black", textDecoration: "none" }}
+                      style={{
+                        color: "black",
+                        textDecoration: "none"
+                      }}
                     >
                       View Profile
                     </Link>
@@ -155,7 +158,7 @@ export default function TeacherListItem(props) {
                   <Button
                     size="small"
                     color="primary"
-                    style={{ marginRight: 20 }}
+                    style={{ marginLeft: 20 }}
                   >
                     <Link
                       to={{
@@ -165,7 +168,10 @@ export default function TeacherListItem(props) {
                       onClick={e => {
                         clickFalse(e);
                       }}
-                      style={{ color: "black", textDecoration: "none" }}
+                      style={{
+                        color: "black",
+                        textDecoration: "none"
+                      }}
                     >
                       Book Now
                     </Link>
