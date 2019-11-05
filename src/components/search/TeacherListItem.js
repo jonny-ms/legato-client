@@ -27,7 +27,7 @@ const useStyles = makeStyles({
 });
 
 export default function TeacherListItem(props) {
-  // console.log("props from TeacherListItem.js: ", props);
+  console.log("props from TeacherListItem.js: ", props);
   const [shadow, setShadow] = useState(4);
   const classes = useStyles();
 
@@ -142,8 +142,9 @@ export default function TeacherListItem(props) {
                       onClick={e => {
                         clickTrue(e);
                       }}
-                    ></Link>
-                    View Profile
+                    >
+                      View Profile
+                    </Link>
                   </Button>
                 </Grid>
                 <Grid item>
@@ -156,8 +157,9 @@ export default function TeacherListItem(props) {
                       onClick={e => {
                         clickFalse(e);
                       }}
-                    ></Link>
-                    Book Now
+                    >
+                      Book Now
+                    </Link>
                   </Button>
                 </Grid>
               </Grid>

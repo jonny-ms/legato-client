@@ -451,7 +451,7 @@ class TeacherCalendar extends Component {
               alignItems={"center"}
               style={{ display: "flex", justifyContent: "space-around" }}
             >
-              <Grid item textAlign={"center"} margin={10}>
+              <Grid item margin={10}>
                 <TextField
                   type="number"
                   label="Weeks"
@@ -462,11 +462,7 @@ class TeacherCalendar extends Component {
                   helperText="Number of weeks to repeat"
                 />
               </Grid>
-              <Grid
-                item
-                textAlign={"center"}
-                className={"teacher-submit-button"}
-              >
+              <Grid item className={"teacher-submit-button"}>
                 <Button
                   onClick={this.submitTimeSlots}
                   variant={"contained"}
