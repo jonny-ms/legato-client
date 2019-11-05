@@ -142,9 +142,8 @@ export default function TeacherListItem(props) {
                       onClick={e => {
                         clickTrue(e);
                       }}
-                    >
-                      View Profile
-                    </Link>
+                    ></Link>
+                    View Profile
                   </Button>
                 </Grid>
                 <Grid item>
@@ -157,9 +156,8 @@ export default function TeacherListItem(props) {
                       onClick={e => {
                         clickFalse(e);
                       }}
-                    >
-                      Book Now
-                    </Link>
+                    ></Link>
+                    Book Now
                   </Button>
                 </Grid>
               </Grid>
