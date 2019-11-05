@@ -77,6 +77,16 @@ export default function Nav(props) {
   useEffect(() => {
     setRedirect(false);
   });
+
+  const [anchorElMenuMobile, setAnchorElMenuMobile] = useState(null);
+
+  const handleClickMenuMobile = event => {
+    setAnchorElMenuMobile(event.currentTarget);
+  };
+
+  const handleCloseMenuMobile = () => {
+    setAnchorElMenuMobile(null);
+  };
   // console.log("event: ", event);
 
   return (
@@ -97,41 +107,87 @@ export default function Nav(props) {
           <Grid item>
             {!user.user.type ? (
               <Grid container>
-                {/*  New Student & Teacher Item */}
-                <Grid item>
-                  <Grid container>
-                    {/* Student Item */}
-                    <Grid item>
-                      <Button
-                        style={{ color: "white" }}
+                {props.mobile && (
+                  <Fragment>
+                    <IconButton
+                      edge="start"
+                      className={classes.menuButton}
+                      color="inherit"
+                      aria-label="menu"
+                      onClick={handleClickMenuMobile}
+                    >
+                      <MenuIcon />
+                    </IconButton>
+                    <Menu
+                      id="simple-menu"
+                      anchorEl={anchorElMenuMobile}
+                      keepMounted
+                      open={Boolean(anchorElMenuMobile)}
+                      onClose={handleCloseMenuMobile}
+                    >
+                      <MenuItem
+                        onClick={handleCloseMenuMobile}
                         component={Link}
                         to="/students/new"
                       >
                         New Student
-                      </Button>
+                      </MenuItem>
+                      <MenuItem
+                        onClick={handleCloseMenuMobile}
+                        component={Link}
+                        to={"/teachers/new"}
+                      >
+                        New Teacher
+                      </MenuItem>
+                      <MenuItem
+                        onClick={handleCloseMenuMobile}
+                        component={Link}
+                        to="/login"
+                      >
+                        Login
+                      </MenuItem>
+                    </Menu>
+                  </Fragment>
+                )}
+                {/*  New Student & Teacher Item */}
+                {!props.mobile && (
+                  <Fragment>
+                    <Grid item>
+                      <Grid container>
+                        {/* Student Item */}
+                        <Grid item>
+                          <Button
+                            style={{ color: "white" }}
+                            component={Link}
+                            to="/students/new"
+                          >
+                            New Student
+                          </Button>
+                        </Grid>
+                        {/* Teacher Item */}
+                        <Grid item>
+                          <Button
+                            style={{ color: "white" }}
+                            component={Link}
+                            to="/teachers/new"
+                          >
+                            New Teacher
+                          </Button>
+                        </Grid>
+                      </Grid>
                     </Grid>
-                    {/* Teacher Item */}
+                    {/*  Login Item */}
                     <Grid item>
                       <Button
                         style={{ color: "white" }}
                         component={Link}
-                        to="/teachers/new"
+                        to="/login"
                       >
-                        New Teacher
+                        Login
                       </Button>
                     </Grid>
-                  </Grid>
-                </Grid>
-                {/*  Login Item */}
-                <Grid item>
-                  <Button
-                    style={{ color: "white" }}
-                    component={Link}
-                    to="/login"
-                  >
-                    Login
-                  </Button>
-                </Grid>
+                  </Fragment>
+                )}
               </Grid>
             ) : (
               <Grid container>

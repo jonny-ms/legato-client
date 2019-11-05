@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 const PendingLessonStudent = props => {
   const classes = useStyles();
 
-  console.log(props);
+  // console.log(props);
 
   return (
     <Card
