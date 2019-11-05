@@ -60,7 +60,7 @@ export default function SearchBar(props) {
   const [instrument, setInstrument] = useState("Select");
   const [level, setLevel] = useState("Select");
   const [rate, setRate] = useState("");
-  console.log("props from SearchBar.js: ", props);
+  // console.log("props from SearchBar.js: ", props);
 
   // const getTimeSlots = () => {
   //   axios(`/teachers/${}`)
@@ -259,7 +259,7 @@ export default function SearchBar(props) {
             alignItems="baseline"
           >
             {filteredTeachers.map((teacher, i) => (
-              <Grid item>
+              <Grid item key={i}>
                 <TeacherListItem
                   key={i}
                   teacher={teacher}

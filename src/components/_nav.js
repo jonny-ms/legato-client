@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../App.css";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
@@ -8,30 +8,28 @@ export default function Nav(props) {
   const [redirect, setRedirect] = useState(false);
 
   const red = () => {
-    console.log("haiTWO");
-    // setRedirect(false);
     return <Redirect to="/" />;
   };
 
+  // console.log("initial redirect: ", redirect);
   const logout = e => {
     e.preventDefault();
     axios(`/api/logout`, {
       withCredentials: true
     }).then(() => {
-      props.setUser({});
-      console.log("haiONE");
       setRedirect(true);
-      red();
+      props.setUser({});
+      // red();
     });
   };
+
+  useEffect(() => {
+    setRedirect(false);
+  });
 
   const UserContext = React.createContext(props);
 
   const user = useContext(UserContext);
-  console.log("redirect from _nav.js: ", redirect);
-
-  // console.log("user from _nav.js: ", user);
-  // console.log("REDIRECT", redirect);
   return (
     <nav>
       <Link to="/">
@@ -77,7 +75,7 @@ export default function Nav(props) {
         {user.user.type && (
           <Button onClick={e => logout(e)}>
             <li>
-              {/* {redirect && red()} */}
+              {redirect && red()}
               Logout
             </li>
           </Button>
