@@ -108,10 +108,8 @@ class StudentCalendar extends Component {
       return teacher.id === course.teacher_id;
     });
 
-    console.log(teacher);
     const teacherName = teacher.first_name + " " + teacher.last_name;
     const teacherEmail = teacher.email;
-    console.log(teacherEmail);
     const courseName = course.level + " " + course.instrument;
     const startTime = moment(arg.event.start).format(
       "dddd, MMMM Do YYYY, h:mm a"

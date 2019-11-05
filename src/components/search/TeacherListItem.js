@@ -27,7 +27,7 @@ const useStyles = makeStyles({
 });
 
 export default function TeacherListItem(props) {
-  console.log("props from TeacherListItem.js: ", props);
+  // console.log("props from TeacherListItem.js: ", props);
   const [shadow, setShadow] = useState(4);
   const classes = useStyles();
 

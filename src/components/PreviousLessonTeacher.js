@@ -45,8 +45,6 @@ const useStyles = makeStyles(theme => ({
 const PreviousLessonTeacher = props => {
   const classes = useStyles();
 
-  console.log(props);
-
   return (
     <Card
       className={"calendar-appointment"}

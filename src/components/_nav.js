@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
-import "../App.css";
 import { Link, Redirect } from "react-router-dom";
+
 import axios from "axios";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,6 +16,10 @@ import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Grid from "@material-ui/core/Grid";
+
+import "../App.css";
+
+import logo from "./logo.png";
 
 export default function Nav(props) {
   const [redirect, setRedirect] = useState(false);
@@ -55,8 +59,8 @@ export default function Nav(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  console.log("open:", open);
-  console.log("props.anchorEl: ", props.anchorEl);
+  // console.log("open:", open);
+  // console.log("props.anchorEl: ", props.anchorEl);
 
   const handleChange = event => {
     setAuth(event.target.checked);
@@ -76,11 +80,12 @@ export default function Nav(props) {
   // console.log("event: ", event);
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" title={<img src="./logo.png" />}>
       <Toolbar>
         <Button style={{ color: "white" }} component={Link} to="/">
-          Legato
+          <img src={logo} style={{ height: 40 }} />
         </Button>
+
         <Grid
           container
           direction="row"

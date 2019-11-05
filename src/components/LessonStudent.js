@@ -62,7 +62,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LessonStudent = props => {
-  console.log(props);
   const classes = useStyles();
 
   return (
