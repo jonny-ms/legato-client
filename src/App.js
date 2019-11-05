@@ -34,8 +34,6 @@ const App = () => {
     }
   }, []);
 
-  const mobile = false
-
   return (
     <Router>
       <div className="App">

@@ -76,7 +76,7 @@ export default function Landing(props) {
 {!props.mobile &&
   <Card className={classes.about}>
   <Typography variant="h4">
-    Connecting music students and teachers.
+    At Legato, our goal is to connect those who want to learn with those who want to teach.
   </Typography>
   </Card>
 }
