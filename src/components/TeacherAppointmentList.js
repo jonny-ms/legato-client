@@ -143,78 +143,94 @@ const TeacherAppointmentList = () => {
               style={{ backgroundColor: lesson.backgroundColor }}
               elevation={4}
             >
-              <CardContent>
-                <Grid container direction="row">
-                  <Grid item xs={8} sm={10}>
-                    <Typography
-                      className={classes.title}
-                      color="textSecondary"
-                      gutterBottom
-                      variant="h5"
-                    >
-                      {lesson.student.first_name} {lesson.student.last_name}
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                      You have a {lesson.title} teaching {lesson.level}{" "}
-                      {lesson.instrument} with {lesson.student.first_name}{" "}
-                      {lesson.student.last_name} on {lesson.start}
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    container
-                    xs={4}
-                    sm={2}
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center"
-                    }}
-                  >
-                    <Grid item alignContent={"center"}>
-                      {!lesson.confirmed && (
-                        <Button
-                          variant={"contained"}
-                          className={classes.button}
-                          style={{ backgroundColor: "green" }}
-                          onClick={() => confirmLesson(lesson.id)}
+              <CardContent style={{ padding: 8 }}>
+                <Card elevation={0}>
+                  <CardContent>
+                    <Grid container direction="row" spacing={2}>
+                      <Grid item xs={8} sm={10}>
+                        <Typography
+                          className={classes.title}
+                          gutterBottom
+                          variant="h5"
+                          style={{ color: "#696969" }}
                         >
-                          Confirm
-                        </Button>
-                      )}
-                      {!lesson.confirmed && (
-                        <Button
-                          variant={"contained"}
-                          className={classes.button}
-                          style={{ backgroundColor: "orange" }}
-                          onClick={() => rejectLesson(lesson.id)}
+                          {lesson.student.first_name} {lesson.student.last_name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          component="p"
+                          style={{ color: "#696969" }}
                         >
-                          Reject
-                        </Button>
-                      )}
-                      {lesson.confirmed && lesson.future && (
-                        <Button
-                          variant={"contained"}
-                          className={classes.button}
-                          style={{ backgroundColor: "orange" }}
-                          onClick={() => rejectLesson(lesson.id)}
+                          {lesson.student.email}
+                        </Typography>
+                        <br></br>
+                        <Typography
+                          variant="body2"
+                          component="p"
+                          style={{ color: "#696969" }}
                         >
-                          Cancel
-                        </Button>
-                      )}
-                      {!lesson.has_paid && !lesson.future && (
-                        <Button
-                          variant={"contained"}
-                          className={classes.button}
-                          style={{ backgroundColor: "lightblue" }}
-                          onClick={() => lessonGetPaid(lesson.id)}
-                        >
-                          Get Paid
-                        </Button>
-                      )}
+                          You have a {lesson.title} teaching {lesson.level}{" "}
+                          {lesson.instrument} with {lesson.student.first_name}{" "}
+                          {lesson.student.last_name} on {lesson.start}
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        container
+                        xs={4}
+                        sm={2}
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        <Grid item alignContent={"center"}>
+                          {!lesson.confirmed && (
+                            <Button
+                              variant={"contained"}
+                              className={classes.button}
+                              style={{ backgroundColor: "green" }}
+                              onClick={() => confirmLesson(lesson.id)}
+                            >
+                              Confirm
+                            </Button>
+                          )}
+                          {!lesson.confirmed && (
+                            <Button
+                              variant={"contained"}
+                              className={classes.button}
+                              style={{ backgroundColor: "orange" }}
+                              onClick={() => rejectLesson(lesson.id)}
+                            >
+                              Reject
+                            </Button>
+                          )}
+                          {lesson.confirmed && lesson.future && (
+                            <Button
+                              variant={"contained"}
+                              className={classes.button}
+                              style={{ backgroundColor: "orange" }}
+                              onClick={() => rejectLesson(lesson.id)}
+                            >
+                              Cancel
+                            </Button>
+                          )}
+                          {!lesson.has_paid && !lesson.future && (
+                            <Button
+                              variant={"contained"}
+                              className={classes.button}
+                              style={{ backgroundColor: "lightblue" }}
+                              onClick={() => lessonGetPaid(lesson.id)}
+                            >
+                              Get Paid
+                            </Button>
+                          )}
+                        </Grid>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Grid>
+                  </CardContent>
+                </Card>
               </CardContent>
             </Card>
           );

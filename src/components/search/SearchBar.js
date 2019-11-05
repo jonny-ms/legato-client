@@ -147,115 +147,111 @@ export default function SearchBar(props) {
         </Tabs>
       </Paper>
 
-    <Card className={classes.card} elevate={4}>
-      <Typography variant="h5" style={{marginTop: "1em"}}>
-        Search by:
-      </Typography>
-      <Grid container spacing={3} className={classes.searchBar}>
-        <Grid item xs={7} sm={4}>
-          <TextField
-            className={classes.formControl}
-            type="text"
-            label="Teacher Name"
-            variant="outlined"
-            onChange={event => setName(event.target.value)}
-          />
-        </Grid>
-        <Grid item xs={3} sm={2}>
-          <FormControl variant="outlined" 
-            className={classes.formControl}
-            style={{minWidth: 100}}
-            >
-            <InputLabel>Max Rate</InputLabel>
-            <OutlinedInput
-              type="number"
-              onChange={event => setRate(event.target.value)}
-              startAdornment={
-                <InputAdornment position="start">$</InputAdornment>
-              }
-              labelWidth={70}
+      <Card className={classes.card} elevate={4}>
+        <Typography variant="h5" style={{ marginTop: "1em" }}>
+          Search by:
+        </Typography>
+        <Grid container spacing={3} className={classes.searchBar}>
+          <Grid item xs={7} sm={4}>
+            <TextField
+              className={classes.formControl}
+              type="text"
+              label="Teacher Name"
+              variant="outlined"
+              onChange={event => setName(event.target.value)}
             />
-          </FormControl>
-        </Grid>
+          </Grid>
+          <Grid item xs={3} sm={2}>
+            <FormControl
+              variant="outlined"
+              className={classes.formControl}
+              style={{ minWidth: 100 }}
+            >
+              <InputLabel>Max Rate</InputLabel>
+              <OutlinedInput
+                type="number"
+                onChange={event => setRate(event.target.value)}
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
+                labelWidth={70}
+              />
+            </FormControl>
+          </Grid>
 
-        <Grid item xs={6} sm={3}>
-          <TextField
-            select
-            label="Instrument"
-            variant="outlined"
-            className={classes.formControl}
-            value={instrument}
-            onChange={e => setInstrument(e.target.value)}
-          >
-            {instruments.map((instrument, i) => {
-              return (
-                <MenuItem key={i} value={instrument}>
-                  {instrument}
-                </MenuItem>
-              );
-            })}
-          </TextField>
-        </Grid>
+          <Grid item xs={6} sm={3}>
+            <TextField
+              select
+              label="Instrument"
+              variant="outlined"
+              className={classes.formControl}
+              value={instrument}
+              onChange={e => setInstrument(e.target.value)}
+            >
+              {instruments.map((instrument, i) => {
+                return (
+                  <MenuItem key={i} value={instrument}>
+                    {instrument}
+                  </MenuItem>
+                );
+              })}
+            </TextField>
+          </Grid>
 
-        <Grid item xs={6} sm={3}>
-          <TextField
-            select
-            label="Level"
-            variant="outlined"
-            className={classes.formControl}
-            onChange={e => setLevel(e.target.value)}
-            value={level}
-          >
-            {levels.map((level, i) => {
-              return (
-                <MenuItem key={i} value={level}>
-                  {level}
-                </MenuItem>
-              );
-            })}
-          </TextField>
+          <Grid item xs={6} sm={3}>
+            <TextField
+              select
+              label="Level"
+              variant="outlined"
+              className={classes.formControl}
+              onChange={e => setLevel(e.target.value)}
+              value={level}
+            >
+              {levels.map((level, i) => {
+                return (
+                  <MenuItem key={i} value={level}>
+                    {level}
+                  </MenuItem>
+                );
+              })}
+            </TextField>
+          </Grid>
         </Grid>
-      </Grid>
       </Card>
 
       {isVideo && (
-        <div style={{marginLeft: "16px", marginRight: "16px"}}>
-          <Grid
-            container
-            spacing={2}
-            direction="row"
-            alignItems="baseline"
-          >
-
-          {filteredTeachers.map(
-            teacher =>
-              teacher.videos &&
-              teacher.videos
-                .filter(video => {
-                  if (instrument === "Select" || video.instrument === instrument) {
-                    return video
-                  }
-                })
-                .map((video, i) => (
-                  <Grid item key={i} 
-                  xs={12} md={4}
-                  >
-                    <VideoListItem
-                      key={i}
-                      video={video}
-                      teacher={teacher}
-                      instrument={instrument}
-                      setTrigger={props.setTrigger}
-                    />
-                  </Grid>
-                ))
-          )}
+        <div style={{ marginLeft: "16px", marginRight: "16px" }}>
+          <Grid container spacing={2} direction="row" alignItems="baseline">
+            {filteredTeachers.map(
+              teacher =>
+                teacher.videos &&
+                teacher.videos
+                  .filter(video => {
+                    if (
+                      instrument === "Select" ||
+                      video.instrument === instrument
+                    ) {
+                      return video;
+                    }
+                  })
+                  .map((video, i) => (
+                    <Grid item key={i} xs={12} md={4}>
+                      <VideoListItem
+                        key={i}
+                        video={video}
+                        teacher={teacher}
+                        instrument={instrument}
+                        setTrigger={props.setTrigger}
+                      />
+                    </Grid>
+                  ))
+            )}
           </Grid>
         </div>
       )}
 
       {isProfile && (
-        <div  >
+        <div>
           <Grid
             container
             direction="row"

@@ -16,6 +16,8 @@ import Login from "./components/Login";
 const App = () => {
   const [user, setUser] = useState({});
   const [trigger, setTrigger] = useState();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobile, setMobile] = useState(false);
 
   const fetchItems = async () => {
     const data = await axios("/api/sessions", { withCredentials: true });
@@ -26,6 +28,10 @@ const App = () => {
 
   useEffect(() => {
     fetchItems();
+    if (window.innerWidth < 680) {
+      setMobile(true);
+      console.log("mobile view");
+    }
   }, []);
 
   const mobile = false
@@ -33,7 +39,12 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <Nav user={user} setUser={setUser} />
+        <Nav
+          anchorEl={anchorEl}
+          user={user}
+          setUser={setUser}
+          mobile={mobile}
+        />
         <Switch>
           <Route
             exact
@@ -63,7 +74,9 @@ const App = () => {
           <Route
             exact
             path="/login"
-            component={() => <Login setUser={setUser} />}
+            component={() => (
+              <Login setAnchorEl={setAnchorEl} setUser={setUser} />
+            )}
           />
         </Switch>
       </div>

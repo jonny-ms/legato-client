@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Container, TextField, Button, Card, Typography} from "@material-ui/core";
+import {
+  Container,
+  TextField,
+  Button,
+  Card,
+  Typography
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 
@@ -11,16 +17,15 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
   },
   card: {
-    padding: "5%",
+    padding: "5%"
   },
   form: {
-    width: '100%',
-    marginTop: theme.spacing(1),
-  },
+    width: "100%",
+    marginTop: theme.spacing(1)
+  }
 }));
 
 export default function RegisterForm(props) {
-
   const classes = useStyles();
 
   const [firstName, setFirstName] = useState("");
@@ -30,8 +35,8 @@ export default function RegisterForm(props) {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [error, setError] = useState("")
 
-  const register = (e) => {
-    e.preventDefault()
+  const register = e => {
+    e.preventDefault();
     if (firstName && lastName && email && password && passwordConfirmation) {
       axios(`/api/${props.userType}s`, {
         method: "post",
@@ -44,9 +49,10 @@ export default function RegisterForm(props) {
             password,
             password_confirmation: passwordConfirmation
           }
-      }}).then((resp) => {
-        console.log(resp)
-      })
+        }
+      }).then(resp => {
+        // console.log(resp)
+      });
     } else {
       setError("Empty field!")
     }
@@ -125,5 +131,5 @@ export default function RegisterForm(props) {
         </form>
       </Card>
     </Container>
-  )
+  );
 }

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 export default function CoursesForm(props) {
-
   const [instrument, setInstrument] = useState("");
   const [level, setLevel] = useState("");
   const [rate, setRate] = useState(0);
@@ -31,17 +30,16 @@ export default function CoursesForm(props) {
   const levels = ["Select", "Beginner", "Intermediate", "Advanced"];
 
   const addCourse = () => {
-    e.preventDefault()
+    e.preventDefault();
     // ! Hard coded
-      axios(`/api/teachers/${3}`, {
-        method: "put",
-        withCredentials: true,
-        data: {}
-      }).then(() => {})
-  }
-  
-  
-  return(
+    axios(`/api/teachers/${3}`, {
+      method: "put",
+      withCredentials: true,
+      data: {}
+    }).then(() => {});
+  };
+
+  return (
     <form>
       <label>
         Instrument:
@@ -57,10 +55,16 @@ export default function CoursesForm(props) {
           })}
         </select>
         Rate:
-        <input type="number" name="rate" value={rate} onChange={e => setRate(e.target.value)}/>
+        <input
+          type="number"
+          name="rate"
+          value={rate}
+          onChange={e => setRate(e.target.value)}
+        />
       </label>
-        <button type="submit" onClick={(e) => addCourse(e)}>Add Course</button>
+      <button type="submit" onClick={e => addCourse(e)}>
+        Add Course
+      </button>
     </form>
-  )
-  
+  );
 }

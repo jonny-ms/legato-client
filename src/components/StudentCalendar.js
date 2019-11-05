@@ -25,6 +25,7 @@ class StudentCalendar extends Component {
     showLesson: false,
     showPendingLesson: false,
     showTeacher: "",
+    teacherEmail: "",
     startDay: 4,
     mobile: false
   };
@@ -108,6 +109,7 @@ class StudentCalendar extends Component {
     });
 
     const teacherName = teacher.first_name + " " + teacher.last_name;
+    const teacherEmail = teacher.email;
     const courseName = course.level + " " + course.instrument;
     const startTime = moment(arg.event.start).format(
       "dddd, MMMM Do YYYY, h:mm a"
@@ -123,6 +125,7 @@ class StudentCalendar extends Component {
           showPendingLesson: true,
           showLesson: false,
           showTeacher: teacherName,
+          teacherEmail: teacherEmail,
           showCourse: courseName,
           showTime: startTime,
           currentLessonID: lessonID
@@ -138,6 +141,7 @@ class StudentCalendar extends Component {
           showLesson: true,
           showPendingLesson: false,
           showTeacher: teacherName,
+          teacherEmail: teacherEmail,
           showCourse: courseName,
           showTime: startTime,
           currentLessonID: lessonID
@@ -175,6 +179,7 @@ class StudentCalendar extends Component {
           {this.state.showPendingLesson && (
             <PendingLessonStudent
               teacher={this.state.showTeacher}
+              teacherEmail={this.state.teacherEmail}
               course={this.state.showCourse}
               time={this.state.showTime}
               currentLessonID={this.state.currentLessonID}
@@ -184,6 +189,7 @@ class StudentCalendar extends Component {
           {this.state.showLesson && (
             <LessonStudent
               teacher={this.state.showTeacher}
+              teacherEmail={this.state.teacherEmail}
               course={this.state.showCourse}
               time={this.state.showTime}
               currentLessonID={this.state.currentLessonID}
@@ -221,6 +227,7 @@ class StudentCalendar extends Component {
                 firstDay={this.state.startDay}
                 minTime={"08:00:00"}
                 aspectRatio={1.8}
+                height={885}
                 allDaySlot={false}
                 eventClick={this.handleEventClick}
               />

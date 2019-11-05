@@ -51,51 +51,63 @@ const LessonTeacher = props => {
       style={{ backgroundColor: "green" }}
       elevation={4}
     >
-      <CardContent>
-        <Grid container direction="row">
-          <Grid item xs={8} sm={10}>
-            <Typography
-              className={classes.title}
-              gutterBottom
-              variant="h5"
-              style={{ color: "white" }}
-            >
-              {props.student}
-            </Typography>
-            <Typography
-              variant="body2"
-              component="p"
-              style={{ color: "white" }}
-            >
-              You have a lesson teaching {props.course} with {props.student} on{" "}
-              {props.time}
-            </Typography>
-          </Grid>
-          <MuiThemeProvider theme={theme}>
-            <Grid
-              item
-              container
-              xs={4}
-              sm={2}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Grid item alignContent={"center"}>
-                <Button
-                  variant={"contained"}
-                  className={classes.button}
-                  color={"secondary"}
-                  onClick={() => props.cancelLesson(props.currentLessonID)}
+      <CardContent style={{ padding: 8 }}>
+        <Card elevation={0}>
+          <CardContent>
+            <Grid container direction="row" spacing={2}>
+              <Grid item xs={8} sm={10}>
+                <Typography
+                  className={classes.title}
+                  gutterBottom
+                  variant="h5"
+                  style={{ color: "#696969" }}
                 >
-                  Cancel
-                </Button>
+                  {props.student}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  component="p"
+                  style={{ color: "#696969" }}
+                >
+                  {props.studentEmail}
+                </Typography>
+                <br></br>
+                <Typography
+                  variant="body2"
+                  component="p"
+                  style={{ color: "#696969" }}
+                >
+                  You have a lesson teaching {props.course} with {props.student}{" "}
+                  on {props.time}
+                </Typography>
               </Grid>
+              <MuiThemeProvider theme={theme}>
+                <Grid
+                  item
+                  container
+                  xs={4}
+                  sm={2}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  <Grid item alignContent={"center"}>
+                    <Button
+                      variant={"contained"}
+                      className={classes.button}
+                      color={"secondary"}
+                      onClick={() => props.cancelLesson(props.currentLessonID)}
+                    >
+                      Cancel
+                    </Button>
+                  </Grid>
+                </Grid>
+              </MuiThemeProvider>
             </Grid>
-          </MuiThemeProvider>
-        </Grid>
+          </CardContent>
+        </Card>
       </CardContent>
     </Card>
   );

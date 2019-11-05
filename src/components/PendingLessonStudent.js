@@ -24,46 +24,69 @@ const useStyles = makeStyles(theme => ({
 const PendingLessonStudent = props => {
   const classes = useStyles();
 
+  // console.log(props);
+
   return (
     <Card
       className={"calendar-appointment"}
       style={{ backgroundColor: "#ffcc80" }}
       elevation={4}
     >
-      <CardContent>
-        <Grid container direction="row">
-          <Grid item xs={8} sm={10}>
-            <Typography className={classes.title} gutterBottom variant="h5">
-              {props.teacher}
-            </Typography>
-            <Typography variant="body2" component="p">
-              You have a pending {props.course} lesson with {props.teacher} on{" "}
-              {props.time}
-            </Typography>
-          </Grid>
-          <Grid
-            item
-            container
-            xs={4}
-            sm={2}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <Grid item alignContent={"center"}>
-              <Button
-                variant={"contained"}
-                className={classes.button}
-                style={{ backgroundColor: "orange" }}
-                onClick={() => props.cancelLesson(props.currentLessonID)}
+      <CardContent style={{ padding: 8 }}>
+        <Card elevation={0}>
+          <CardContent>
+            <Grid container direction="row" spacing={2}>
+              <Grid item xs={8} sm={10}>
+                <Typography
+                  className={classes.title}
+                  gutterBottom
+                  variant="h5"
+                  style={{ color: "#696969" }}
+                >
+                  {props.teacher}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  component="p"
+                  style={{ color: "#696969" }}
+                >
+                  {props.teacherEmail}
+                </Typography>
+                <br></br>
+                <Typography
+                  variant="body2"
+                  component="p"
+                  style={{ color: "#696969" }}
+                >
+                  You have a pending {props.course} lesson with {props.teacher}{" "}
+                  on {props.time}
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                container
+                xs={4}
+                sm={2}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
               >
-                Cancel Request
-              </Button>
+                <Grid item alignContent={"center"}>
+                  <Button
+                    variant={"contained"}
+                    className={classes.button}
+                    style={{ backgroundColor: "orange" }}
+                    onClick={() => props.cancelLesson(props.currentLessonID)}
+                  >
+                    Cancel Request
+                  </Button>
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
+          </CardContent>
+        </Card>
       </CardContent>
     </Card>
   );
