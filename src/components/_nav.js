@@ -15,6 +15,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import Grid from "@material-ui/core/Grid";
 
 export default function Nav(props) {
   const [redirect, setRedirect] = useState(false);
@@ -71,98 +72,151 @@ export default function Nav(props) {
 
   useEffect(() => {
     setRedirect(false);
+    // handleClose();
   });
   console.log("event: ", event);
 
   return (
     <AppBar position="static">
       <Toolbar>
-        <Button style={{ color: "white" }} component={Link} to="/">
-          Legato
-        </Button>
-        {user.user.type && (
-          <div>
-            <IconButton
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              open={open}
-              onClose={handleClose}
-            >
-              {user.user.type === "Teacher" && (
+        <Grid
+          container
+          direction="row"
+          justify="space-between" // Add it here :)
+        >
+          {/* 1. Legato Item */}
+          <Grid item>
+            <Button style={{ color: "white" }} component={Link} to="/">
+              Legato
+            </Button>
+          </Grid>
+          {/* 2. New Student & Teacher */}
+          <Grid item>
+            <Grid item>
+              {!user.user.type && (
                 <div>
-                  <MenuItem component={Link} to="/teachers/edit">
-                    Edit Profile
-                  </MenuItem>
-                  <MenuItem onClick={e => logout(e)}>
-                    {redirect && red()}
-                    Logout
-                  </MenuItem>
+                  <Grid
+                    container
+                    // justify="space-between" alignItems="center"
+                  >
+                    {/* 1. New Student & Teacher Item */}
+                    <Grid item>
+                      <Grid container>
+                        {/* Student Item */}
+                        <Grid item>
+                          <Button
+                            style={{ color: "white" }}
+                            component={Link}
+                            to="/students/new"
+                          >
+                            New Student
+                          </Button>
+                        </Grid>
+                        {/* Teacher Item */}
+                        <Grid item>
+                          <Button
+                            style={{ color: "white" }}
+                            component={Link}
+                            to="/teachers/new"
+                          >
+                            New Teacher
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    {/* 2. Login Item */}
+                    <Grid item>
+                      <Button
+                        style={{ color: "white" }}
+                        component={Link}
+                        to="/login"
+                      >
+                        Login
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </div>
               )}
-              {user.user.type === "Student" && (
-                <div>
-                  <MenuItem onClick={e => logout(e)}>
-                    {redirect && red()}
-                    Logout
-                  </MenuItem>
-                </div>
-              )}
-            </Menu>
-          </div>
-        )}
-        {!user.user.type && (
-          <div>
-            <Button
-              style={{ color: "white" }}
-              component={Link}
-              to="/students/new"
-            >
-              New Student
-            </Button>
-            <Button
-              style={{ color: "white" }}
-              component={Link}
-              to="/teachers/new"
-            >
-              New Teacher
-            </Button>
-            <Button style={{ color: "white" }} component={Link} to="/login">
-              Login
-            </Button>
-          </div>
-        )}
-        {user.user.type === "Teacher" && (
-          <Button
-            style={{ color: "white" }}
-            component={Link}
-            to="/teachers/schedule"
-          >
-            Dashboard
-          </Button>
-        )}
-        {user.user.type === "Student" && (
-          <Button style={{ color: "white" }} component={Link} to="/students/">
-            Dashboard
-          </Button>
-        )}
+            </Grid>
+
+            {/* 5. Menu Button */}
+            <Grid item>
+              <Grid item>
+                {user.user.type && (
+                  <div>
+                    {/* 3. Teacher Dashboard Item */}
+
+                    {user.user.type === "Teacher" && (
+                      <Button
+                        style={{ color: "white" }}
+                        component={Link}
+                        to="/teachers/schedule"
+                      >
+                        Dashboard
+                      </Button>
+                    )}
+
+                    {/* 4. Student Dashboard Item */}
+
+                    {user.user.type === "Student" && (
+                      <Button
+                        style={{ color: "white" }}
+                        component={Link}
+                        to="/students/"
+                      >
+                        Dashboard
+                      </Button>
+                    )}
+                    <IconButton
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
+                      <AccountCircle />
+                    </IconButton>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right"
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right"
+                      }}
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      {user.user.type === "Teacher" && (
+                        <div>
+                          <MenuItem component={Link} to="/teachers/edit">
+                            Edit Profile
+                          </MenuItem>
+                          <MenuItem onClick={e => logout(e)}>
+                            {redirect && red()}
+                            Logout
+                          </MenuItem>
+                        </div>
+                      )}
+                      {user.user.type === "Student" && (
+                        <div>
+                          <MenuItem onClick={e => logout(e)}>
+                            {redirect && red()}
+                            Logout
+                          </MenuItem>
+                        </div>
+                      )}
+                    </Menu>
+                  </div>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </Toolbar>
     </AppBar>
     // <nav>
