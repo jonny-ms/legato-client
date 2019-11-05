@@ -63,6 +63,7 @@ const parseLoadedEvents = (courses, students) => {
         id: lessons[i].id,
         title: confirmed ? "lesson" : "pending lesson",
         start: startTime,
+        datetimeStart: timeslots[0].datetime,
         has_paid: lessons[i].has_paid,
         confirmed,
         future,
@@ -73,7 +74,7 @@ const parseLoadedEvents = (courses, students) => {
       });
     }
   }
-
+  console.log(loadedLessons);
   return loadedLessons;
 };
 
@@ -94,18 +95,45 @@ const TeacherAppointmentList = () => {
       const courses = JSON.parse(data.data.courses);
 
       let loadedEvents = parseLoadedEvents(courses, students);
+      console.log(loadedEvents);
 
-      setLessons(loadedEvents);
+      const sortedLoadedEvents = loadedEvents.sort((a, b) => {
+        return moment(a.datetimeStart).diff(moment(b.datetimeStart));
+      });
+      console.log(sortedLoadedEvents);
+
+      setLessons(sortedLoadedEvents);
       setStudents(students);
-
-      // console.log(loadedEvents);
-      // console.log(courses);
     });
   };
 
   useEffect(() => {
     getCalendarEvents();
   }, []);
+
+  const confirmLesson = id => {
+    axios(`/api/lessons/${id}`, {
+      method: "put",
+      withCredentials: true
+    });
+  };
+
+  const rejectLesson = id => {
+    axios(`/api/lessons/${id}`, {
+      method: "delete",
+      withCredentials: true
+    });
+  };
+
+  const lessonGetPaid = id => {
+    axios(`/api/lessons/${id}`, {
+      method: "put",
+      withCredentials: true,
+      data: {
+        has_paid: true
+      }
+    });
+  };
 
   return (
     <div>
@@ -154,6 +182,7 @@ const TeacherAppointmentList = () => {
                           variant={"contained"}
                           className={classes.button}
                           style={{ backgroundColor: "green" }}
+                          onClick={() => confirmLesson(lesson.id)}
                         >
                           Confirm
                         </Button>
@@ -163,6 +192,7 @@ const TeacherAppointmentList = () => {
                           variant={"contained"}
                           className={classes.button}
                           style={{ backgroundColor: "orange" }}
+                          onClick={() => rejectLesson(lesson.id)}
                         >
                           Reject
                         </Button>
@@ -172,6 +202,7 @@ const TeacherAppointmentList = () => {
                           variant={"contained"}
                           className={classes.button}
                           style={{ backgroundColor: "orange" }}
+                          onClick={() => rejectLesson(lesson.id)}
                         >
                           Cancel
                         </Button>
@@ -181,6 +212,7 @@ const TeacherAppointmentList = () => {
                           variant={"contained"}
                           className={classes.button}
                           style={{ backgroundColor: "lightblue" }}
+                          onClick={() => lessonGetPaid(lesson.id)}
                         >
                           Get Paid
                         </Button>
