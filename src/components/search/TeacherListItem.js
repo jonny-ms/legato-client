@@ -98,7 +98,7 @@ export default function TeacherListItem(props) {
               >
                 <Grid>
                   <Avatar
-                    alt="Remy Sharp"
+                    alt={props.teacher.first_name}
                     src={props.teacher.profile_pic}
                     className={classes.bigAvatar}
                   />

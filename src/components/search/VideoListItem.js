@@ -1,56 +1,112 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Card,
   CardContent,
   Box,
   Typography,
   Button,
-  Link,
-  CardActionArea
+  CardActionArea,
+  Grow,
+  Grid,
+  CardMedia
 } from "@material-ui/core";
-// CardMedia
-// import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 import YouTube from "react-youtube";
 
-// const useStyles = makeStyles({
-//   card: {
-//     maxWidth: 345
-//   },
-//   media: {
-//     height: 140
-//   }
-// });
 
 export default function VideoListItem(props) {
-  // const classes = useStyles();
+
+  const [shadow, setShadow] = useState(4);
+
 
   const opts = {
-    height: "310",
-    width: "540"
-    //   playerVars: { // https://developers.google.com/youtube/player_parameters
-    //   autoplay: 1
-    // }
+    height: "300vh",
+    width: "100%"
+
   };
 
+  const clickFalse = e => {
+    props.setTrigger(false);
+  };
+  const clickTrue = e => {
+    props.setTrigger(true);
+  };
+  
+  const triggerShadow = e => {
+    setShadow(6);
+  };
+
+  const unTriggerShadow = e => {
+    setShadow(4);
+  };
+  
   return (
-    <div>
-      <Card>
-        <Box>
-          <YouTube videoId={props.video.file} opts={opts}></YouTube>
-        </Box>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {props.video.level} {props.video.instrument}
-          </Typography>
-        </CardContent>
-        <CardActionArea>
+    <Grow
+    in={true}
+    onMouseEnter={e => {
+      triggerShadow(e);
+    }}
+    onMouseLeave={e => {
+      unTriggerShadow(e);
+    }}
+  >
+    <Card
+      elevation={shadow}
+      style={{
+        minWidth: "300px",
+        marginTop: "25px",
+        padding: "3%"
+      }}
+    >
+      <Typography gutterBottom variant="h5" component="h2">
+        {`${props.teacher.first_name}  ${props.teacher.last_name}`}{props.instrument === "Select" && ` - ${props.video.instrument}` }
+      </Typography>
+
+      <YouTube videoId={props.video.file} opts={opts}></YouTube>
+
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+        justify="space-evenly"
+        style={{marginTop: "1em"}}
+      >
+        <Grid item>
           <Button size="small" color="primary">
-            <Link to={`/teachers/${props.teacher.id}`}>
-              View {props.teacher.first_name}'s Profile
+            <Link
+              to={{
+                pathname: `/teachers/${props.teacher.id}`,
+                // sending teacher id as state to /teachers/
+                state: { teacher: props.teacher.id }
+              }}
+              onClick={e => {
+                clickTrue(e);
+              }}
+              style={{ color: "black", textDecoration: "none" }}
+            >
+              View Profile
             </Link>
           </Button>
-        </CardActionArea>
+        </Grid>
+        <Grid item>
+          <Button size="small" color="primary">
+            <Link
+              to={{
+                pathname: `/teachers/${props.teacher.id}`,
+                state: { teacher: props.teacher.id }
+              }}
+              onClick={e => {
+                clickFalse(e);
+              }}
+              style={{ color: "black", textDecoration: "none" }}
+
+            >
+              Book Now
+            </Link>
+          </Button>
+        </Grid>
+      </Grid>
       </Card>
-    </div>
+    </Grow>
   );
 }

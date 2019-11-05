@@ -16,7 +16,9 @@ import {
   InputLabel,
   OutlinedInput,
   IconButton,
-  Divider
+  Divider,
+  Avatar,
+  Box
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -62,6 +64,7 @@ export default function EditProfile(props) {
   const [email, setEmail] = useState("");
   const [tagline, setTagline] = useState("");
   const [bio, setBio] = useState("");
+  const [profilePic, setProfilePic] = useState("");
   const [courses, setCourses] = useState([]);
   const [instrument, setInstrument] = useState("");
   const [level, setLevel] = useState("");
@@ -102,7 +105,7 @@ export default function EditProfile(props) {
 
   const videoSpecs = {
     height: "200",
-    width: "300"
+    width: "340"
   };
 
   const fetchTeacherInfo = () => {
@@ -117,6 +120,7 @@ export default function EditProfile(props) {
       setBio(data.bio);
       setCourses(currentCourses);
       setVideos(data.videos);
+      setProfilePic(data.profile_pic)
     });
   };
 
@@ -231,8 +235,8 @@ export default function EditProfile(props) {
     <div>
       <CssBaseline />
       <Container className={classes.container}>
-        <Card style={{ padding: "5%", borderRadius: 10 }} elevation={4}>
-          <Typography variant="h3">Edit Profile</Typography>
+        <Card style={{ padding: "5%", borderRadius: 7 }} elevation={4}>
+          <Typography variant="h4">Profile</Typography>
 
           <Grid container spacing={2} className={classes.gridContainer}>
             <Grid item xs={12} sm={6} md={4}>
@@ -277,11 +281,22 @@ export default function EditProfile(props) {
                   label="Bio"
                   value={bio}
                   onChange={e => setBio(e.target.value)}
-                  rows="4"
+                  rows="5"
                   className={classes.formControl}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
+                  <TextField
+                    type="url"
+                    label="Profile Pic Url"
+                    variant="outlined"
+                    value={profilePic}
+                    onChange={e => setProfilePic(e.target.value)}
+                    className={classes.formControl}
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     type="text"
@@ -293,17 +308,17 @@ export default function EditProfile(props) {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    variant="outlined"
-                    style={{ marginTop: "1.2em" }}
-                    onClick={e => editProfile(e, id)}
-                  >
-                    Edit Teacher
-                  </Button>
-                </Grid>
               </Grid>
             </Grid>
+
+            <Button
+              variant="outlined"
+              style={{ marginTop: "1.2em" }}
+              onClick={e => editProfile(e, id)}
+              >
+              Edit P
+            </Button>
+
           </Grid>
 
           {/* <label> */}
@@ -314,7 +329,7 @@ export default function EditProfile(props) {
           <Divider variant="middle" />
 
           {/* //!COURSES */}
-          <Typography variant="h4" style={{ marginTop: "0.4em" }}>
+          <Typography variant="h4" style={{ marginTop: "1em" }}>
             {" "}
             Courses{" "}
           </Typography>
@@ -451,7 +466,7 @@ export default function EditProfile(props) {
 
           {/* //!VIDEOS */}
 
-          <Typography variant="h4" style={{ marginTop: "0.4em" }}>
+          <Typography variant="h4" style={{ marginTop: "1em" }}>
             Videos
           </Typography>
 
@@ -459,11 +474,17 @@ export default function EditProfile(props) {
             {videos.map((video, i) => {
               return (
                 <Grid item key={i} xs={12} sm={6} md={4} lg={4}>
-                  <YouTube videoId={video.file} opts={videoSpecs} />
-                  {video.level} {video.instrument}
-                  <Button onClick={e => destroyVideo(e, video.id)}>
-                    Remove Video
-                  </Button>
+                  <Card>
+                  <YouTube fullWidth videoId={video.file} opts={videoSpecs} />
+                    <Box style={{display: "flex", justifyContent: "space-between"}}>
+                      <Box style={{marginLeft: "40%"}}>
+                        <Typography variant="h6" >{video.instrument}</Typography>
+                      </Box>
+                      <IconButton aria-label="delete">
+                        <DeleteIcon fontSize="small" onClick={e => destroyVideo(e, video.id)}/>
+                      </IconButton>
+                    </Box>
+                  </Card>
                 </Grid>
               );
             })}
@@ -501,25 +522,6 @@ export default function EditProfile(props) {
               </TextField>
             </Grid>
             <Grid item xs={6} sm={2}>
-              <TextField
-                select
-                label="Level"
-                variant="outlined"
-                onChange={e => setVideoLevel(e.target.value)}
-                value={videoLevel}
-                className={classes.formControl}
-                fullWidth
-              >
-                {levels.map((level, i) => {
-                  return (
-                    <MenuItem key={i} value={level}>
-                      {level}
-                    </MenuItem>
-                  );
-                })}
-              </TextField>
-            </Grid>
-            <Grid item xs={6} sm={2}>
               <Button
                 onClick={e => addVideo(e, id)}
                 variant="outlined"
@@ -530,12 +532,9 @@ export default function EditProfile(props) {
             </Grid>
           </Grid>
 
-          <Button onClick={e => addVideo(e, id)}>Add Video</Button>
         </Card>
       </Container>
 
-      {/* {error}
-      </Container> */}
     </div>
   );
 }

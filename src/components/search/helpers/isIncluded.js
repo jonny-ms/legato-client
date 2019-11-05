@@ -9,12 +9,18 @@ export function isTeacherNameIncluded(teacherName, teacher) {
   return false;
 }
 
-export function isLevelIncluded(level, teacher) {
+export function isLevelIncluded(level, instrument, teacher) {
   if (level === "Select") {
     return true;
   }
-  if (teacher.courses.some(course => course.level === level)) {
-    return true;
+  if (instrument !== "Select") {
+    if (teacher.courses.some(course => course.instrument === instrument && course.level === level)) {
+      return true
+    }
+  } else {
+    if (teacher.courses.some(course => course.level === level)) {
+      return true;
+    }
   }
   return false;
 }
