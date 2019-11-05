@@ -226,7 +226,14 @@ export default function SearchBar(props) {
       </Card>
 
       {isVideo && (
-        <div className={classes.root}>
+        <div style={{marginLeft: "16px", marginRight: "16px"}}>
+          <Grid
+            container
+            spacing={2}
+            direction="row"
+            alignItems="baseline"
+          >
+
           {filteredTeachers.map(
             teacher =>
               teacher.videos &&
@@ -237,21 +244,25 @@ export default function SearchBar(props) {
                   }
                 })
                 .map((video, i) => (
-                  <GridList key={i} cellHeight={180}>
+                  <Grid item key={i} 
+                  xs={12} md={4}
+                  >
                     <VideoListItem
                       key={i}
                       video={video}
                       teacher={teacher}
+                      instrument={instrument}
                       setTrigger={props.setTrigger}
                     />
-                  </GridList>
+                  </Grid>
                 ))
           )}
+          </Grid>
         </div>
       )}
 
       {isProfile && (
-        <div>
+        <div  >
           <Grid
             container
             direction="row"
