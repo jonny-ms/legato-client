@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   card: {
     padding: "5%",
@@ -28,7 +28,7 @@ export default function RegisterForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [error, setError] = useState(false)
+  const [error, setError] = useState("")
 
   const register = (e) => {
     e.preventDefault()
@@ -48,21 +48,21 @@ export default function RegisterForm(props) {
         console.log(resp)
       })
     } else {
-      setError(true)
+      setError("Empty field!")
     }
   };
 
   return(
-    <Container maxWidth="sm" className={classes.container}>
-      <Card elevation={4} className={classes.card}>
+    <Container maxWidth="sm" className={classes.container} >
+      <Card elevation={4} className={classes.card} >
         <Typography variant="h4">
           Register as a {props.userType}
         </Typography>
 
-          <form className={classes.form} onClick={(e) => register(e)}>
+          <form className={classes.form}>
             <TextField
-              error={error && firstName === ""}
-              helperText={error && firstName === "" ? 'Empty field!' : ' '}
+              error={error === "Empty field!" && firstName === ""}
+              helperText={error === "Empty field!" && firstName === "" ? 'Empty field!' : ' '}
               variant="outlined"
               label="First Name"
               type="text"
@@ -73,8 +73,8 @@ export default function RegisterForm(props) {
               required />
 
             <TextField
-              error={error && lastName === ""}
-              helperText={error && lastName === "" ? 'Empty field!' : ' '}
+              error={error === "Empty field!" && lastName === ""}
+              helperText={error === "Empty field!" && lastName === "" ? 'Empty field!' : ' '}
               variant="outlined"
               label="Last Name"
               type="text"
@@ -85,8 +85,8 @@ export default function RegisterForm(props) {
               required />
 
             <TextField
-              error={error && email === ""}
-              helperText={error && email === "" ? 'Empty field!' : ' '}
+              error={error === "Empty field!" && email === ""}
+              helperText={error === "Empty field!" && email === "" ? 'Empty field!' : ' '}
               variant="outlined"
               label="Email"
               type="email"
@@ -97,8 +97,8 @@ export default function RegisterForm(props) {
               required />
 
             <TextField
-              error={error && password === ""}
-              helperText={error && password === "" ? 'Empty field!' : ' '}
+              error={error === "Empty field!"&& password === ""}
+              helperText={error === "Empty field!" && password === "" ? 'Empty field!' : ' '}
               variant="outlined"
               label="Password"
               type="password"
@@ -109,8 +109,8 @@ export default function RegisterForm(props) {
               required />
 
             <TextField
-              error={error && passwordConfirmation === ""}
-              helperText={error && passwordConfirmation === "" ? 'Empty field!' : ' '}
+              error={error === "Empty field!" && passwordConfirmation === ""}
+              helperText={error === "Empty field!" && passwordConfirmation === "" ? 'Empty field!' : ' '}
               variant="outlined"
               label="Password Confirmation"
               type="password"
@@ -120,7 +120,7 @@ export default function RegisterForm(props) {
               fullWidth
               required />
 
-            <Button type="submit" variant="outlined" color="primary">Register</Button>
+            <Button type="submit" variant="outlined" color="primary" onClick={(e) => register(e)}>Register</Button>
             
         </form>
       </Card>

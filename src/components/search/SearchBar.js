@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     flexWrap: "wrap",
     justifyContent: "space-around",
     overflow: "hidden",
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
   },
   gridList: {
     width: 500,
@@ -133,7 +133,7 @@ export default function SearchBar(props) {
   const classes = useStyles();
 
   return (
-    <div className="search">
+    <div style={{paddingBottom: "40px"}}>
       <Paper>
         <Tabs
           value={tab}
