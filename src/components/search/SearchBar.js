@@ -81,28 +81,21 @@ export default function SearchBar(props) {
 
   const instruments = [
     "Select",
-    "Accordion",
     "Bassoon",
     "Cello",
     "Clarinet",
     "Double bass",
     "Drums",
-    "Euphonium",
     "Flute",
     "French horn",
     "Guitar",
-    "Harp",
-    "Harpsichord",
     "Oboe",
     "Organ",
     "Percussion",
     "Piano",
-    "Recorder",
     "Saxophone",
-    "Speech arts and drama",
     "Trombone",
     "Trumpet",
-    "Tuba",
     "Viola",
     "Violin",
     "Voice"
@@ -114,7 +107,7 @@ export default function SearchBar(props) {
     let check = false;
     if (
       isTeacherNameIncluded(name, teacher) &&
-      isLevelIncluded(level, teacher) &&
+      isLevelIncluded(level, instrument, teacher) &&
       isInstrumentIncluded(instrument, teacher) &&
       isRateIncluded(rate, teacher)
     ) {
