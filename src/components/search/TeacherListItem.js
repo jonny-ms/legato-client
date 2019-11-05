@@ -27,7 +27,7 @@ const useStyles = makeStyles({
 });
 
 export default function TeacherListItem(props) {
-  // console.log("props from TeacherListItem.js: ", props);
+  console.log("props from TeacherListItem.js: ", props);
   const [shadow, setShadow] = useState(4);
   const classes = useStyles();
 
@@ -98,7 +98,7 @@ export default function TeacherListItem(props) {
               >
                 <Grid>
                   <Avatar
-                    alt="Remy Sharp"
+                    alt={props.teacher.first_name}
                     src={props.teacher.profile_pic}
                     className={classes.bigAvatar}
                   />

@@ -13,7 +13,9 @@ import {
   InputLabel,
   OutlinedInput,
   InputAdornment,
-  Grid
+  Grid,
+  Card,
+  Typography
 } from "@material-ui/core";
 import GridList from "@material-ui/core/GridList";
 
@@ -42,9 +44,9 @@ const useStyles = makeStyles(theme => ({
     color: "rgba(255, 255, 255, 0.54)"
   },
   formControl: {
-    margin: theme.spacing(1)
-    // minWidth: 80,
-    // width: "80%"
+    margin: theme.spacing(1),
+    minWidth: 120,
+    width: "80%"
   },
   searchBar: {
     marginTop: theme.spacing(2),
@@ -52,6 +54,9 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     alignItems: "center",
     justify: "center"
+  },
+  card: {
+    margin: theme.spacing(2)
   }
 }));
 
@@ -102,7 +107,7 @@ export default function SearchBar(props) {
     let check = false;
     if (
       isTeacherNameIncluded(name, teacher) &&
-      isLevelIncluded(level, teacher) &&
+      isLevelIncluded(level, instrument, teacher) &&
       isInstrumentIncluded(instrument, teacher) &&
       isRateIncluded(rate, teacher)
     ) {
@@ -142,8 +147,12 @@ export default function SearchBar(props) {
         </Tabs>
       </Paper>
 
+    <Card className={classes.card} elevate={4}>
+      <Typography variant="h5" style={{marginTop: "1em"}}>
+        Search by:
+      </Typography>
       <Grid container spacing={3} className={classes.searchBar}>
-        <Grid item xs={8} sm={4}>
+        <Grid item xs={7} sm={4}>
           <TextField
             className={classes.formControl}
             type="text"
@@ -152,8 +161,11 @@ export default function SearchBar(props) {
             onChange={event => setName(event.target.value)}
           />
         </Grid>
-        <Grid item xs={4} sm={2}>
-          <FormControl variant="outlined" className={classes.formControl}>
+        <Grid item xs={3} sm={2}>
+          <FormControl variant="outlined" 
+            className={classes.formControl}
+            style={{minWidth: 100}}
+            >
             <InputLabel>Max Rate</InputLabel>
             <OutlinedInput
               type="number"
@@ -204,47 +216,46 @@ export default function SearchBar(props) {
           </TextField>
         </Grid>
       </Grid>
+      </Card>
 
       {isVideo && (
-        <div className={classes.root}>
+        <div style={{marginLeft: "16px", marginRight: "16px"}}>
+          <Grid
+            container
+            spacing={2}
+            direction="row"
+            alignItems="baseline"
+          >
+
           {filteredTeachers.map(
             teacher =>
               teacher.videos &&
               teacher.videos
                 .filter(video => {
-                  if (instrument !== "Select" && level !== "Select") {
-                    if (
-                      video.instrument === instrument &&
-                      video.level === level
-                    )
-                      return video;
-                  } else if (instrument === "Select") {
-                    if (video.level === level || level === "Select")
-                      return video;
-                  } else if (level === "Select") {
-                    if (
-                      video.instrument === instrument ||
-                      instrument === "Select"
-                    )
-                      return video;
+                  if (instrument === "Select" || video.instrument === instrument) {
+                    return video
                   }
                 })
                 .map((video, i) => (
-                  <GridList key={i} cellHeight={180}>
+                  <Grid item key={i} 
+                  xs={12} md={4}
+                  >
                     <VideoListItem
                       key={i}
                       video={video}
                       teacher={teacher}
+                      instrument={instrument}
                       setTrigger={props.setTrigger}
                     />
-                  </GridList>
+                  </Grid>
                 ))
           )}
+          </Grid>
         </div>
       )}
 
       {isProfile && (
-        <div>
+        <div  >
           <Grid
             container
             direction="row"

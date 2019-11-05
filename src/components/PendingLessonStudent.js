@@ -33,12 +33,7 @@ const PendingLessonStudent = props => {
       <CardContent>
         <Grid container direction="row">
           <Grid item xs={8} sm={10}>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-              variant="h5"
-            >
+            <Typography className={classes.title} gutterBottom variant="h5">
               {props.teacher}
             </Typography>
             <Typography variant="body2" component="p">
