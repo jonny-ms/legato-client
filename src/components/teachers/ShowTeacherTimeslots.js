@@ -20,7 +20,7 @@ const ShowTeacherTimeslots = props => {
       method: "get",
       withCredentials: true
     }).then(({ data }) => {
-      setVideos(data.videos)
+      setVideos(data.video)
       setTeacher(data.teachers);
       setCourses(data.courses)
     });

@@ -155,26 +155,6 @@ export default function TeacherProfile(props) {
           </Box>
 
           <Divider variant="middle" />
-
-          {/* <Grid container spacing={2} className={classes.videoContainer}>
-            {videos.map((video, i) => {
-              return (
-                <Grid item key={i} xs={12} sm={6} md={4} lg={4}>
-                  <Card>
-                  <YouTube fullWidth videoId={video.file} opts={videoSpecs} />
-                    <Box style={{display: "flex", justifyContent: "space-between"}}>
-                      <Box style={{marginLeft: "40%"}}>
-                        <Typography variant="h6" >{video.instrument}</Typography>
-                      </Box>
-                      <IconButton aria-label="delete">
-                        <DeleteIcon fontSize="small" onClick={e => destroyVideo(e, video.id)}/>
-                      </IconButton>
-                    </Box>
-                  </Card>
-                </Grid>
-              );
-            })}
-          </Grid> */}
         </Card>
       </Container>
     </div>
