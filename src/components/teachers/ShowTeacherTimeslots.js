@@ -10,6 +10,8 @@ const ShowTeacherTimeslots = props => {
   const [showCalendar, setShowCalendar] = useState(true);
   const [showProfile, setShowProfile] = useState(false);
   const [tab, setTab] = useState(props.trigger ? 0 : 1);
+  const [courses, setCourses] = useState()
+  const [videos, setVideos] = useState()
 
   const teacherID = props.history.location.state;
 
@@ -18,7 +20,9 @@ const ShowTeacherTimeslots = props => {
       method: "get",
       withCredentials: true
     }).then(({ data }) => {
+      setVideos(data.videos)
       setTeacher(data.teachers);
+      setCourses(data.courses)
       setShowProfile(props.trigger);
       setShowCalendar(!props.trigger);
     });
@@ -42,6 +46,8 @@ const ShowTeacherTimeslots = props => {
     setTab(newValue);
   };
 
+  console.log(teacher)
+
   return (
     <div>
       <Paper>
@@ -63,7 +69,7 @@ const ShowTeacherTimeslots = props => {
       )}
       {showProfile && teacher && (
         <div>
-          <TeacherProfile teacher={teacher} />
+          <TeacherProfile teacher={teacher} courses={courses} mobile={props.mobile} videos={videos} />
         </div>
       )}
     </div>

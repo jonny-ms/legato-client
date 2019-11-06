@@ -204,7 +204,7 @@ export default function EditProfile(props) {
     if (ampersandPosition !== -1) {
       videoId = videoId.substring(0, ampersandPosition);
     }
-    if (videoInstrument && videoLevel) {
+    if (videoInstrument) {
       axios(`/api/videos`, {
         method: "post",
         withCredentials: true,
@@ -213,13 +213,11 @@ export default function EditProfile(props) {
             teacher_id: id,
             file: videoId,
             instrument: videoInstrument,
-            level: videoLevel
           }
         }
       }).then(() => {
         fetchTeacherInfo();
         setVideoInstrument("");
-        setVideoLevel("");
         setUrl("");
       });
     } else {
