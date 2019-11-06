@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Card, Typography, Paper, CardActionArea, CardContent } from "@material-ui/core";
+import { Grid, Card, Typography, Paper, CardActionArea, CardContent, Divider } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { fontSize } from "@material-ui/system";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,11 +22,11 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "rgba(0,0,0, 0.4)", /* Black w/opacity/see-through */
     color: "white",
     fontWeight: "bold",
-    border: "2px solid #f1f1f1",
+    border: "2px solid silver",
     zIndex: 2,
     width: "60%",
     margin: "auto",
-    borderRadius: 10,
+    borderRadius: 15,
     height: "100%"
   },
   becoming: {
@@ -39,10 +40,13 @@ const useStyles = makeStyles(theme => ({
     fontWeight: "bold",
     margin: "auto",
     width: "50%",
+    padding: "2%",
+    textAlign: "left",
+    fontSize: 20,
     position: "absolute",
     top: "20%",
-    right: "9%",
-    padding: "2%"
+    left: "23%",
+    borderRadius: 7
   },
   mobileAbout: {
     backgroundColor: "rgb(0,0,0)", /* Fallback color */
@@ -54,7 +58,22 @@ const useStyles = makeStyles(theme => ({
     padding: "4%",
     position: "absolute",
     top: "20%",
-    left: "17%"
+    left: "17%",
+    borderRadius: 7
+
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  pos: {
+    marginBottom: 12,
+  },
+  divider: {
+    marginTop: 15,
+    marginBottom: 15,
+    height: "3px"
   }
   
 }))
@@ -63,21 +82,51 @@ const useStyles = makeStyles(theme => ({
 export default function Landing(props) {
   const classes = useStyles();
 
+  const bull = <span className={classes.bullet}>•</span>;
+
   return(
     <Paper className={classes.container}>
 
 {props.mobile &&
 <Card className={classes.mobileAbout}>
-  <Typography variant="h4">
-    Connecting music students and teachers.
+<Typography variant="h3" component="h1" style={{marginBottom: "2px"}}>
+    le
+    {bull}
+    ga
+    {bull}
+    to
+  </Typography>
+  <Divider className={classes.divider} />
+
+  <Typography variant="h5" component="p">
+    to connect music students and teachers.
   </Typography>
 </Card>
 }
 {!props.mobile &&
   <Card className={classes.about}>
-  <Typography variant="h4">
-    At Legato, our goal is to connect those who want to learn with those who want to teach.
+  <CardContent>
+  <Typography variant="h3" component="h1" style={{marginBottom: "2px"}}>
+    le
+    {bull}
+    ga
+    {bull}
+    to
   </Typography>
+  <Typography className={classes.pos} variant="h6" style={{color: "silver"}}>
+    adverb
+  </Typography>
+  <Typography variant="h5" component="p">
+    in a smooth flowing manner, without breaks between notes.
+  </Typography>
+  <Divider className={classes.divider} />
+  <Typography className={classes.pos} variant="h6" style={{color: "silver"}}>
+    our mission
+  </Typography>
+  <Typography variant="h5" component="p">
+    to connect music students and teachers.
+  </Typography>
+  </CardContent>
   </Card>
 }
 
