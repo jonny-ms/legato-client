@@ -7,8 +7,6 @@ import Landing from "./Landing";
 const Home = props => {
   const [teachers, setTeachers] = useState([]);
 
-  console.log("props.user: ", props.user);
-
   const fetchItems = async () => {
     const data = await axios("/api/teachers", { withCredentials: true });
 

@@ -30,7 +30,6 @@ const App = () => {
     fetchItems();
     if (window.innerWidth < 680) {
       setMobile(true);
-      console.log("mobile view");
     }
   }, []);
 
@@ -63,7 +62,6 @@ const App = () => {
                 {...props}
                 withCredentials={true}
                 trigger={trigger}
-                mobile={mobile}
               />
             )}
           />
