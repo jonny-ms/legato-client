@@ -161,7 +161,6 @@ class CalendarForBooking extends Component {
             }
           }
         }).then(resp => {
-          console.log(sortedRequests);
           events = events.filter(event => {
             return event.title !== "Booking Request";
           });

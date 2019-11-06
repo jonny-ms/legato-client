@@ -86,10 +86,6 @@ export default function SearchBar(props) {
   const [rate, setRate] = useState("");
   // console.log("props from SearchBar.js: ", props);
 
-  // const getTimeSlots = () => {
-  //   axios(`/teachers/${}`)
-  // }
-
   const [isVideo, setIsVideo] = useState(false);
   const [isProfile, setIsProfile] = useState(true);
 

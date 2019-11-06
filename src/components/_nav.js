@@ -2,9 +2,9 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 import { Link, Redirect } from "react-router-dom";
 
 import axios from "axios";
-import { Button, AppBar, Toolbar, IconButton, MenuItem, Menu, Grid } from "@material-ui/core";
+import { Button, AppBar, Toolbar, IconButton, MenuItem, Menu, Grid, Avatar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { MenuIcon, AccountCircle } from "@material-ui/icons";
+import { MenuIcon } from "@material-ui/icons";
 
 import "../App.css";
 
@@ -12,12 +12,12 @@ import logo from "./logo.png";
 
 export default function Nav(props) {
   const [redirect, setRedirect] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const red = () => {
     return <Redirect to="/" />;
   };
 
-  // console.log("initial redirect: ", redirect);
   const logout = e => {
     e.preventDefault();
     axios(`/api/logout`, {
@@ -44,16 +44,7 @@ export default function Nav(props) {
   }));
 
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
-  // console.log("open:", open);
-  // console.log("props.anchorEl: ", props.anchorEl);
-
-  const handleChange = event => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -78,7 +69,7 @@ export default function Nav(props) {
   };
 
   return (
-    <AppBar position="static" title={<img src="./logo.png" />}>
+    <AppBar position="static" title={<img src="./logo.png"  alt="Logo" />}>
       <Toolbar>
         <Grid
           container
@@ -87,8 +78,13 @@ export default function Nav(props) {
           style={{ alignItems: "center" }}
         >
           {/* 1. Legato Item */}
-          <Button style={{ color: "white" }} component={Link} to="/">
-            <img src={logo} style={{ height: 40 }} />
+          <Button
+            style={{ color: "white" }}
+            component={Link}
+            to="/"
+            title="Legato"
+          >
+            <img alt="Logo" src={logo} style={{ height: 40 }} />
           </Button>
 
           {/* 2. New Student & Teacher */}
@@ -118,6 +114,7 @@ export default function Nav(props) {
                         onClick={handleCloseMenuMobile}
                         component={Link}
                         to="/students/new"
+                        title="New Student"
                       >
                         New Student
                       </MenuItem>
@@ -125,6 +122,7 @@ export default function Nav(props) {
                         onClick={handleCloseMenuMobile}
                         component={Link}
                         to={"/teachers/new"}
+                        title="New Teacher"
                       >
                         New Teacher
                       </MenuItem>
@@ -132,6 +130,7 @@ export default function Nav(props) {
                         onClick={handleCloseMenuMobile}
                         component={Link}
                         to="/login"
+                        title="Login"
                       >
                         Login
                       </MenuItem>
@@ -149,6 +148,7 @@ export default function Nav(props) {
                             style={{ color: "white" }}
                             component={Link}
                             to="/students/new"
+                            title="New Student"
                           >
                             New Student
                           </Button>
@@ -159,6 +159,7 @@ export default function Nav(props) {
                             style={{ color: "white" }}
                             component={Link}
                             to="/teachers/new"
+                            title="New Teacher"
                           >
                             New Teacher
                           </Button>
@@ -171,6 +172,7 @@ export default function Nav(props) {
                         style={{ color: "white" }}
                         component={Link}
                         to="/login"
+                        title="Login"
                       >
                         Login
                       </Button>
@@ -188,6 +190,7 @@ export default function Nav(props) {
                       style={{ color: "white" }}
                       component={Link}
                       to="/teachers/schedule"
+                      title="Dashboard"
                     >
                       Dashboard
                     </Button>
@@ -200,8 +203,14 @@ export default function Nav(props) {
                       style={{ color: "white" }}
                       component={Link}
                       to="/students/"
+                      title="Dashboard"
                     >
                       Dashboard
+                    </Button>
+                  )}
+                  {!props.mobile && (
+                    <Button style={{ color: "white" }} variant="disabled">
+                      {props.user.first_name}
                     </Button>
                   )}
                   <IconButton
@@ -213,7 +222,11 @@ export default function Nav(props) {
                     className={classes.menuButton}
                     edge="start"
                   >
-                    <AccountCircle />
+                    <Avatar
+                      title={props.user.first_name}
+                      src={props.user.profile_pic}
+                      className={classes.avatar}
+                    />
                   </IconButton>
                   <Menu
                     id="menu-appbar"
@@ -236,17 +249,18 @@ export default function Nav(props) {
                           onClick={handleClose}
                           component={Link}
                           to="/teachers/edit"
+                          title="Edit Profile"
                         >
                           Edit Profile
                         </MenuItem>
-                        <MenuItem onClick={e => logout(e)}>
+                        <MenuItem onClick={e => logout(e)} title="Logout">
                           {redirect && red()}
                           Logout
                         </MenuItem>
                       </div>
                     )}
                     {user.user.type === "Student" && (
-                      <MenuItem onClick={e => logout(e)}>
+                      <MenuItem onClick={e => logout(e)} title="Logout">
                         {redirect && red()}
                         Logout
                       </MenuItem>
