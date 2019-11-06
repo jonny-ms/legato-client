@@ -17,7 +17,6 @@ import {
   OutlinedInput,
   IconButton,
   Divider,
-  Avatar,
   Box
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -72,7 +71,6 @@ export default function EditProfile(props) {
   const [videos, setVideos] = useState([]);
   const [url, setUrl] = useState("");
   const [videoInstrument, setVideoInstrument] = useState("");
-  const [videoLevel, setVideoLevel] = useState("");
   const [error, setError] = useState("");
 
   const instruments = [

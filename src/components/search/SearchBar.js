@@ -17,7 +17,6 @@ import {
   Card,
   Typography
 } from "@material-ui/core";
-import GridList from "@material-ui/core/GridList";
 
 import { makeStyles } from "@material-ui/core/styles";
 

@@ -25,8 +25,7 @@ const useStyles = makeStyles(theme => ({
     height: "auto"
   },
   cards: {
-    backgroundColor: "rgb(0,0,0)" /* Fallback color */,
-    backgroundColor: "rgba(0,0,0, 0.4)" /* Black w/opacity/see-through */,
+    backgroundColor: "rgba(0,0,0, 0.4)",
     color: "white",
     fontWeight: "bold",
     border: "2px solid silver",
@@ -41,8 +40,7 @@ const useStyles = makeStyles(theme => ({
     top: "65%"
   },
   about: {
-    backgroundColor: "rgb(0,0,0)" /* Fallback color */,
-    backgroundColor: "rgba(0,0,0, 0.4)" /* Black w/opacity/see-through */,
+    backgroundColor: "rgba(0,0,0, 0.4)",
     color: "white",
     fontWeight: "bold",
     margin: "auto",
@@ -56,8 +54,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 7
   },
   mobileAbout: {
-    backgroundColor: "rgb(0,0,0)" /* Fallback color */,
-    backgroundColor: "rgba(0,0,0, 0.4)" /* Black w/opacity/see-through */,
+    backgroundColor: "rgba(0,0,0, 0.4)",
     color: "white",
     fontWeight: "bold",
     margin: "auto",

@@ -7,10 +7,6 @@ import {
   CardMedia,
   Typography,
   CssBaseline,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  IconButton,
   Divider,
   Avatar,
   Box
