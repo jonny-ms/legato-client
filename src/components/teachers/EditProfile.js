@@ -205,7 +205,6 @@ export default function EditProfile(props) {
       videoId = videoId.substring(0, ampersandPosition);
     }
     if (videoInstrument) {
-      console.log("just before axios call");
       axios(`/api/videos`, {
         method: "post",
         withCredentials: true,
