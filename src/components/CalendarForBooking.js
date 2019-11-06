@@ -180,8 +180,6 @@ class CalendarForBooking extends Component {
           });
         });
       }
-
-      // Set requested bookings to Pending Lesson
     }
   };
 

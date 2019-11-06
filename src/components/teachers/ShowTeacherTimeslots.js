@@ -19,13 +19,13 @@ const ShowTeacherTimeslots = props => {
       withCredentials: true
     }).then(({ data }) => {
       setTeacher(data.teachers);
-      setShowProfile(props.trigger);
-      setShowCalendar(!props.trigger);
     });
   };
 
   useEffect(() => {
     fetch();
+    setShowProfile(props.trigger);
+    setShowCalendar(!props.trigger);
   }, []);
 
   const showCalendarFunc = () => {
@@ -56,14 +56,14 @@ const ShowTeacherTimeslots = props => {
           <Tab label="Book a Lesson" onClick={e => showCalendarFunc(e)} />
         </Tabs>
       </Paper>
-      {showCalendar && (
-        <div className="calendar">
-          <CalendarForBooking teacherID={teacherID} />
-        </div>
-      )}
       {showProfile && teacher && (
         <div>
           <TeacherProfile teacher={teacher} />
+        </div>
+      )}
+      {showCalendar && (
+        <div className="calendar">
+          <CalendarForBooking teacherID={teacherID} />
         </div>
       )}
     </div>

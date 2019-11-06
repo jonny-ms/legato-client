@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Grid,
@@ -10,7 +10,6 @@ import {
   Divider
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { fontSize } from "@material-ui/system";
 
 const useStyles = makeStyles(theme => ({
   container: {
