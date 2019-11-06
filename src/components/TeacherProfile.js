@@ -1,13 +1,11 @@
-import React from "react";
+import React, {Fragment} from "react";
 import YouTube from "react-youtube";
 import {
   Container,
   Grid,
   Card,
+  CardMedia,
   Typography,
-  Button,
-  MenuItem,
-  InputAdornment,
   CssBaseline,
   FormControl,
   InputLabel,
@@ -53,7 +51,15 @@ export default function TeacherProfile(props) {
   const classes = useStyles();
 
   const teacher = props.teacher[0];
-  console.log(props.videos)
+
+  const videoSpecs = {
+    height: "250vh",
+    width: "100%"
+  };
+  const mobileVideoSpecs = {
+    height: "180vh",
+    width: "100%"
+  };
   
   return (
     <div style={{paddingBottom: "40px"}}>
@@ -92,7 +98,7 @@ export default function TeacherProfile(props) {
             <Divider variant="middle" />            
 
             <Box className={classes.textBox}>
-              <Typography gutterBottom variant={props.mobile ? "subtitle1" : "h4"} component="h2" style={{textAlign: "center"}}>
+              <Typography gutterBottom variant={props.mobile ? "h6" : "h4"} component="h2" style={{textAlign: "center"}}>
                 Bio
               </Typography>
               <Typography gutterBottom variant={props.mobile ? "subtitle1" : "h5"} component="h2" style={{textAlign: "justify"}}>
@@ -109,18 +115,34 @@ export default function TeacherProfile(props) {
             <Grid container>
             {props.courses.map((course, i) => {
               return (
-                <Grid container key={i} className={classes.courses}
+                <Grid container key={i}
                 direction="column"
                 justify="space-between"
-                alignItems="center">
+                alignItems={props.mobile ? "left" : "center"} >
                   <Grid item fullWidth xs={12} style={{marginTop: "5px"}}>
-                    <Typography
-                      align="left"
-                      variant={props.mobile ? "subtitle1" : "h5"}
-                    >
-                      {course.level} {course.instrument} for ${course.rate}
-                      /hour
-                    </Typography>
+                    {!props.mobile && 
+                      <Typography
+                        align="left"
+                        variant={"h5"}
+                      >
+                        {course.level} {course.instrument} for ${course.rate}
+                        /hour
+                      </Typography>
+                    }
+                    {props.mobile && 
+                    <Fragment>
+                        <Typography
+                        align="left"
+                        variant={"subtitle1"}
+                      > {course.level} {course.instrument}
+                      </Typography>
+                      <Typography 
+                        align="left"
+                        color="textSecondary">
+                        ${course.rate}/hour
+                      </Typography>
+                    </Fragment>              
+                    }
                   </Grid>
                 </Grid>
                 );
@@ -128,27 +150,26 @@ export default function TeacherProfile(props) {
               </Grid>
             </Box>
 
-            <Divider variant="middle" />
+            <Divider variant="middle" style={{marginBottom: "20px"}} />
 
-            {/* <Grid container spacing={2} className={classes.videoContainer}>
-            {videos.map((video, i) => {
+            <Typography gutterBottom variant={props.mobile ? "h6" : "h4"} component="h2">
+              Videos
+            </Typography>
+
+            <Grid container spacing={2} style={{marginTop: 5}}>
+            {props.videos.map((video, i) => {
               return (
-                <Grid item key={i} xs={12} sm={6} md={4} lg={4}>
+                <Grid item key={i} xs={12} sm={6} >
                   <Card>
-                  <YouTube fullWidth videoId={video.file} opts={videoSpecs} />
-                    <Box style={{display: "flex", justifyContent: "space-between"}}>
-                      <Box style={{marginLeft: "40%"}}>
-                        <Typography variant="h6" >{video.instrument}</Typography>
-                      </Box>
-                      <IconButton aria-label="delete">
-                        <DeleteIcon fontSize="small" onClick={e => destroyVideo(e, video.id)}/>
-                      </IconButton>
-                    </Box>
+                    <CardMedia >
+                      <YouTube fullWidth videoId={video.file} opts={props.mobile ? mobileVideoSpecs : videoSpecs} />
+                    </CardMedia>
+                    <Typography variant="h6" >{video.instrument}</Typography>
                   </Card>
                 </Grid>
               );
             })}
-          </Grid> */}
+          </Grid>
 
 
         </Card>

@@ -104,7 +104,7 @@ export default function EditProfile(props) {
   const levels = ["Select", "Beginner", "Intermediate", "Advanced"];
 
   const videoSpecs = {
-    height: "100%",
+    minHeight: "100%",
     width: "100%"
   };
 
