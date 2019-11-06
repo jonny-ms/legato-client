@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     backgroundImage: `url(https://s17026.pcdn.co/wp-content/uploads/sites/9/2017/06/Music-teacher.jpeg)`,
     backgroundSize: "cover",
-    // width: "100vw",
+    width: "100hw",
     height: "100vh"
   },
   backgroundImage: {
@@ -152,12 +152,12 @@ export default function Landing(props) {
 
       <Grid
         container
-        spacing={5}
+        spacing={0}
         direction="row"
         justify="center"
         className={classes.becoming}
       >
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} style={{ paddingTop: 10, paddingBottom: 10 }}>
           <Card className={classes.cards}>
             <CardActionArea component={Link} to="/students/new">
               <CardContent>
@@ -166,7 +166,7 @@ export default function Landing(props) {
             </CardActionArea>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} style={{ paddingTop: 10, paddingBottom: 10 }}>
           <Card className={classes.cards}>
             <CardActionArea component={Link} to="/teachers/new">
               <CardContent>
