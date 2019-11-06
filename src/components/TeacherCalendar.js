@@ -472,7 +472,7 @@ class TeacherCalendar extends Component {
                 <Button
                   onClick={this.submitTimeSlots}
                   variant={"contained"}
-                  style={{ backgroundColor: "green" }}
+                  style={{ backgroundColor: "green", color: "white" }}
                 >
                   Submit Availabilities
                 </Button>

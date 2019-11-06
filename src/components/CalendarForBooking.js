@@ -226,10 +226,20 @@ class CalendarForBooking extends Component {
       newEvents.push(newEvent);
     }
 
+    let areAnyCoursesSelected = false;
+    for (let event of newEvents) {
+      if (event.title === "Booking Request") {
+        areAnyCoursesSelected = true;
+      }
+    }
+
     this.setState({
       calendarEvents: newEvents,
-      eventSelected: true,
-      submitBackgroundColor: this.activeSubmit(true, this.state.courseSelected)
+      eventSelected: areAnyCoursesSelected,
+      submitBackgroundColor: this.activeSubmit(
+        areAnyCoursesSelected,
+        this.state.courseSelected
+      )
         ? true
         : false
     });
@@ -280,7 +290,8 @@ class CalendarForBooking extends Component {
                   style={{
                     backgroundColor: this.state.submitBackgroundColor
                       ? "green"
-                      : "grey"
+                      : "grey",
+                    color: this.state.submitBackgroundColor ? "white" : "black"
                   }}
                 >
                   Request a Lesson
