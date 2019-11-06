@@ -104,8 +104,8 @@ export default function EditProfile(props) {
   const levels = ["Select", "Beginner", "Intermediate", "Advanced"];
 
   const videoSpecs = {
-    height: "200",
-    width: "340"
+    height: "100%",
+    width: "100%"
   };
 
   const fetchTeacherInfo = () => {
@@ -120,7 +120,7 @@ export default function EditProfile(props) {
       setBio(data.bio);
       setCourses(currentCourses);
       setVideos(data.videos);
-      setProfilePic(data.profile_pic)
+      setProfilePic(data.profile_pic);
     });
   };
 
@@ -204,7 +204,8 @@ export default function EditProfile(props) {
     if (ampersandPosition !== -1) {
       videoId = videoId.substring(0, ampersandPosition);
     }
-    if (videoInstrument && videoLevel) {
+    if (videoInstrument) {
+      console.log("just before axios call");
       axios(`/api/videos`, {
         method: "post",
         withCredentials: true,
@@ -212,14 +213,12 @@ export default function EditProfile(props) {
           video: {
             teacher_id: id,
             file: videoId,
-            instrument: videoInstrument,
-            level: videoLevel
+            instrument: videoInstrument
           }
         }
       }).then(() => {
         fetchTeacherInfo();
         setVideoInstrument("");
-        setVideoLevel("");
         setUrl("");
       });
     } else {
@@ -232,7 +231,7 @@ export default function EditProfile(props) {
   }, []);
 
   return (
-    <div style={{paddingBottom: "40px"}}>
+    <div style={{ paddingBottom: "40px" }}>
       <CssBaseline />
       <Container className={classes.container}>
         <Card style={{ padding: "5%", borderRadius: 7 }} elevation={4}>
@@ -286,7 +285,7 @@ export default function EditProfile(props) {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-              <Grid item xs={12}>
+                <Grid item xs={12}>
                   <TextField
                     type="url"
                     label="Profile Pic Url"
@@ -315,10 +314,9 @@ export default function EditProfile(props) {
               variant="outlined"
               style={{ marginTop: "1.2em" }}
               onClick={e => editProfile(e, id)}
-              >
+            >
               Edit Profile
             </Button>
-
           </Grid>
 
           {/* <label> */}
@@ -358,8 +356,9 @@ export default function EditProfile(props) {
                             variant="h5"
                             style={{ marginTop: "0.4em", marginLeft: "5%" }}
                           >
-                            {course.level} {course.instrument} for {course.rate}
-                            $/hour
+                            {course.level} {course.instrument} for $
+                            {course.rate}
+                            /hour
                           </Typography>
                         </Grid>
                         <Grid item xs={2}>
@@ -475,13 +474,21 @@ export default function EditProfile(props) {
               return (
                 <Grid item key={i} xs={12} sm={6} md={4} lg={4}>
                   <Card>
-                  <YouTube fullWidth videoId={video.file} opts={videoSpecs} />
-                    <Box style={{display: "flex", justifyContent: "space-between"}}>
-                      <Box style={{marginLeft: "40%"}}>
-                        <Typography variant="h6" >{video.instrument}</Typography>
+                    <YouTube fullWidth videoId={video.file} opts={videoSpecs} />
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between"
+                      }}
+                    >
+                      <Box style={{ marginLeft: "40%" }}>
+                        <Typography variant="h6">{video.instrument}</Typography>
                       </Box>
                       <IconButton aria-label="delete">
-                        <DeleteIcon fontSize="small" onClick={e => destroyVideo(e, video.id)}/>
+                        <DeleteIcon
+                          fontSize="small"
+                          onClick={e => destroyVideo(e, video.id)}
+                        />
                       </IconButton>
                     </Box>
                   </Card>
@@ -512,13 +519,18 @@ export default function EditProfile(props) {
                 className={classes.formControl}
                 fullWidth
               >
-                {teacherInstruments.map((instrument, i) => {
-                  return (
-                    <MenuItem key={i} value={instrument}>
-                      {instrument}
-                    </MenuItem>
-                  );
-                })}
+                {teacherInstruments
+                  .filter(
+                    (instrument, i, teacherInstruments) =>
+                      teacherInstruments.indexOf(instrument) === i
+                  )
+                  .map((instrument, i) => {
+                    return (
+                      <MenuItem key={i} value={instrument}>
+                        {instrument}
+                      </MenuItem>
+                    );
+                  })}
               </TextField>
             </Grid>
             <Grid item xs={6} sm={2}>
@@ -531,10 +543,8 @@ export default function EditProfile(props) {
               </Button>
             </Grid>
           </Grid>
-
         </Card>
       </Container>
-
     </div>
   );
 }
