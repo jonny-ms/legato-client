@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
   },
   becoming: {
     position: "absolute",
-    top: "65%"
+    top: "70%"
   },
   about: {
     backgroundColor: "rgb(0,0,0)" /* Fallback color */,
