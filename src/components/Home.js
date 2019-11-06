@@ -6,27 +6,18 @@ import Landing from "./Landing";
 
 const Home = props => {
   const [teachers, setTeachers] = useState([]);
-  // console.log("props from Home.js: ", props);
-  // const [user, setUser] = useState({});
 
   console.log("props.user: ", props.user);
 
   const fetchItems = async () => {
     const data = await axios("/api/teachers", { withCredentials: true });
-    // console.log("data", JSON.parse(data.data.teachers));
 
     setTeachers(JSON.parse(data.data.teachers));
-    // const user = data.data.user;
-    // user.type = data.data.type;
-    // setUser(user);
-    // setTeachers(data.data);
   };
 
   useEffect(() => {
     fetchItems();
   }, []);
-  // console.log("user Home.js: ", user);
-  console.log("user", props.user);
   return (
     <div className="App">
       <div>

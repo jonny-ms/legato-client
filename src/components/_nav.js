@@ -28,7 +28,6 @@ export default function Nav(props) {
     return <Redirect to="/" />;
   };
 
-  // console.log("initial redirect: ", redirect);
   const logout = e => {
     e.preventDefault();
     axios(`/api/logout`, {
@@ -59,9 +58,6 @@ export default function Nav(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  // console.log("open:", open);
-  // console.log("props.anchorEl: ", props.anchorEl);
-
   const handleChange = event => {
     setAuth(event.target.checked);
   };
@@ -87,7 +83,6 @@ export default function Nav(props) {
   const handleCloseMenuMobile = () => {
     setAnchorElMenuMobile(null);
   };
-  // console.log("event: ", event);
 
   return (
     <AppBar position="static" title={<img src="./logo.png" />}>
