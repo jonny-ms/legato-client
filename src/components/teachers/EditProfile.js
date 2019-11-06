@@ -104,8 +104,8 @@ export default function EditProfile(props) {
   const levels = ["Select", "Beginner", "Intermediate", "Advanced"];
 
   const videoSpecs = {
-    height: "200",
-    width: "340"
+    height: "100%",
+    width: "100%"
   };
 
   const fetchTeacherInfo = () => {
@@ -212,14 +212,12 @@ export default function EditProfile(props) {
           video: {
             teacher_id: id,
             file: videoId,
-            instrument: videoInstrument,
-            level: videoLevel
+            instrument: videoInstrument
           }
         }
       }).then(() => {
         fetchTeacherInfo();
         setVideoInstrument("");
-        setVideoLevel("");
         setUrl("");
       });
     } else {
@@ -357,8 +355,9 @@ export default function EditProfile(props) {
                             variant="h5"
                             style={{ marginTop: "0.4em", marginLeft: "5%" }}
                           >
-                            {course.level} {course.instrument} for {course.rate}
-                            $/hour
+                            {course.level} {course.instrument} for $
+                            {course.rate}
+                            /hour
                           </Typography>
                         </Grid>
                         <Grid item xs={2}>
@@ -519,13 +518,18 @@ export default function EditProfile(props) {
                 className={classes.formControl}
                 fullWidth
               >
-                {teacherInstruments.map((instrument, i) => {
-                  return (
-                    <MenuItem key={i} value={instrument}>
-                      {instrument}
-                    </MenuItem>
-                  );
-                })}
+                {teacherInstruments
+                  .filter(
+                    (instrument, i, teacherInstruments) =>
+                      teacherInstruments.indexOf(instrument) === i
+                  )
+                  .map((instrument, i) => {
+                    return (
+                      <MenuItem key={i} value={instrument}>
+                        {instrument}
+                      </MenuItem>
+                    );
+                  })}
               </TextField>
             </Grid>
             <Grid item xs={6} sm={2}>

@@ -75,7 +75,7 @@ const PendingLessonTeacher = props => {
                   <Button
                     variant={"contained"}
                     className={classes.button}
-                    style={{ backgroundColor: "green" }}
+                    style={{ backgroundColor: "green", color: "white" }}
                     onClick={() => props.acceptBooking(props.currentLessonID)}
                   >
                     Confirm

@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     flexWrap: "wrap",
     justifyContent: "space-around",
     overflow: "hidden",
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.paper
   },
   gridList: {
     width: 500,
@@ -59,6 +59,26 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(2)
   }
 }));
+
+function shuffle(array) {
+  var currentIndex = array.length,
+    temporaryValue,
+    randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
 
 export default function SearchBar(props) {
   const [name, setName] = useState("");
@@ -116,6 +136,8 @@ export default function SearchBar(props) {
     return check;
   });
 
+  let filteredTeachersRandomOrder = shuffle(filteredTeachers);
+
   const searchByVideo = e => {
     e.preventDefault();
     e.stopPropagation();
@@ -133,7 +155,7 @@ export default function SearchBar(props) {
   const classes = useStyles();
 
   return (
-    <div style={{paddingBottom: "40px"}}>
+    <div style={{ paddingBottom: "40px" }}>
       <Paper>
         <Tabs
           value={tab}
@@ -222,7 +244,7 @@ export default function SearchBar(props) {
       {isVideo && (
         <div style={{ marginLeft: "16px", marginRight: "16px" }}>
           <Grid container spacing={2} direction="row" alignItems="baseline">
-            {filteredTeachers.map(
+            {filteredTeachersRandomOrder.map(
               teacher =>
                 teacher.videos &&
                 teacher.videos
@@ -258,7 +280,7 @@ export default function SearchBar(props) {
             justify="space-around"
             alignItems="baseline"
           >
-            {filteredTeachers.map((teacher, i) => (
+            {filteredTeachersRandomOrder.map((teacher, i) => (
               <Grid item key={i}>
                 <TeacherListItem
                   key={i}
