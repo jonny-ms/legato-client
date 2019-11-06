@@ -40,6 +40,10 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     top: "70%"
   },
+  mobileBecoming: {
+    position: "absolute",
+    top: "55%"
+  },
   about: {
     backgroundColor: "rgb(0,0,0)" /* Fallback color */,
     backgroundColor: "rgba(0,0,0, 0.4)" /* Black w/opacity/see-through */,
@@ -64,7 +68,7 @@ const useStyles = makeStyles(theme => ({
     width: "60%",
     padding: "4%",
     position: "absolute",
-    top: "20%",
+    top: "15%",
     left: "17%",
     borderRadius: 7
   },
@@ -106,7 +110,8 @@ export default function Landing(props) {
           <Divider className={classes.divider} />
 
           <Typography variant="h5" component="p">
-            to connect music students and teachers.
+            indicates that musical notes are played or sung smoothly and
+            connected
           </Typography>
         </Card>
       )}
@@ -132,7 +137,8 @@ export default function Landing(props) {
               adverb
             </Typography>
             <Typography variant="h5" component="p">
-              in a smooth flowing manner, without breaks between notes.
+              indicates that musical notes are played or sung smoothly and
+              connected.
             </Typography>
             <Divider className={classes.divider} />
             <Typography
@@ -154,7 +160,7 @@ export default function Landing(props) {
         spacing={0}
         direction="row"
         justify="center"
-        className={classes.becoming}
+        className={props.mobile ? classes.mobileBecoming : classes.becoming}
       >
         <Grid item xs={12} md={6} style={{ paddingTop: 10, paddingBottom: 10 }}>
           <Card className={classes.cards}>

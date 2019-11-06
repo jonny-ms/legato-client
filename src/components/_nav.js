@@ -40,8 +40,6 @@ export default function Nav(props) {
     });
   };
 
-  console.log(props.user.profile_pic);
-
   const UserContext = React.createContext(props);
 
   const user = useContext(UserContext);
@@ -231,9 +229,11 @@ export default function Nav(props) {
                       Dashboard
                     </Button>
                   )}
-                  <Button style={{ color: "white" }} variant="disabled">
-                    {props.user.first_name}
-                  </Button>
+                  {!props.mobile && (
+                    <Button style={{ color: "white" }} variant="disabled">
+                      {props.user.first_name}
+                    </Button>
+                  )}
                   <IconButton
                     aria-label="account of current user"
                     aria-controls="menu-appbar"
