@@ -63,6 +63,7 @@ const App = () => {
                 {...props}
                 withCredentials={true}
                 trigger={trigger}
+                mobile={mobile}
               />
             )}
           />

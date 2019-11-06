@@ -212,7 +212,7 @@ export default function EditProfile(props) {
           video: {
             teacher_id: id,
             file: videoId,
-            instrument: videoInstrument
+            instrument: videoInstrument,
           }
         }
       }).then(() => {
