@@ -85,7 +85,13 @@ class CalendarForBooking extends Component {
 
       let courses = {};
       for (let course of data.courses) {
-        const courseName = course.instrument + " - " + course.level;
+        const courseName =
+          course.instrument +
+          " - " +
+          course.level +
+          " - $" +
+          course.rate +
+          "/hr";
         courses[courseName] = course.id;
       }
 

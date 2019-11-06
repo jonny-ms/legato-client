@@ -33,7 +33,7 @@ export default function TeacherListItem(props) {
 
   let courses = {};
   for (let course of props.teacher.courses) {
-    const courseName = `${course.instrument} - ${course.level} - ${course.rate}/hr`;
+    const courseName = `${course.instrument} - ${course.level} - $${course.rate}/hr`;
     courses[courseName] = course.id;
   }
   const coursesArray = Object.keys(courses);
