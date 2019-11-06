@@ -47,7 +47,7 @@ const App = () => {
           <Route
             exact
             path="/"
-            render={props => <Home setTrigger={setTrigger} />}
+            render={props => <Home setTrigger={setTrigger} user={user} mobile={mobile}/>}
           />
           <Route exact path="/students/new" component={() => <NewStudent />} />
           <Route exact path="/teachers/new" component={() => <NewTeacher />} />
