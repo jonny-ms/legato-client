@@ -120,7 +120,7 @@ export default function EditProfile(props) {
       setBio(data.bio);
       setCourses(currentCourses);
       setVideos(data.videos);
-      setProfilePic(data.profile_pic)
+      setProfilePic(data.profile_pic);
     });
   };
 
@@ -204,7 +204,7 @@ export default function EditProfile(props) {
     if (ampersandPosition !== -1) {
       videoId = videoId.substring(0, ampersandPosition);
     }
-    if (videoInstrument && videoLevel) {
+    if (videoInstrument) {
       axios(`/api/videos`, {
         method: "post",
         withCredentials: true,
@@ -232,7 +232,7 @@ export default function EditProfile(props) {
   }, []);
 
   return (
-    <div style={{paddingBottom: "40px"}}>
+    <div style={{ paddingBottom: "40px" }}>
       <CssBaseline />
       <Container className={classes.container}>
         <Card style={{ padding: "5%", borderRadius: 7 }} elevation={4}>
@@ -286,7 +286,7 @@ export default function EditProfile(props) {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-              <Grid item xs={12}>
+                <Grid item xs={12}>
                   <TextField
                     type="url"
                     label="Profile Pic Url"
@@ -315,10 +315,9 @@ export default function EditProfile(props) {
               variant="outlined"
               style={{ marginTop: "1.2em" }}
               onClick={e => editProfile(e, id)}
-              >
+            >
               Edit Profile
             </Button>
-
           </Grid>
 
           {/* <label> */}
@@ -475,13 +474,21 @@ export default function EditProfile(props) {
               return (
                 <Grid item key={i} xs={12} sm={6} md={4} lg={4}>
                   <Card>
-                  <YouTube fullWidth videoId={video.file} opts={videoSpecs} />
-                    <Box style={{display: "flex", justifyContent: "space-between"}}>
-                      <Box style={{marginLeft: "40%"}}>
-                        <Typography variant="h6" >{video.instrument}</Typography>
+                    <YouTube fullWidth videoId={video.file} opts={videoSpecs} />
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between"
+                      }}
+                    >
+                      <Box style={{ marginLeft: "40%" }}>
+                        <Typography variant="h6">{video.instrument}</Typography>
                       </Box>
                       <IconButton aria-label="delete">
-                        <DeleteIcon fontSize="small" onClick={e => destroyVideo(e, video.id)}/>
+                        <DeleteIcon
+                          fontSize="small"
+                          onClick={e => destroyVideo(e, video.id)}
+                        />
                       </IconButton>
                     </Box>
                   </Card>
@@ -531,10 +538,8 @@ export default function EditProfile(props) {
               </Button>
             </Grid>
           </Grid>
-
         </Card>
       </Container>
-
     </div>
   );
 }
