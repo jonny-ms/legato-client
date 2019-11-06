@@ -232,7 +232,7 @@ export default function EditProfile(props) {
   }, []);
 
   return (
-    <div>
+    <div style={{paddingBottom: "40px"}}>
       <CssBaseline />
       <Container className={classes.container}>
         <Card style={{ padding: "5%", borderRadius: 7 }} elevation={4}>
@@ -316,7 +316,7 @@ export default function EditProfile(props) {
               style={{ marginTop: "1.2em" }}
               onClick={e => editProfile(e, id)}
               >
-              Edit P
+              Edit Profile
             </Button>
 
           </Grid>
