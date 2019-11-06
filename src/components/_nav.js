@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 import { Link, Redirect } from "react-router-dom";
 
 import axios from "axios";
-import { Button } from "@material-ui/core";
+import { Button, Avatar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -94,7 +94,12 @@ export default function Nav(props) {
           style={{ alignItems: "center" }}
         >
           {/* 1. Legato Item */}
-          <Button style={{ color: "white" }} component={Link} to="/">
+          <Button
+            style={{ color: "white" }}
+            component={Link}
+            to="/"
+            title="Legato"
+          >
             <img src={logo} style={{ height: 40 }} />
           </Button>
 
@@ -125,6 +130,7 @@ export default function Nav(props) {
                         onClick={handleCloseMenuMobile}
                         component={Link}
                         to="/students/new"
+                        title="New Student"
                       >
                         New Student
                       </MenuItem>
@@ -132,6 +138,7 @@ export default function Nav(props) {
                         onClick={handleCloseMenuMobile}
                         component={Link}
                         to={"/teachers/new"}
+                        title="New Teacher"
                       >
                         New Teacher
                       </MenuItem>
@@ -139,6 +146,7 @@ export default function Nav(props) {
                         onClick={handleCloseMenuMobile}
                         component={Link}
                         to="/login"
+                        title="Login"
                       >
                         Login
                       </MenuItem>
@@ -156,6 +164,7 @@ export default function Nav(props) {
                             style={{ color: "white" }}
                             component={Link}
                             to="/students/new"
+                            title="New Student"
                           >
                             New Student
                           </Button>
@@ -166,6 +175,7 @@ export default function Nav(props) {
                             style={{ color: "white" }}
                             component={Link}
                             to="/teachers/new"
+                            title="New Teacher"
                           >
                             New Teacher
                           </Button>
@@ -178,6 +188,7 @@ export default function Nav(props) {
                         style={{ color: "white" }}
                         component={Link}
                         to="/login"
+                        title="Login"
                       >
                         Login
                       </Button>
@@ -195,6 +206,7 @@ export default function Nav(props) {
                       style={{ color: "white" }}
                       component={Link}
                       to="/teachers/schedule"
+                      title="Dashboard"
                     >
                       Dashboard
                     </Button>
@@ -207,8 +219,14 @@ export default function Nav(props) {
                       style={{ color: "white" }}
                       component={Link}
                       to="/students/"
+                      title="Dashboard"
                     >
                       Dashboard
+                    </Button>
+                  )}
+                  {!props.mobile && (
+                    <Button style={{ color: "white" }} variant="disabled">
+                      {props.user.first_name}
                     </Button>
                   )}
                   <IconButton
@@ -220,7 +238,11 @@ export default function Nav(props) {
                     className={classes.menuButton}
                     edge="start"
                   >
-                    <AccountCircle />
+                    <Avatar
+                      title={props.user.first_name}
+                      src={props.user.profile_pic}
+                      className={classes.avatar}
+                    />
                   </IconButton>
                   <Menu
                     id="menu-appbar"
@@ -243,17 +265,18 @@ export default function Nav(props) {
                           onClick={handleClose}
                           component={Link}
                           to="/teachers/edit"
+                          title="Edit Profile"
                         >
                           Edit Profile
                         </MenuItem>
-                        <MenuItem onClick={e => logout(e)}>
+                        <MenuItem onClick={e => logout(e)} title="Logout">
                           {redirect && red()}
                           Logout
                         </MenuItem>
                       </div>
                     )}
                     {user.user.type === "Student" && (
-                      <MenuItem onClick={e => logout(e)}>
+                      <MenuItem onClick={e => logout(e)} title="Logout">
                         {redirect && red()}
                         Logout
                       </MenuItem>

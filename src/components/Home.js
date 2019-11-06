@@ -11,6 +11,10 @@ const Home = props => {
     const data = await axios("/api/teachers", { withCredentials: true });
 
     setTeachers(JSON.parse(data.data.teachers));
+    // const user = data.data.user;
+    // user.type = data.data.type;
+    // setUser(user);
+    // setTeachers(data.data);
   };
 
   useEffect(() => {
