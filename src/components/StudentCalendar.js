@@ -163,7 +163,8 @@ class StudentCalendar extends Component {
     }).then(resp => {
       this.setState({
         calendarEvents: events,
-        showLesson: false
+        showLesson: false,
+        showPendingLesson: false
       });
     });
   };

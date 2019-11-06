@@ -190,7 +190,10 @@ const TeacherAppointmentList = () => {
                             <Button
                               variant={"contained"}
                               className={classes.button}
-                              style={{ backgroundColor: "green" }}
+                              style={{
+                                backgroundColor: "green",
+                                color: "white"
+                              }}
                               onClick={() => confirmLesson(lesson.id)}
                             >
                               Confirm

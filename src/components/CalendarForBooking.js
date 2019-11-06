@@ -85,7 +85,13 @@ class CalendarForBooking extends Component {
 
       let courses = {};
       for (let course of data.courses) {
-        const courseName = course.instrument + " - " + course.level;
+        const courseName =
+          course.instrument +
+          " - " +
+          course.level +
+          " - $" +
+          course.rate +
+          "/hr";
         courses[courseName] = course.id;
       }
 
@@ -174,8 +180,6 @@ class CalendarForBooking extends Component {
           });
         });
       }
-
-      // Set requested bookings to Pending Lesson
     }
   };
 
@@ -220,10 +224,20 @@ class CalendarForBooking extends Component {
       newEvents.push(newEvent);
     }
 
+    let areAnyCoursesSelected = false;
+    for (let event of newEvents) {
+      if (event.title === "Booking Request") {
+        areAnyCoursesSelected = true;
+      }
+    }
+
     this.setState({
       calendarEvents: newEvents,
-      eventSelected: true,
-      submitBackgroundColor: this.activeSubmit(true, this.state.courseSelected)
+      eventSelected: areAnyCoursesSelected,
+      submitBackgroundColor: this.activeSubmit(
+        areAnyCoursesSelected,
+        this.state.courseSelected
+      )
         ? true
         : false
     });
@@ -274,7 +288,8 @@ class CalendarForBooking extends Component {
                   style={{
                     backgroundColor: this.state.submitBackgroundColor
                       ? "green"
-                      : "grey"
+                      : "grey",
+                    color: this.state.submitBackgroundColor ? "white" : "black"
                   }}
                 >
                   Request a Lesson

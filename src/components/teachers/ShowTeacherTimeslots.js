@@ -10,8 +10,8 @@ const ShowTeacherTimeslots = props => {
   const [showCalendar, setShowCalendar] = useState(true);
   const [showProfile, setShowProfile] = useState(false);
   const [tab, setTab] = useState(props.trigger ? 0 : 1);
-  const [courses, setCourses] = useState()
-  const [videos, setVideos] = useState()
+  const [courses, setCourses] = useState([])
+  const [videos, setVideos] = useState([])
 
   const teacherID = props.history.location.state;
 
@@ -23,13 +23,13 @@ const ShowTeacherTimeslots = props => {
       setVideos(data.videos)
       setTeacher(data.teachers);
       setCourses(data.courses)
-      setShowProfile(props.trigger);
-      setShowCalendar(!props.trigger);
     });
   };
 
   useEffect(() => {
     fetch();
+    setShowProfile(props.trigger);
+    setShowCalendar(!props.trigger);
   }, []);
 
   const showCalendarFunc = () => {
@@ -62,14 +62,14 @@ const ShowTeacherTimeslots = props => {
           <Tab label="Book a Lesson" onClick={e => showCalendarFunc(e)} />
         </Tabs>
       </Paper>
-      {showCalendar && (
-        <div className="calendar">
-          <CalendarForBooking teacherID={teacherID} />
-        </div>
-      )}
       {showProfile && teacher && (
         <div>
           <TeacherProfile teacher={teacher} courses={courses} mobile={props.mobile} videos={videos} />
+        </div>
+      )}
+      {showCalendar && (
+        <div className="calendar">
+          <CalendarForBooking teacherID={teacherID} />
         </div>
       )}
     </div>
