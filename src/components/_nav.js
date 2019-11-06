@@ -92,17 +92,17 @@ export default function Nav(props) {
   return (
     <AppBar position="static" title={<img src="./logo.png" />}>
       <Toolbar>
-        <Button style={{ color: "white" }} component={Link} to="/">
-          <img src={logo} style={{ height: 40 }} />
-        </Button>
-
         <Grid
           container
           direction="row"
-          justify="space-between" // Add it here :)
+          justify="space-between"
+          style={{ alignItems: "center" }}
         >
+          <Button style={{ color: "white" }} component={Link} to="/">
+            <img src={logo} style={{ height: 40 }} />
+          </Button>
+
           {/* 1. Legato Item */}
-          <Grid item></Grid>
           {/* 2. New Student & Teacher */}
           <Grid item>
             {!user.user.type ? (
@@ -115,6 +115,7 @@ export default function Nav(props) {
                       color="inherit"
                       aria-label="menu"
                       onClick={handleClickMenuMobile}
+                      style={{}}
                     >
                       <MenuIcon />
                     </IconButton>

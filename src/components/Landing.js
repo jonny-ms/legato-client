@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     backgroundImage: `url(https://s17026.pcdn.co/wp-content/uploads/sites/9/2017/06/Music-teacher.jpeg)`,
     backgroundSize: "cover",
-    width: "100vw",
+    // width: "100vw",
     height: "100vh"
   },
   backgroundImage: {
