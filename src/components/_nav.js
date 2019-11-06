@@ -98,11 +98,11 @@ export default function Nav(props) {
           justify="space-between"
           style={{ alignItems: "center" }}
         >
+          {/* 1. Legato Item */}
           <Button style={{ color: "white" }} component={Link} to="/">
             <img src={logo} style={{ height: 40 }} />
           </Button>
 
-          {/* 1. Legato Item */}
           {/* 2. New Student & Teacher */}
           <Grid item>
             {!user.user.type ? (
