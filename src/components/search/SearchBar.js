@@ -84,7 +84,6 @@ export default function SearchBar(props) {
   const [instrument, setInstrument] = useState("Select");
   const [level, setLevel] = useState("Select");
   const [rate, setRate] = useState("");
-  // console.log("props from SearchBar.js: ", props);
 
   const [isVideo, setIsVideo] = useState(false);
   const [isProfile, setIsProfile] = useState(true);
@@ -248,20 +247,23 @@ export default function SearchBar(props) {
                       instrument === "Select" ||
                       video.instrument === instrument
                     ) {
-                      return video;
+                      return true;
                     }
+                    return false;
                   })
-                  .map((video, i) => (
-                    <Grid item key={i} xs={12} md={4}>
-                      <VideoListItem
-                        key={i}
-                        video={video}
-                        teacher={teacher}
-                        instrument={instrument}
-                        setTrigger={props.setTrigger}
-                      />
-                    </Grid>
-                  ))
+                  .map((video, i) => {
+                    return (
+                      <Grid item key={i} xs={12} md={4}>
+                        <VideoListItem
+                          key={i}
+                          video={video}
+                          teacher={teacher}
+                          instrument={instrument}
+                          setTrigger={props.setTrigger}
+                        />
+                      </Grid>
+                    );
+                  })
             )}
           </Grid>
         </div>

@@ -24,8 +24,6 @@ const useStyles = makeStyles(theme => ({
 const PendingLessonStudent = props => {
   const classes = useStyles();
 
-  // console.log(props);
-
   return (
     <Card
       className={"calendar-appointment"}

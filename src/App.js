@@ -21,16 +21,17 @@ const App = () => {
 
   const fetchItems = async () => {
     const data = await axios("/api/sessions", { withCredentials: true });
-    const user = data.data.user;
-    user.type = data.data.type;
-    setUser(user);
+    if (data.data.user) {
+      const user = data.data.user;
+      user.type = data.data.type;
+      setUser(user);
+    }
   };
 
   useEffect(() => {
     fetchItems();
     if (window.innerWidth < 680) {
       setMobile(true);
-      console.log("mobile view");
     }
   }, []);
 
@@ -47,7 +48,9 @@ const App = () => {
           <Route
             exact
             path="/"
-            render={props => <Home setTrigger={setTrigger} user={user} mobile={mobile}/>}
+            render={props => (
+              <Home setTrigger={setTrigger} user={user} mobile={mobile} />
+            )}
           />
           <Route exact path="/students/new" component={() => <NewStudent />} />
           <Route exact path="/teachers/new" component={() => <NewTeacher />} />
