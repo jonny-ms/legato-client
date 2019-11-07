@@ -69,7 +69,7 @@ export default function VideoListItem(props) {
                 onClick={e => {
                   clickTrue(e);
                 }}
-                style={{ color: "black", textDecoration: "none" }}
+                style={{ color: "darkblue", textDecoration: "none" }}
               >
                 View Profile
               </Link>
@@ -85,7 +85,7 @@ export default function VideoListItem(props) {
                 onClick={e => {
                   clickFalse(e);
                 }}
-                style={{ color: "black", textDecoration: "none" }}
+                style={{ color: "darkblue", textDecoration: "none" }}
               >
                 Book Now
               </Link>

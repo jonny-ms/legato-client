@@ -68,8 +68,8 @@ class CalendarForBooking extends Component {
             start: moment(startTime).toDate(),
             end: endTime,
             id: lessons[i].id,
-            backgroundColor: "orange",
-            borderColor: "orange"
+            backgroundColor: "grey",
+            borderColor: "grey"
           });
         } else {
           loadedEvents.push({
@@ -77,8 +77,8 @@ class CalendarForBooking extends Component {
             start: moment(startTime).toDate(),
             end: endTime,
             id: lessons[i].id,
-            backgroundColor: "green",
-            borderColor: "green"
+            backgroundColor: "grey",
+            borderColor: "grey"
           });
         }
       }

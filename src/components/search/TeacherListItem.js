@@ -144,7 +144,7 @@ export default function TeacherListItem(props) {
                         clickTrue(e);
                       }}
                       style={{
-                        color: "black",
+                        color: "darkblue",
                         textDecoration: "none"
                       }}
                     >
@@ -167,7 +167,7 @@ export default function TeacherListItem(props) {
                         clickFalse(e);
                       }}
                       style={{
-                        color: "black",
+                        color: "darkblue",
                         textDecoration: "none"
                       }}
                     >

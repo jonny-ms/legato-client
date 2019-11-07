@@ -2,9 +2,18 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 import { Link, Redirect } from "react-router-dom";
 
 import axios from "axios";
-import { Button, AppBar, Toolbar, IconButton, MenuItem, Menu, Grid, Avatar } from "@material-ui/core";
+import {
+  Button,
+  AppBar,
+  Toolbar,
+  IconButton,
+  MenuItem,
+  Menu,
+  Grid,
+  Avatar
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { MenuIcon } from "@material-ui/icons";
+import MenuIcon from "@material-ui/icons/Menu";
 
 import "../App.css";
 
@@ -13,6 +22,7 @@ import logo from "./logo.png";
 export default function Nav(props) {
   const [redirect, setRedirect] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElMenuMobile, setAnchorElMenuMobile] = useState(null);
 
   const red = () => {
     return <Redirect to="/" />;
@@ -58,8 +68,6 @@ export default function Nav(props) {
     setRedirect(false);
   });
 
-  const [anchorElMenuMobile, setAnchorElMenuMobile] = useState(null);
-
   const handleClickMenuMobile = event => {
     setAnchorElMenuMobile(event.currentTarget);
   };
@@ -69,7 +77,7 @@ export default function Nav(props) {
   };
 
   return (
-    <AppBar position="static" title={<img src="./logo.png"  alt="Logo" />}>
+    <AppBar position="static" title={<img src="./logo.png" alt="Logo" />}>
       <Toolbar>
         <Grid
           container
@@ -99,7 +107,6 @@ export default function Nav(props) {
                       color="inherit"
                       aria-label="menu"
                       onClick={handleClickMenuMobile}
-                      style={{}}
                     >
                       <MenuIcon />
                     </IconButton>
